@@ -1,0 +1,22 @@
+ignnore:
+  default: null
+
+buildType:
+  default: debug
+  choices:
+    debug:
+      short: debug
+      long: Emit debug information
+      buildType: Debug
+    staging:
+      short: staging
+      long: Optimize for speed - include debug information
+      buildType: RelWithDebInfo
+    demo:
+      short: demo
+      long: Optimize for smallest binary size - exlude debug information
+      buildType: MinSizeRel
+    release:
+      short: release
+      long: Optimize generated code
+      buildType: Release
