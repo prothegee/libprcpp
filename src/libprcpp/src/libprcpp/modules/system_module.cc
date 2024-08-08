@@ -40,9 +40,7 @@ bool CSystemModule::SFilePDF::generateTable(const std::vector<std::vector<std::s
     HPDF_Doc pdf = HPDF_New(filePDFerrorHandler, NULL);
     if (!pdf)
     {
-        #if PROJECT_BUILD_STATUS == 1
-        std::cerr << "DEBUG ERROR FilePDF: Cannot create PDF object\n";
-        #endif
+        std::cerr << "ERROR FilePDF: cannot create PDF object on \"generateTable\"\n";
         return result;
     }
 
@@ -76,10 +74,262 @@ bool CSystemModule::SFilePDF::generateTable(const std::vector<std::vector<std::s
 
     #if PROJECT_BUILD_STATUS == 1
     std::cout << "DEBUG FilePDF: generated successfully!\n";
-    #endif
+    #endif // PROJECT_BUILD_STATUS
 
     return result;
 }
 #endif // PROJECT_USING_LIBHARU
+
+#if PROJECT_USING_JSONCPP
+std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const int &indent, const int &precision)
+{
+    int _indent, _precision;
+
+    if (indent >= 4) { _indent = 4; }
+    if (indent <= 3) { _indent = 0; }
+    if (precision >= 16) { _precision = 16; }
+    if (precision <= 2) { _precision = 2; }
+
+    Json::StreamWriterBuilder writter;
+    
+    std::string _indentString = "";
+    for (auto i = 0; i < indent; i++)
+    {
+        _indentString += " ";
+    }
+
+    writter["indentation"] = _indentString;
+    writter["precision"] = _precision;
+    // writter.settings_["indentation"] = _indentString;
+    // writter.settings_["precision"] = _precision;
+
+    return std::string(Json::writeString(writter, input));
+}
+
+Json::Value CSystemModule::SFileJSON::fromFile(const std::string &input)
+{
+    Json::Value result;
+
+    std::ifstream f(input);
+
+    if (f.is_open())
+    {
+        f >> result;
+        f.close();
+    }
+    else
+    {
+        std::cerr << "ERROR FileJSON: can't find json file from \"" << input << "\"\n";
+    }
+
+    return result;
+}
+
+Json::Value CSystemModule::SFileJSON::fromString(const std::string &input, const int &indent, const int &precision)
+{
+    Json::Value result;
+
+    int _indent, _precision;
+
+    if (indent >= 4) { _indent = 4; }
+    if (indent <= 3) { _indent = 0; }
+    if (precision >= 16) { _precision = 16; }
+    if (precision <= 2) { _precision = 2; }
+
+    std::string _indentString = "";
+    for (auto i = 0; i < indent; i++)
+    {
+        _indentString += " ";
+    }
+
+    JSONCPP_STRING err;
+    Json::CharReaderBuilder builder;
+
+    builder["indentation"] = _indentString;
+    builder["precision"] = _precision;
+
+    const int inputLength = static_cast<int>(input.length());
+
+    const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
+    reader->parse(input.c_str(), input.c_str() + inputLength, &result, &err);
+
+    return result;
+}
+
+Json::Value CSystemModule::SFileJSON::fromCSV(const std::string &input)
+{
+    Json::Value result;
+
+    std::ifstream file(input);
+    std::string line;
+    std::vector<std::string> headers;
+
+    if (file.is_open())
+    {
+        if (std::getline(file, line))
+        {
+            std::stringstream ss(line);
+            std::string header;
+            while (std::getline(ss, header, ','))
+            {
+                header.erase(header.find_last_not_of(" \t\r\n") + 1);
+                header.erase(0, header.find_first_not_of(" \t\r\n"));
+                headers.push_back(header);
+            }
+        }
+
+        Json::Value jsonArray(Json::arrayValue);
+        while (std::getline(file, line))
+        {
+            line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+            
+            std::stringstream ss(line);
+            std::string cell;
+            Json::Value jsonObject(Json::objectValue);
+            size_t headerIndex = 0;
+            
+            while (std::getline(ss, cell, ','))
+            {
+                cell.erase(cell.find_last_not_of(" \t\n") + 1);
+                cell.erase(0, cell.find_first_not_of(" \t\n"));
+                
+                if (headerIndex < headers.size())
+                {
+                    if (internal::isNumber(cell))
+                    {
+                        try
+                        {
+                            size_t pos;
+                            int intValue = std::stoi(cell, &pos);
+                            if (pos == cell.size())
+                            {
+                                jsonObject[headers[headerIndex]] = intValue;
+                            }
+                            else
+                            {
+                                jsonObject[headers[headerIndex]] = std::stod(cell);
+                            }
+                        }
+                        catch (...)
+                        {
+                            jsonObject[headers[headerIndex]] = cell;
+                        }
+                    }
+                    else
+                    {
+                        jsonObject[headers[headerIndex]] = cell;
+                    }
+                }
+                headerIndex++;
+            }
+            jsonArray.append(jsonObject);
+        }
+
+        result = jsonArray;
+
+        file.close();
+    }
+    else
+    {
+        std::cerr << "ERROR FileJSON: can't open \"" << input << "\"\n";
+    }
+
+    return result;
+}
+
+bool CSystemModule::SFileJSON::save(const Json::Value & input, const std::string & output)
+{
+    bool result = false;
+
+    std::ofstream outFile(output);
+    if (outFile.is_open())
+    {
+        Json::StreamWriterBuilder writer;
+
+        writer["indentation"] = "    ";
+
+        std::string jsonString = Json::writeString(writer, input);
+
+        outFile << jsonString;
+        outFile.close();
+
+        result = true;
+    }
+    else
+    {
+        std::cerr << "ERROR FileJSON: can't save file to \"" << output << "\"\n";
+    }
+
+    return result;
+}
+bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::string &output)
+{
+    bool result = false;
+
+    std::ifstream jsonFile(input);
+    if (!jsonFile.is_open())
+    {
+        std::cerr << "ERROR FileJSON: can't open JSON file \"" << input << "\"\n";
+        return result;
+    }
+
+    Json::CharReaderBuilder readerBuilder;
+    Json::Value jsonData;
+    std::string errs;
+
+    if (!Json::parseFromStream(readerBuilder, jsonFile, &jsonData, &errs))
+    {
+        std::cerr << "ERROR FileJSON: failed to parse json: " << errs << "\n";
+        return result;
+    }
+    jsonFile.close();
+
+    // Open CSV file for writing
+    std::ofstream csvFile(output);
+    if (!csvFile.is_open())
+    {
+        std::cerr << "ERROR FileJSON: can't open CSV file " << output << "\"\n";
+        return result;
+    }
+
+    if (jsonData.isArray() && !jsonData.empty())
+    {
+        // Write CSV header
+        const Json::Value& firstObject = jsonData[0];
+        for (auto it = firstObject.begin(); it != firstObject.end(); ++it)
+        {
+            if (it != firstObject.begin())
+            {
+                csvFile << ",";
+            }
+            csvFile << it.key().asString();
+        }
+        csvFile << "\n";
+
+        // Write CSV rows
+        for (const auto& obj : jsonData)
+        {
+            for (auto it = firstObject.begin(); it != firstObject.end(); ++it)
+            {
+                if (it != firstObject.begin())
+                {
+                    csvFile << ",";
+                }
+                csvFile << obj[it.key().asString()].asString();
+            }
+            csvFile << "\n";
+        }
+
+        result = true;
+    }
+    else
+    {
+        std::cerr << "ERROR FileJSON: json data is not an array or is empty" << "\n";
+    }
+    csvFile.close();
+
+    return result;
+}
+#endif // PROJECT_USING_JSONCPP
 
 } // namespace libprcpp
