@@ -7,6 +7,9 @@
 
 #include "enums/build_enums.h"
 #include "enums/os_enums.h"
+#include "enums/requirement_enums.h"
+#include "enums/requirement_enums.h"
+#include "enums/time_enums.h"
 
 #include "interfaces/idrogon_http_controller_helper.h"
 #include "interfaces/iscylladb_core_interface.h"
@@ -19,6 +22,7 @@
 #include "types/basic_types.h"
 #include "types/look_types.h"
 #include "types/ok_types.h"
+#include "types/pdf_types.h"
 
 namespace libprcpp
 {
