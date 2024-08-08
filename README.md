@@ -10,10 +10,11 @@ one stop c++ library for c++ project integration
 
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - [openssl](https://github.com/openssl/openssl)
-- [drogon framework](https://github.com/drogonframework/drogon)
+- [jwt cpp](https://github.com/Thalhammer/jwt-cpp)
+- [libharu](https://github.com/libharu/libharu)
 - [cryptopp cmake](https://github.com/abdes/cryptopp-cmake)
+- [drogon framework](https://github.com/drogonframework/drogon)
 - [scylla cpp driver](https://github.com/scylladb/cpp-driver)
-<!-- - [jwt cpp](https://github.com/Thalhammer/jwt-cpp) -->
 
 __*NOTES:*__
 ```
