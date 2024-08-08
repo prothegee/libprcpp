@@ -5,6 +5,7 @@
 
 [Bb][Ii][Nn]
 [Bb][Uu][Ii][Ll][Dd]
+[Dd][Ii][Ss][Tt]
 [Ll][Oo][Gg]
 [Ll][Oo][Gg][Ss]
 [Pp][Uu][Bb][Ll][Ii][Cc]
@@ -42,35 +43,11 @@ node_modules
 
 /.tmp.md
 
-project-build-development*.sh
+project-build-debug*.sh
 project-build-staging*.sh
 project-build-demo*.sh
 project-build-release*.sh
 
 project-cleanup.sh
-
-/configs/json/com_prothegee_adasta.json
-/configs/json/com_prothegee_api.json
-/configs/json/com_prothegee_app.json
-/configs/json/com_prothegee_article.json
-/configs/json/com_prothegee_auth.json
-/configs/json/com_prothegee_dashboard.json
-/configs/json/com_prothegee_display.json
-/configs/json/com_prothegee_docs.json
-/configs/json/com_prothegee_gallery.json
-/configs/json/com_prothegee_game.json
-/configs/json/com_prothegee_lnk.json
-/configs/json/com_prothegee_media.json
-/configs/json/com_prothegee_merch.json
-/configs/json/com_prothegee_music.json
-/configs/json/com_prothegee_payment.json
-/configs/json/com_prothegee_project.json
-/configs/json/com_prothegee_store.json
-/configs/json/com_prothegee_test.json
-/configs/json/com_prothegee_www.json
-
-/configs/json/drogon_framework.json
-
-/configs/json/frontend_views.json
 
 /package-lock.json
