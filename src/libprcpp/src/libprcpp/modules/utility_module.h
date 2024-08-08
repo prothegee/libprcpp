@@ -14,10 +14,6 @@
 #include <chrono>
 #include <regex>
 
-#if PROJECT_USING_JSONCPP
-#include <jsoncpp/json/json.h>
-#endif // PROJECT_USING_JSONCPP
-
 #if PROJECT_USING_OPENSSL
 #include <openssl/bio.h>
 #include <openssl/evp.h>
@@ -228,46 +224,6 @@ public:
      */
     std::string base64decode(const std::string &input);
 #endif // PROJECT_USING_OPENSSL
-
-#if PROJECT_USING_JSONCPP
-    // json helper structure
-    struct SJsonHelper
-    {
-        /**
-         * @brief write json to filePath
-         * 
-         * @param json 
-         * @param filePath 
-         */
-        void toFile(Json::Value &json, const std::string &filePath);
-
-        /**
-         * @brief get json from filePath
-         * 
-         * @param filePath 
-         * @return Json::Value 
-         */
-        Json::Value fromFile(const std::string &filePath);
-
-        /**
-         * @brief format json to string
-         * 
-         * @param json 
-         * @return std::string 
-         */
-        std::string toString(const Json::Value &input);
-
-        /**
-         * @brief format string to json
-         * 
-         * @param input 
-         * @return Json::Value 
-         */
-        Json::Value fromString(const std::string &input);
-    };
-    // json helper access
-    SJsonHelper Json = SJsonHelper();
-#endif // PROJECT_USING_JSONCPP
 
     // date and time structure
     struct SDateAndTime
