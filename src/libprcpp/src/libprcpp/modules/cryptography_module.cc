@@ -1,6 +1,6 @@
 #include "cryptography_module.h"
 
-#if PROJECT_USING_CRYPTOPP_CMAKE
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 namespace libprcpp
 {
@@ -331,4 +331,4 @@ std::string CCryptographyModule::SStreamCipher::rc6decrypt(std::string input, st
 
 } // namespace libprcpp
 
-#endif // PROJECT_USING_CRYPTOPP_CMAKE
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE

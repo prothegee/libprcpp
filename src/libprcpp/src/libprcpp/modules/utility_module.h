@@ -14,11 +14,11 @@
 #include <chrono>
 #include <regex>
 
-#if PROJECT_USING_OPENSSL
+#if LIBPRCPP_PROJECT_USING_OPENSSL
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/buffer.h>
-#endif // PROJECT_USING_OPENSSL
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if PROJECT_BUILD_COMPILER_ID == 1
 // RESERVED
@@ -207,7 +207,7 @@ public:
      */
     bool checkInputUsernameMeetRequirement(const std::string &input, const ERequirementUsernameInput::Enum &requirement) const;
 
-#if PROJECT_USING_OPENSSL
+#if LIBPRCPP_PROJECT_USING_OPENSSL
     /**
      * @brief base64 encoding
      * 
@@ -223,7 +223,7 @@ public:
      * @return std::string 
      */
     std::string base64decode(const std::string &input);
-#endif // PROJECT_USING_OPENSSL
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     // date and time structure
     struct SDateAndTime

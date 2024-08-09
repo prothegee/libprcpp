@@ -385,7 +385,7 @@ bool CUtilityModule::checkInputUsernameMeetRequirement(const std::string &input,
     return result;
 }
 
-#if PROJECT_USING_OPENSSL
+#if LIBPRCPP_PROJECT_USING_OPENSSL
 std::string CUtilityModule::base64encode(const std::string &input)
 {
     BIO *bio, *b64;
@@ -425,7 +425,7 @@ std::string CUtilityModule::base64decode(const std::string &input)
     std::string result(output, decodedLength);
     return result;
 }
-#endif // PROJECT_USING_OPENSSL
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toString()
 {

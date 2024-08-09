@@ -17,10 +17,10 @@ set(PROJECT_SYSTEM_PROCESSOR)
 set(PROJECT_BUILD_TAGET_DIRECTORY)
 
 # definition of if using build target directory
-set(PROJECT_USING_BUILD_TAGET_DIRECTORY)
+set(LIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY)
 
 # this project will build test
-set(PROJECT_BUILD_TEST)
+set(LIBPRCPP_PROJECT_BUILD_TEST)
 
 # cmake include
 include(cmake/project-00-setup.cmake)
