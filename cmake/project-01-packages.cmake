@@ -69,8 +69,10 @@ else()
     message(NOTICE "-- ${PROJECT_NAME}:\n   jwt-cpp package not found")
 endif()
 
+
 # libharu
 set(LIBPRCPP_PROJECT_USING_LIBHARU false)
+
 find_path(LIBHARU_INCLUDE_DIRS "hpdf.h")
 if(LIBHARU_INCLUDE_DIRS)
     set(LIBPRCPP_PROJECT_USING_LIBHARU true)
