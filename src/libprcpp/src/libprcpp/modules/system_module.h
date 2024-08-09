@@ -11,14 +11,14 @@
 #include <thread>
 #include <sstream>
 
-#if PROJECT_USING_LIBHARU
+#if LIBPRCPP_PROJECT_USING_LIBHARU
 #include "hpdf.h"
 #include <libprcpp/types/pdf_types.h>
-#endif // PROJECT_USING_LIBHARU
+#endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
-#if PROJECT_USING_JSONCPP
+#if LIBPRCPP_PROJECT_USING_JSONCPP
 #include <jsoncpp/json/json.h>
-#endif // PROJECT_USING_JSONCPP
+#endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
 namespace libprcpp
 {
@@ -110,7 +110,7 @@ public:
     // directory object access
     SDirectory Directory = SDirectory();
 
-#if PROJECT_USING_LIBHARU
+#if LIBPRCPP_PROJECT_USING_LIBHARU
     /**
      * @brief file pdf structure
      * 
@@ -134,9 +134,9 @@ public:
     };
     // file pdf access
     SFilePDF FilePDF = SFilePDF();
-#endif // PROJECT_USING_LIBHARU
+#endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
-#if PROJECT_USING_JSONCPP
+#if LIBPRCPP_PROJECT_USING_JSONCPP
     /**
      * @brief file json structure
      * 
@@ -157,7 +157,7 @@ public:
     };
     // file json access
     SFileJSON FileJSON = SFileJSON();
-#endif // PROJECT_USING_JSONCPP
+#endif // LIBPRCPP_PROJECT_USING_JSONCPP
 };
 
 } // namespace libprcpp

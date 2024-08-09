@@ -4,7 +4,7 @@
 
 #include <cstring>
 
-#if PROJECT_USING_SCYLLADB
+#if LIBPRCPP_PROJECT_USING_SCYLLADB
 
 namespace libprcpp
 {
@@ -237,6 +237,6 @@ CassUuid IScyllaDbCoreInterface::SIScyllaDb::stringToCassUuid(const std::string 
     return result;
 }
 
-#endif // PROJECT_USING_SCYLLADB
+#endif // LIBPRCPP_PROJECT_USING_SCYLLADB
 
 } // namespace libprcpp

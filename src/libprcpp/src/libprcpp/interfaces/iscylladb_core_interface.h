@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-#if PROJECT_USING_SCYLLADB
+#if LIBPRCPP_PROJECT_USING_SCYLLADB
 #include <libprcpp/types/auth_types.h>
 
 #include <cassandra.h>
@@ -159,6 +159,6 @@ public:
 
 } // namespace libprcpp
 
-#endif // PROJECT_USING_SCYLLADB
+#endif // LIBPRCPP_PROJECT_USING_SCYLLADB
 
 #endif // LIBPRCPP_ISCYLLADB_CORE_INTERFACE_H

@@ -2,7 +2,7 @@
 #define LIBPRCPP_CRYPTOGRAPHY_MODULE_H
 #include <libprcpp/base/config.h>
 
-#if PROJECT_USING_CRYPTOPP_CMAKE
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 #include <string>
 
 #include <cryptopp/ec2n.h>
@@ -191,6 +191,6 @@ public:
 
 } // namespace libprcpp
 
-#endif // PROJECT_USING_CRYPTOPP_CMAKE
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #endif // LIBPRCPP_CRYPTOGRAPHY_MODULE_H

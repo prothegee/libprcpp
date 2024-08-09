@@ -2,7 +2,7 @@
 #define LIBPRCPP_PDF_TYPES_H
 #include <libprcpp/base/config.h>
 
-#if PROJECT_USING_LIBHARU
+#if LIBPRCPP_PROJECT_USING_LIBHARU
 #include "hpdf.h"
 
 namespace libprcpp
@@ -26,6 +26,6 @@ struct TPdfConfig
 
 } // namespace libprcpp
 
-#endif // PROJECT_USING_LIBHARU
+#endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
 #endif // LIBPRCPP_PDF_TYPES_H

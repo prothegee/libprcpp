@@ -2,7 +2,7 @@
 #define LIBPRCPP_IDROGON_HTTP_CONTROLLER_HELPER_H
 #include <libprcpp/base/config.h>
 
-#if PROJECT_USING_DROGON_FRAMEWORK
+#if LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 #include <drogon/drogon.h>
 
 #include <libprcpp/constants/header_const.h>
@@ -164,6 +164,6 @@ public:
 
 } // namespace libprcpp
 
-#endif // PROJECT_USING_DROGON_FRAMEWORK
+#endif // LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 
 #endif // LIBPRCPP_IDROGON_HTTP_CONTROLLER_HELPER_H

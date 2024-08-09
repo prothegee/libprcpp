@@ -32,7 +32,7 @@ std::string CSystemModule::SDirectory::getCurrentDir()
     return currentDir.string();
 }
 
-#if PROJECT_USING_LIBHARU
+#if LIBPRCPP_PROJECT_USING_LIBHARU
 bool CSystemModule::SFilePDF::generateTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig)
 {
     bool result = false;
@@ -78,9 +78,9 @@ bool CSystemModule::SFilePDF::generateTable(const std::vector<std::vector<std::s
 
     return result;
 }
-#endif // PROJECT_USING_LIBHARU
+#endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
-#if PROJECT_USING_JSONCPP
+#if LIBPRCPP_PROJECT_USING_JSONCPP
 std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const int &indent, const int &precision)
 {
     int _indent, _precision;
@@ -330,6 +330,6 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
 
     return result;
 }
-#endif // PROJECT_USING_JSONCPP
+#endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
 } // namespace libprcpp

@@ -5,9 +5,9 @@
 #include <string>
 #include <any>
 
-#if PROJECT_USING_JSONCPP
+#if LIBPRCPP_PROJECT_USING_JSONCPP
 #include <jsoncpp/json/json.h>
-#endif // PROJECT_USING_JSONCPP
+#endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
 namespace libprcpp
 {
@@ -22,7 +22,7 @@ struct TOkMessage
     std::string message = "";
 };
 
-#if PROJECT_USING_JSONCPP
+#if LIBPRCPP_PROJECT_USING_JSONCPP
 /**
  * @brief type ok with message and data structure
  * 
@@ -33,7 +33,7 @@ struct TOkMessageData
     std::string message = "";
     Json::Value data;
 };
-#endif // PROJECT_USING_JSONCPP
+#endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
 /**
  * @brief type ok with any structure
