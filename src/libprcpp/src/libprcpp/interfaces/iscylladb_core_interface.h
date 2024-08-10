@@ -6,7 +6,10 @@
 #include <iostream>
 
 #if LIBPRCPP_PROJECT_USING_SCYLLADB
+#include <libprcpp/enums/scylla_enums.h>
+
 #include <libprcpp/types/auth_types.h>
+#include <libprcpp/types/scylla_types.h>
 
 #include <cassandra.h>
 
@@ -16,9 +19,7 @@ namespace libprcpp
 class IScyllaDbCoreInterface
 {
 private:
-    static const char *m_host;
-    static const char *m_username;
-    static const char *m_password;
+    inline static TScyllaDbConnection m_connectionData;
 
 public:
     virtual ~IScyllaDbCoreInterface();
@@ -65,22 +66,6 @@ public:
         virtual ~SIScyllaDb();
 
         /**
-         * @brief get this project topology strategy
-         * 
-         * @note 0:undefined 1:SimpleStrategy 2:NetworkTopologyStrategy 3:LocalStrategy 4:EverywhereStrategy
-         * 
-         * @return int 
-         */
-        int getStrategy() { return m_strategy; };
-
-        /**
-         * @brief get this project auth mode
-         * 
-         * @return int 
-         */
-        int getAuthMode() { return m_authMode; }
-
-        /**
          * @brief scylladb print error
          * 
          * @param pCassFuture 
@@ -92,19 +77,39 @@ public:
          * @brief immediately initialize pointer/s for session & cluster
          * 
          * @note should be call in constructor before any usage
+         * 
+         * @param connectionData 
          */
-        void initializeConstructor(const std::string &host, const std::string &username, const std::string &password, const int &authMode, std::string &keyspace, const int &strategy, const int &replicationFactor);
+        void initializeConstructor(const TScyllaDbConnection &connectionData);
 
         /**
          * @brief get this keyspace project
          * 
          * @return std::string 
          */
-        std::string getKeyspace() { return m_keyspace; }
+        std::string getKeyspace() { return IScyllaDbCoreInterface::m_connectionData.keyspace; }
 
         std::string generateUuidV1AsString();
         std::string generateUuidV4AsString();
         std::string cassUuidToString(const CassUuid &uuidCass);
+
+        /**
+         * @brief get this project topology strategy
+         * 
+         * @note 0:undefined 1:SimpleStrategy 2:NetworkTopologyStrategy 3:LocalStrategy 4:EverywhereStrategy
+         * 
+         * @return EScyllaDbTopologyStrat::Enum 
+         */
+        EScyllaDbTopologyStrat::Enum getStrategy() { return IScyllaDbCoreInterface::m_connectionData.strategy; };
+
+        /**
+         * @brief get this project auth mode
+         * 
+         * @note 0:undefined 1:AllowAllAuthenticator 2:PasswordAuthenticator 3:com.scylladb.auth.TransitionalAuthenticator
+         * 
+         * @return EScyllaDbAuthMode::Enum 
+         */
+        EScyllaDbAuthMode::Enum getAuthMode() { return IScyllaDbCoreInterface::m_connectionData.auth_mode; }
 
         /**
          * @brief execute cqlsh command
@@ -141,12 +146,6 @@ public:
         CassUuid stringToCassUuid(const std::string &uuidStr);
 
     private:
-        int m_strategy; // 0:undefined 1:SimpleStrategy 2:NetworkTopologyStrategy 3:LocalStrategy 4:EverywhereStrategy 
-        int m_authMode; // 0:undefined 1:AllowAllAuthenticator 2:PasswordAuthenticator 3:com.scylladb.auth.TransitionalAuthenticator
-        int m_replicationFactor;
-
-        std::string m_keyspace;
-
         CassFuture *m_pCassFuture = nullptr;
 
         CassCluster *m_pCassCluster = nullptr;

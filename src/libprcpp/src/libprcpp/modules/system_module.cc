@@ -40,7 +40,7 @@ bool CSystemModule::SFilePDF::generateTable(const std::vector<std::vector<std::s
     HPDF_Doc pdf = HPDF_New(filePDFerrorHandler, NULL);
     if (!pdf)
     {
-        std::cerr << "ERROR FilePDF: cannot create PDF object on \"generateTable\"\n";
+        std::cerr << "ERROR FilePDF: cannot create PDF object on \"CSystemModule::SFilePDF::generateTable\"\n";
         return result;
     }
 
@@ -98,10 +98,8 @@ std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const i
         _indentString += " ";
     }
 
-    writter["indentation"] = _indentString;
-    writter["precision"] = _precision;
-    // writter.settings_["indentation"] = _indentString;
-    // writter.settings_["precision"] = _precision;
+    writter.settings_["indentation"] = _indentString;
+    writter.settings_["precision"] = _precision;
 
     return std::string(Json::writeString(writter, input));
 }
@@ -119,7 +117,7 @@ Json::Value CSystemModule::SFileJSON::fromFile(const std::string &input)
     }
     else
     {
-        std::cerr << "ERROR FileJSON: can't find json file from \"" << input << "\"\n";
+        std::cerr << "ERROR FileJSON: can't find json file from \"" << input << "\" in \"CSystemModule::SFileJSON::fromFile\"\n";
     }
 
     return result;
@@ -231,7 +229,7 @@ Json::Value CSystemModule::SFileJSON::fromCSV(const std::string &input)
     }
     else
     {
-        std::cerr << "ERROR FileJSON: can't open \"" << input << "\"\n";
+        std::cerr << "ERROR FileJSON: can't open \"" << input << "\"in \"CSystemModule::SFileJSON::fromCSV\"\n";
     }
 
     return result;
@@ -257,7 +255,7 @@ bool CSystemModule::SFileJSON::save(const Json::Value & input, const std::string
     }
     else
     {
-        std::cerr << "ERROR FileJSON: can't save file to \"" << output << "\"\n";
+        std::cerr << "ERROR FileJSON: can't save file to \"" << output << "\" in \"CSystemModule::SFileJSON::save\"\n";
     }
 
     return result;
@@ -269,7 +267,7 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
     std::ifstream jsonFile(input);
     if (!jsonFile.is_open())
     {
-        std::cerr << "ERROR FileJSON: can't open JSON file \"" << input << "\"\n";
+        std::cerr << "ERROR FileJSON: can't open JSON file \"" << input << "\" in \"CSystemModule::SFileJSON::saveToCSV\"\n";
         return result;
     }
 
@@ -279,7 +277,7 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
 
     if (!Json::parseFromStream(readerBuilder, jsonFile, &jsonData, &errs))
     {
-        std::cerr << "ERROR FileJSON: failed to parse json: " << errs << "\n";
+        std::cerr << "ERROR FileJSON: failed to parse json: \"" << errs << "\" in \"CSystemModule::SFileJSON::saveToCSV(\"\n";
         return result;
     }
     jsonFile.close();
@@ -288,7 +286,7 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
     std::ofstream csvFile(output);
     if (!csvFile.is_open())
     {
-        std::cerr << "ERROR FileJSON: can't open CSV file " << output << "\"\n";
+        std::cerr << "ERROR FileJSON: can't open CSV file " << output << "\" in \"CSystemModule::SFileJSON::saveToCSV\"\n";
         return result;
     }
 
@@ -324,7 +322,7 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
     }
     else
     {
-        std::cerr << "ERROR FileJSON: json data is not an array or is empty" << "\n";
+        std::cerr << "ERROR FileJSON: json data is not an array or is empty" << " in \"CSystemModule::SFileJSON::saveToCSV\"\n";
     }
     csvFile.close();
 

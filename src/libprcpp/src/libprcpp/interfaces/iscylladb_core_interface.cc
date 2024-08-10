@@ -16,8 +16,8 @@ IScyllaDbCoreInterface::~IScyllaDbCoreInterface()
 void IScyllaDbCoreInterface::OnAuth::initialize(CassAuthenticator *pCassAuth, void *pVoidData)
 {
     const TAuthbBasic *pCredential = (const TAuthbBasic*)new TAuthbBasic({
-        IScyllaDbCoreInterface::m_username,
-        IScyllaDbCoreInterface::m_password
+        IScyllaDbCoreInterface::m_connectionData.username.c_str(),
+        IScyllaDbCoreInterface::m_connectionData.password.c_str()
     });
 
     size_t username_size = strlen(pCredential->username);
@@ -73,22 +73,22 @@ void IScyllaDbCoreInterface::SIScyllaDb::printError(CassFuture *pCassFuture, con
     fprintf(stderr, "ERROR \"%s\":\n%.*s\n", info, (int)messageSize, message);
 }
 
-void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const std::string &host, const std::string &username, const std::string &password, const int &authMode, std::string &keyspace, const int &strategy, const int &replicationFactor)
+void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbConnection &connectionData)
 {
-    IScyllaDbCoreInterface::m_host = host.c_str();
-    IScyllaDbCoreInterface::m_username = username.c_str();
-    IScyllaDbCoreInterface::m_password = password.c_str();
+    IScyllaDbCoreInterface::m_connectionData.host = connectionData.host;
+    IScyllaDbCoreInterface::m_connectionData.username = connectionData.username;
+    IScyllaDbCoreInterface::m_connectionData.password = connectionData.password;
 
-    m_keyspace = keyspace;
-    m_strategy = strategy;
-    m_replicationFactor = replicationFactor;
+    IScyllaDbCoreInterface::m_connectionData.keyspace = connectionData.keyspace;
+    IScyllaDbCoreInterface::m_connectionData.strategy = connectionData.strategy;
+    IScyllaDbCoreInterface::m_connectionData.replication_factor = connectionData.replication_factor;
 
     if (m_pCassCluster == nullptr) { m_pCassCluster = cass_cluster_new(); }
     if (m_pCassSession == nullptr) { m_pCassSession = cass_session_new(); }
 
     TAuthbBasic *pAuth = new TAuthbBasic({
-        username.c_str(),
-        password.c_str()
+        IScyllaDbCoreInterface::m_connectionData.username.c_str(),
+        IScyllaDbCoreInterface::m_connectionData.password.c_str()
     });
 
     CassAuthenticatorCallbacks authCallbacks = {
@@ -98,20 +98,21 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const std::string
         IScyllaDbCoreInterface::OnAuth::cleanup
     };
 
-    m_authMode = authMode;
-    switch (m_authMode)
+    IScyllaDbCoreInterface::m_connectionData.auth_mode = connectionData.auth_mode;
+
+    switch (IScyllaDbCoreInterface::m_connectionData.auth_mode)
     {
-        case 1:
+        case EScyllaDbAuthMode::Enum::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR:
         {
-            cass_cluster_set_contact_points(m_pCassCluster, IScyllaDbCoreInterface::m_host);
+            cass_cluster_set_contact_points(m_pCassCluster, IScyllaDbCoreInterface::m_connectionData.host.c_str());
 
             cass_cluster_set_authenticator_callbacks(m_pCassCluster, &authCallbacks, nullptr, pAuth);
         }
         break;
 
-        case 2:
+        case EScyllaDbAuthMode::Enum::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR:
         {
-            cass_cluster_set_contact_points(m_pCassCluster, IScyllaDbCoreInterface::m_host);
+            cass_cluster_set_contact_points(m_pCassCluster, IScyllaDbCoreInterface::m_connectionData.host.c_str());
 
             cass_cluster_set_authenticator_callbacks(m_pCassCluster, &authCallbacks, nullptr, pAuth);
 
@@ -122,9 +123,19 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const std::string
         default:
         {
             std::cerr << "ERROR: core interface for scylladb auth mode is default, it's not implemented\n";
-            abort();
+            exit(-1);
         }
         break;
+    }
+
+    if (cass_future_error_code(m_pCassFuture) != CASS_OK)
+    {
+        std::cerr << "ERROR: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" fail to make connection\n";
+        exit(-1);
+    }
+    else
+    {
+        std::cout << "MESSAGE: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected\n";
     }
 }
 

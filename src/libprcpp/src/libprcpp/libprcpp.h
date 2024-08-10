@@ -9,6 +9,7 @@
 #include "enums/os_enums.h"
 #include "enums/requirement_enums.h"
 #include "enums/requirement_enums.h"
+#include "enums/scylla_enums.h"
 #include "enums/time_enums.h"
 
 #include "interfaces/idrogon_http_controller_helper.h"
@@ -23,6 +24,7 @@
 #include "types/look_types.h"
 #include "types/ok_types.h"
 #include "types/pdf_types.h"
+#include "types/scylla_types.h"
 
 namespace libprcpp
 {
