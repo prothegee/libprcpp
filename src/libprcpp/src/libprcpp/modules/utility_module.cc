@@ -376,8 +376,7 @@ bool CUtilityModule::checkInputUsernameMeetRequirement(const std::string &input,
 
         default:
         {
-            std::cerr << "requirement param is undefined\n";
-            abort();
+            std::cerr << "ERROR: requirement param is undefined in \"CUtilityModule::checkInputUsernameMeetRequirement\"\n";            
         }
         break;
     }

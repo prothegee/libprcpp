@@ -40,7 +40,7 @@ __*NOTES:*__
 -DLIBPRCPP_PROJECT_BUILD_TEST=true                 # will add test directory execute-able
 
 # not required | default false
--LIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true # will make output under PROJECT_BUILD_TAGET_DIRECTORY
+-DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true # will make output under PROJECT_BUILD_TAGET_DIRECTORY
 ```
 
 look on [cmake directory for more info](./cmake)
@@ -50,7 +50,7 @@ look on [cmake directory for more info](./cmake)
 `cmake build debug`
 ```sh
 mkdir -p build/debug;
-cmake -B build/debug -DCMAKE_CXX_FLAGS="-std=c++17" -DCMAKE_BUILD_TYPE=Debug -DPROJECT_BUILD_STATUS=1 -DPROJECT_BUILD_TARGET=1 -DLIBPRCPP_PROJECT_BUILD_TEST=false -LIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true;
+cmake -B build/debug -DCMAKE_CXX_FLAGS="-std=c++17" -DCMAKE_BUILD_TYPE=Debug -DPROJECT_BUILD_STATUS=1 -DPROJECT_BUILD_TARGET=1 -DLIBPRCPP_PROJECT_BUILD_TEST=false -DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true;
 cmake --build build/debug --config Debug;
 ```
 

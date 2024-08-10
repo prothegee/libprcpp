@@ -132,20 +132,27 @@ std::string CCryptographyModule::SHash::scrypt(const std::string &input, const s
         computation=1<<16, blockSize=6, threads=1;
     }
 
-    CryptoPP::SecByteBlock derived(32);
-    CryptoPP::Scrypt scrypt;
+    try
+    {
+        CryptoPP::SecByteBlock derived(32);
+        CryptoPP::Scrypt scrypt;
 
-    CryptoPP::AlgorithmParameters params = 
-        CryptoPP::MakeParameters("Cost", computation)
-        ("BlockSize", blockSize)("Parallelization", threads)
-        ("Salt", CryptoPP::ConstByteArrayParameter(
-            (const CryptoPP::byte*)&salt_input[0], salt_input.size()));
+        CryptoPP::AlgorithmParameters params = 
+            CryptoPP::MakeParameters("Cost", computation)
+            ("BlockSize", blockSize)("Parallelization", threads)
+            ("Salt", CryptoPP::ConstByteArrayParameter(
+                (const CryptoPP::byte*)&salt_input[0], salt_input.size()));
 
-    scrypt.DeriveKey(derived, derived.size(),
-        (const CryptoPP::byte*)&passwd_input[0], passwd_input.size(), params);
+        scrypt.DeriveKey(derived, derived.size(),
+            (const CryptoPP::byte*)&passwd_input[0], passwd_input.size(), params);
 
-    CryptoPP::StringSource(derived, derived.size(), true,
-        new CryptoPP::HexEncoder(new CryptoPP::StringSink(result)));
+        CryptoPP::StringSource(derived, derived.size(), true,
+            new CryptoPP::HexEncoder(new CryptoPP::StringSink(result)));
+    }
+    catch(const CryptoPP::Exception &e)
+    {
+        std::cerr << "ERROR: \"CCryptographyModule::SHash::scrypt\":\n" << e.what() << '\n';
+    }
 
     return result;
 }
@@ -166,21 +173,28 @@ std::string CCryptographyModule::SHash::scrypt(const std::string &input, const s
 
     if (_derivedLength <= 32) _derivedLength = 32;
 
-    CryptoPP::SecByteBlock derived(derivedLength);
+    try
+    {
+        CryptoPP::SecByteBlock derived(derivedLength);
 
-    CryptoPP::Scrypt scrypt;
+        CryptoPP::Scrypt scrypt;
 
-    CryptoPP::AlgorithmParameters params = 
-        CryptoPP::MakeParameters("Cost", computation)
-        ("BlockSize", blockSize)("Parallelization", threads)
-        ("Salt", CryptoPP::ConstByteArrayParameter(
-            (const CryptoPP::byte*)&salt_input[0], salt_input.size()));
+        CryptoPP::AlgorithmParameters params = 
+            CryptoPP::MakeParameters("Cost", computation)
+            ("BlockSize", blockSize)("Parallelization", threads)
+            ("Salt", CryptoPP::ConstByteArrayParameter(
+                (const CryptoPP::byte*)&salt_input[0], salt_input.size()));
 
-    scrypt.DeriveKey(derived, derived.size(),
-        (const CryptoPP::byte*)&passwd_input[0], passwd_input.size(), params);
+        scrypt.DeriveKey(derived, derived.size(),
+            (const CryptoPP::byte*)&passwd_input[0], passwd_input.size(), params);
 
-    CryptoPP::StringSource(derived, derived.size(), true,
-        new CryptoPP::HexEncoder(new CryptoPP::StringSink(result)));
+        CryptoPP::StringSource(derived, derived.size(), true,
+            new CryptoPP::HexEncoder(new CryptoPP::StringSink(result)));
+    }
+    catch(const CryptoPP::Exception &e)
+    {
+        std::cerr << "ERROR: \"CCryptographyModule::SHash::scrypt\":\n" << e.what() << '\n';
+    }
 
     return result;
 }
@@ -203,7 +217,7 @@ std::string CCryptographyModule::SStreamCipher::aesEncrypt(std::string input, st
     }
     catch(const CryptoPP::Exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "ERROR: \"CCryptographyModule::SStreamCipher::aesEncrypt\":\n" << e.what() << '\n';
     }
 
     return result;
@@ -227,7 +241,7 @@ std::string CCryptographyModule::SStreamCipher::aesDecrypt(std::string input, st
     }
     catch(const CryptoPP::Exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "ERROR: \"CCryptographyModule::SStreamCipher::aesDecrypt\":\n" << e.what() << '\n';
     }
 
     return result;
@@ -251,7 +265,7 @@ std::string CCryptographyModule::SStreamCipher::xChaCha20encrypt(std::string inp
     }
     catch(const CryptoPP::Exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "ERROR: \"CCryptographyModule::SStreamCipher::xChacha20encrypt\":\n" << e.what() << '\n';
     }
 
     return result;
@@ -275,7 +289,7 @@ std::string CCryptographyModule::SStreamCipher::xChaCha20decrypt(std::string inp
     }
     catch(const CryptoPP::Exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "ERROR: \"CCryptographyModule::SStreamCipher::xChaCha20decrypt\":\n" << e.what() << '\n';
     }
 
     return result;
@@ -299,7 +313,7 @@ std::string CCryptographyModule::SStreamCipher::rc6encrypt(std::string input, st
     }
     catch(const CryptoPP::Exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "ERROR: \"CCryptographyModule::SStreamCipher::rc6encrypt\":\n" << e.what() << '\n';
     }
 
     return result;
@@ -323,7 +337,7 @@ std::string CCryptographyModule::SStreamCipher::rc6decrypt(std::string input, st
     }
     catch(const CryptoPP::Exception& e)
     {
-        std::cerr << e.what() << '\n';
+        std::cerr << "ERROR: \"CCryptographyModule::SStreamCipher::rc6decrypt\":\n" << e.what() << '\n';
     }
 
     return result;
