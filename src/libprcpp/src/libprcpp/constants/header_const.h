@@ -18,6 +18,7 @@ struct HEADER
         inline static const std::string REFERER = "Referer";
         inline static const std::string ACCEPT_LANGUAGE = "Accept-Language";
         inline static const std::string ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+        inline static const std::string ACCESS_CONTROL_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
         inline static const std::string STRICT_TRANSPORT_SECURITY = "Strict-Transport-Security";
         inline static const std::string CROSS_ORIGIN_OPENER_POLICY = "Cross-Origin-Opener-Policy";
         inline static const std::string CROSS_ORIGIN_EMBEDDER_POLICY = "Cross-Origin-Embedder-Policy";
