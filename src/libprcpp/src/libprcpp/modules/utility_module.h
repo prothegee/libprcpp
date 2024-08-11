@@ -1,6 +1,7 @@
 #ifndef LIBPRCPP_UTILITY_MODULE_H
 #define LIBPRCPP_UTILITY_MODULE_H
 #include <libprcpp/base/config.h>
+#include <libprcpp/base/export.h>
 
 #include <libprcpp/enums/requirement_enums.h>
 #include <libprcpp/enums/time_enums.h>
@@ -153,14 +154,6 @@ public:
      * @return std::string 
      */
     std::string generateRandomAlphanumericWithSpecialCharacter(int length);
-
-    /**
-     * @brief generate random uuid
-     * 
-     * @note might not safe
-     * @return std::string 
-     */
-    std::string generateRandomUUID();
 
     /**
      * @brief change input letter case
@@ -331,6 +324,8 @@ public:
                 long toInt64(const int &timeOffset = 0);
 
                 std::string toString(const int &timeOffset = 0);
+
+                std::string toStringSecondsOffset(const int &secondsOffset = 0);
             };
             // utc YYYYMMDDhhmmss data access
             SUTCYearMonthDayHourMinuteSecond YYYYMMDDhhmmss = SUTCYearMonthDayHourMinuteSecond();
@@ -341,6 +336,118 @@ public:
     // date and time data access
     SDateAndTime DateAndTime = SDateAndTime();
 };
+
+// namespace utilityFunctions for quick access common utilities
+namespace utilityFunctions
+{
+
+/**
+ * @brief format string source, find match query and replace it
+ * 
+ * @param source 
+ * @param query 
+ * @param replacement 
+ */
+void findAndReplaceAll(std::string &source, const std::string &query, const std::string &replacement);
+
+/**
+ * @brief find each keywords from source
+ * 
+ * @note return value is how many keyword that've been found
+ * 
+ * @param source 
+ * @param keywords 
+ * @param foundKeywords 
+ * @return int 
+ */
+int  findEachKeywords(const std::string &source, const std::vector<std::string> &keywords, std::vector<std::string> &foundKeywords);
+
+/**
+ * @brief find keyword before "keywordBefore" param
+ * 
+ * @param source 
+ * @param keywordBefore 
+ * @param extraction 
+ * @return true 
+ * @return false 
+ */
+bool findKeywordBefore(const std::string &source, const std::string &keywordBefore, std::string &extraction);
+
+/**
+ * @brief find keyword after "keywordAfter" param
+ * 
+ * @param source 
+ * @param keywordAfter 
+ * @param extraction 
+ * @return true 
+ * @return false 
+ */
+bool findKeywordAfter(const std::string &source, const std::string &keywordAfter, std::string &extraction);
+
+/**
+ * @brief generate random number
+ * 
+ * @param min 
+ * @param max 
+ * @return int 
+ */
+int generateRandomNumber(const int min, const int max);
+
+/**
+ * @brief generate random number
+ * 
+ * @param min 
+ * @param max 
+ * @return long 
+ */
+long generateRandomNumber(const long min, const long max);
+
+/**
+ * @brief generate random number
+ * 
+ * @param min 
+ * @param max 
+ * @return long long 
+ */
+long long generateRandomNumber(const long long min, const long long max);
+
+/**
+ * @brief generate random number
+ * 
+ * @param min 
+ * @param max 
+ * @return float 
+ */
+float generateRandomNumber(const float min, const float max);
+
+/**
+ * @brief generate random number
+ * 
+ * @param min 
+ * @param max 
+ * @return double 
+ */
+double generateRandomNumber(const double min, const double max);
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+/**
+ * @brief base64 encoding
+ * 
+ * @param input 
+ * @return std::string 
+ */
+std::string base64encode(const std::string &input);
+
+/**
+ * @brief base64 decoding
+ * 
+ * @param input 
+ * @return std::string 
+ */
+std::string base64decode(const std::string &input);
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+} // namespace utilityFunctions
 
 } // namespace libprcpp
 
