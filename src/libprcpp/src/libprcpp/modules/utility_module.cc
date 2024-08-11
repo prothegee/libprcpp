@@ -192,17 +192,6 @@ std::string CUtilityModule::generateRandomAlphanumericWithSpecialCharacter(int l
     return result;
 }
 
-std::string CUtilityModule::generateRandomUUID()
-{
-    std::string result;
-
-    std::string str1(generateRandomAlphanumeric(8)), str2(generateRandomAlphanumeric(4)), str3(generateRandomAlphanumeric(4)), str4(generateRandomAlphanumeric(4)), str5(generateRandomAlphanumeric(12));
-
-    result = str1 + "-" + str2 + "-" + str3 + "-" + str4 + "-" + str5;
-
-    return result;
-}
-
 std::string CUtilityModule::changeInputLetterCase(const std::string input, const int letterCase)
 {
     std::string result;
@@ -969,6 +958,101 @@ std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond
 
     return result;
 }
+
+std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toStringSecondsOffset(const int &secondsOffset)
+{
+    std::string result;
+    std::stringstream ss;
+
+    auto now = std::chrono::system_clock::now();
+
+    auto seconds = std::chrono::seconds(secondsOffset);
+
+    auto future_time = now + seconds;
+
+    std::time_t future_time_t = std::chrono::system_clock::to_time_t(future_time);
+
+    std::tm future_tm = *std::gmtime(&future_time_t);
+
+    ss << std::put_time(&future_tm, "%Y%m%d%H%M%S");
+
+    result = ss.str();
+
+    return result;
+}
+
+namespace utilityFunctions
+{
+
+void findAndReplaceAll(std::string &source, const std::string &query, const std::string &replacement)
+{
+    CUtilityModule Utility;
+    Utility.findAndReplaceAll(source, query, replacement);
+}
+
+int findEachKeywords(const std::string &source, const std::vector<std::string> &keywords, std::vector<std::string> &foundKeywords)
+{
+    CUtilityModule Utility;
+    return Utility.findEachKeywords(source, keywords, foundKeywords);
+}
+
+bool findKeywordBefore(const std::string &source, const std::string &keywordBefore, std::string &extraction)
+{
+    CUtilityModule Utility;
+    return Utility.findKeywordBefore(source, keywordBefore, extraction);
+}
+
+bool findKeywordAfter(const std::string &source, const std::string &keywordAfter, std::string &extraction)
+{
+    CUtilityModule Utility;
+    return Utility.findKeywordAfter(source, keywordAfter, extraction);
+}
+
+int generateRandomNumber(const int min, const int max)
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomNumber(min, max);
+}
+
+long generateRandomNumber(const long min, const long max)
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomNumber(min, max);
+}
+
+long long generateRandomNumber(const long long min, const long long max)
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomNumber(min, max);
+}
+
+float generateRandomNumber(const float min, const float max)
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomNumber(min, max);
+}
+
+double generateRandomNumber(const double min, const double max)
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomNumber(min, max);
+}
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+std::string base64encode(const std::string &input)
+{
+    CUtilityModule Utility;
+    return Utility.base64encode(input);
+}
+
+std::string base64decode(const std::string &input)
+{
+    CUtilityModule Utility;
+    return Utility.base64decode(input);
+}
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+} // namespace utilityFunctions
 
 } // namespace libprcpp
 
