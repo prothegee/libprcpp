@@ -330,6 +330,258 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
 }
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
+bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+{
+    bool result = false;
+
+    if (encryptDecryptMode == EEncDecMode::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
+    {
+        std::cerr << "ERROR FileEncDec fileEncrypt: OpenSSL library is not configured\n";
+        return result;
+    }
+
+    auto plaintext = readFile(input);
+
+    if (plaintext.empty())
+    {
+        std::cerr << "ERROR FileEncDec fileEncrypt: input is empty\n";
+        return result;
+    }
+
+    switch (encryptDecryptMode)
+    {
+        case EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES:
+        {
+            OpenSSL_add_all_algorithms();
+            ERR_load_crypto_strings();
+
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto ciphertext = encryptOpenSSL_AES(plaintext, _iv.data(), _ik.data());
+
+            result = writeFile(output, ciphertext);
+
+            EVP_cleanup();
+            ERR_free_strings();
+        }
+        break;
+
+        default:
+        {
+            std::cerr << "ERROR FileEncDec fileEncrypt: encryptDecryptMode is not supported\n";
+            abort();
+        }
+        break;
+    }
+
+    return result;
+}
+
+bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+{
+    bool result = false;
+
+    if (encryptDecryptMode == EEncDecMode::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
+    {
+        std::cerr << "ERROR FileEncDec fileDecrypt: OpenSSL library is not configured\n";
+        return result;
+    }
+
+    auto ciphertext = readFile(input);
+
+    if (ciphertext.empty())
+    {
+        std::cerr << "ERROR FileEncDec fileEncrypt: input is empty\n";
+        return result;
+    }
+
+    switch (encryptDecryptMode)
+    {
+        case EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES:
+        {
+            OpenSSL_add_all_algorithms();
+            ERR_load_crypto_strings();
+
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto plaintext = decryptOpenSSL_AES(ciphertext, _iv.data(), _ik.data());
+
+            result = writeFile(output, plaintext);
+
+            EVP_cleanup();
+            ERR_free_strings();
+        }
+        break;
+
+        default:
+        {
+            std::cerr << "ERROR FileEncDec fileDecrypt: encryptDecryptMode is not supported\n";
+            abort();
+        }
+        break;
+    }
+
+    return result;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::readFile(const std::string& filePath)
+{
+    std::ifstream file(filePath, std::ios::binary | std::ios::ate);
+
+    if (!file)
+    {
+        std::cerr << "ERROR FileEncDec readFile: opening file for writing\n";
+        return {};
+    }
+
+    std::streamsize size = file.tellg();
+    file.seekg(0, std::ios::beg);
+    std::vector<unsigned char> buffer(size);
+
+    if (!file.read(reinterpret_cast<char*>(buffer.data()), size))
+    {
+        std::cerr << "ERROR FileEncDec readFile: writing to file\n";
+        return {};
+    }
+
+    return buffer;
+}
+
+bool CSystemModule::SFileEncDec::writeFile(const std::string& filePath, const std::vector<unsigned char>& data)
+{
+    std::ofstream file(filePath, std::ios::binary);
+
+    if (!file)
+    {
+        std::cerr << "ERROR FileEncDec writeFile: opening file for writing\n";
+        return false;
+    }
+
+    if (!file.write(reinterpret_cast<const char*>(data.data()), data.size()))
+    {
+        std::cerr << "ERROR FileEncDec writeFile: writing to file\n";
+        return false;
+    }
+
+    return true;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::stringToUnsignedChar(const std::string& str, size_t requiredSize)
+{
+    std::vector<unsigned char> result(str.begin(), str.end());
+
+    if (result.size() > requiredSize)
+    {
+        result.resize(requiredSize);
+    }
+    else if (result.size() < requiredSize)
+    {
+        result.resize(requiredSize, 0x00);
+    }
+
+    return result;
+}
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+std::vector<unsigned char> CSystemModule::SFileEncDec::encryptOpenSSL_AES(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik)
+{
+    OpenSSL_add_all_algorithms();
+    ERR_load_crypto_strings();
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+
+    if (!ctx)
+    {
+        handleOpenSSLError();
+    }
+
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, ik, iv))
+    {
+        handleOpenSSLError();
+    }
+
+    int len;
+
+    std::vector<unsigned char> ciphertext(plaintext.size() + AES_BLOCK_SIZE);
+
+    if (1 != EVP_EncryptUpdate(ctx, ciphertext.data(), &len, plaintext.data(), plaintext.size()))
+    {
+        handleOpenSSLError();
+    }
+
+    int ciphertext_len = len;
+
+    if (1 != EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len)) 
+    {
+        handleOpenSSLError();
+    }
+
+    ciphertext_len += len;
+
+    ciphertext.resize(ciphertext_len);
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    EVP_cleanup();
+    ERR_free_strings();
+
+    return ciphertext;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::decryptOpenSSL_AES(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik)
+{
+    OpenSSL_add_all_algorithms();
+    ERR_load_crypto_strings();
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+
+    if (!ctx)
+    {
+        handleOpenSSLError();
+    }
+
+    if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, ik, iv))
+    {
+        handleOpenSSLError();
+    }
+
+    int len;
+
+    std::vector<unsigned char> plaintext(ciphertext.size());
+
+    if (1 != EVP_DecryptUpdate(ctx, plaintext.data(), &len, ciphertext.data(), ciphertext.size()))
+    {
+        handleOpenSSLError();
+    }
+
+    int plaintext_len = len;
+
+    if (1 != EVP_DecryptFinal_ex(ctx, plaintext.data() + len, &len))
+    {
+        handleOpenSSLError();
+    }
+
+    plaintext_len += len;
+
+    plaintext.resize(plaintext_len);
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    EVP_cleanup();
+    ERR_free_strings();
+
+    return plaintext;
+}
+
+void CSystemModule::SFileEncDec::handleOpenSSLError()
+{
+    ERR_print_errors_fp(stderr);
+    abort();
+}
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
 namespace utilityFunction
 {
 
