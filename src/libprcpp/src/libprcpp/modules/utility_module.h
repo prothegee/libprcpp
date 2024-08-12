@@ -429,6 +429,67 @@ float generateRandomNumber(const float min, const float max);
  */
 double generateRandomNumber(const double min, const double max);
 
+/**
+ * @brief generate random alphanumeric
+ * 
+ * @param length 
+ * @return std::string 
+ */
+std::string generateRandomAlphanumeric(int length);
+
+/**
+ * @brief generate random alphanumeric with special character
+ * 
+ * @param length 
+ * @return std::string 
+ */
+std::string generateRandomAlphanumericWithSpecialCharacter(int length);
+
+/**
+ * @brief change input letter case
+ * 
+ * @param input 
+ * @param letterCase 0:lowercase, 1:uppercase, 2:mixcase
+ * @return std::string 
+ */
+std::string changeInputLetterCase(const std::string input, const int letterCase);
+
+/**
+ * @brief check if input is alphabetic value
+ * 
+ * @param input 
+ * @return true 
+ * @return boolean
+ */
+bool checkInputIsAlphabetic(const std::string input);
+
+/**
+ * @brief check if input is alphanumeric value
+ * 
+ * @param input 
+ * @return true 
+ * @return boolean
+ */
+bool checkInputIsAlphaNumeric(const std::string input);
+
+/**
+ * @brief check if input password meet requirement param
+ * 
+ * @param input 
+ * @param requirement 
+ * @return true if meet requirement
+ */
+bool checkInputPasswordMeetRequirement(const std::string &input, const ERequirementPasswordInput::Enum &requirement);
+
+/**
+ * @brief check if input username meet requirement param
+ * 
+ * @param input 
+ * @param requirement 
+ * @return false if illegal
+ */
+bool checkInputUsernameMeetRequirement(const std::string &input, const ERequirementUsernameInput::Enum &requirement);
+
 #if LIBPRCPP_PROJECT_USING_OPENSSL
 /**
  * @brief base64 encoding
@@ -446,6 +507,86 @@ std::string base64encode(const std::string &input);
  */
 std::string base64decode(const std::string &input);
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+namespace dateAndTime
+{
+
+namespace UTC
+{
+
+    namespace timeZone
+    {
+        // default: UTC +00:00
+        std::string toString();
+
+        // @param timeOffset from -11 to 14
+        std::string toString(const int &timeOffset, const bool &ISO8601 = true);
+    } // namespace timeZone
+
+    namespace year
+    {
+        int toInt(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+    } // namespace year
+
+    namespace month
+    {
+        int toInt(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+    } // namespace month
+
+    namespace day
+    {
+        int toInt(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+    } // namespace day
+
+    namespace hour
+    {
+        int toInt(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+    } // namespace hour
+
+    namespace second
+    {
+        int toInt(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+    } // namespace second
+
+    namespace YYYYMMDD
+    {
+        int toInt(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+
+        std::string toStringISO8601(const int &timeOffset = 0);
+    } // namespace YYYYMMDD
+
+    namespace hhmmss
+    {
+        int toInt(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+    } // namespace hhmmss
+
+    namespace YYYYMMDDhhmmss
+    {
+        long toInt64(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+
+        std::string toStringSecondsOffset(const int &secondsOffset = 0);
+    } // namespace YYYYMMDDhhmmss
+    
+
+} // namespace UTC
+
+} // namespace dateAndTime
 
 } // namespace utilityFunctions
 

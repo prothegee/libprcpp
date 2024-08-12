@@ -330,4 +330,82 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
 }
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
+namespace utilityFunction
+{
+
+    namespace directory
+    {
+        bool createDirectory(const std::string &path)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.Directory.createDirectory(path);
+        }
+
+        bool deleteDirectory(const std::string &path)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.Directory.deleteDirectory(path);
+        }
+
+        std::string getCurrentDir()
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.Directory.getCurrentDir();
+        }
+    } // namespace directory
+
+    #if LIBPRCPP_PROJECT_USING_LIBHARU
+    namespace filePdf
+    {
+        bool generateTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FilePDF.generateTable(tableData, filePathName, pdfConfig);
+        }
+    } // namespace filePdf
+    #endif // LIBPRCPP_PROJECT_USING_LIBHARU
+
+    #if LIBPRCPP_PROJECT_USING_JSONCPP
+    namespace json
+    {
+        std::string toString(const Json::Value &input, const int &indent, const int &precision)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileJSON.toString(input, indent, precision);
+        }
+
+        Json::Value fromFile(const std::string &input)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileJSON.fromFile(input);
+        }
+
+        Json::Value fromString(const std::string &input, const int &indent, const int &precision)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileJSON.fromString(input, indent, precision);
+        }
+
+        Json::Value fromCSV(const std::string &input)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileJSON.fromCSV(input);
+        }
+
+        bool save(const Json::Value &input, const std::string &output)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileJSON.save(input, output);
+        }
+
+        bool saveToCSV(const std::string &input, const std::string &output)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileJSON.saveToCSV(input, output);
+        }
+    } // namespace json
+#endif // LIBPRCPP_PROJECT_USING_JSONCPP
+
+} // namespace utilityFunction
+
 } // namespace libprcpp

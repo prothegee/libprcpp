@@ -160,6 +160,75 @@ public:
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 };
 
+namespace utilityFunction
+{
+
+    namespace directory
+    {
+        /**
+         * @brief create directory
+         * 
+         * @note relative from execute-able file
+         * 
+         * @param path 
+         * @return true if ok
+         */
+        bool createDirectory(const std::string &path);
+
+        /**
+         * @brief delete driectory
+         * 
+         * @note relative from execute-able file
+         * 
+         * @param path 
+         * @return true if ok
+         */
+        bool deleteDirectory(const std::string &path);
+
+        /**
+         * @brief get current directory
+         * 
+         * @note relative from execute-able file
+         * 
+         * @return std::string 
+         */
+        std::string getCurrentDir();
+    } // namespace directory
+
+    #if LIBPRCPP_PROJECT_USING_LIBHARU
+    namespace filePdf
+    {
+        /**
+         * @brief generate table pdf file
+         * 
+         * @param tableData 
+         * @param filePathName 
+         * @param pdfConfig 
+         * @return true if ok
+         */
+        bool generateTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig);
+    } // namespace filePdf
+    #endif // LIBPRCPP_PROJECT_USING_LIBHARU
+
+    #if LIBPRCPP_PROJECT_USING_JSONCPP
+    namespace json
+    {
+        std::string toString(const Json::Value &input, const int &indent = 4, const int &precision = 16);
+
+        Json::Value fromFile(const std::string &input);
+
+        Json::Value fromString(const std::string &input, const int &indent = 4, const int &precision = 16);
+
+        Json::Value fromCSV(const std::string &input);
+
+        bool save(const Json::Value &input, const std::string &output);
+
+        bool saveToCSV(const std::string &input, const std::string &output);
+    } // namespace json
+    #endif // LIBPRCPP_PROJECT_USING_JSONCPP
+
+} // namespace utilityFunction
+
 } // namespace libprcpp
 
 #endif // LIBPRCPP_SYSTEM_MODULE_H

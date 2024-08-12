@@ -343,6 +343,103 @@ std::string CCryptographyModule::SStreamCipher::rc6decrypt(std::string input, st
     return result;
 }
 
+namespace utilityFunctions
+{
+namespace cryptography
+{
+    namespace hasher
+    {
+        std::string sha1(const std::string &input)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.sha1(input);
+        }
+
+        std::string sha224(const std::string &input)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.sha224(input);
+        }
+
+        std::string sha256(const std::string &input)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.sha256(input);
+        }
+
+        std::string sha384(const std::string &input)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.sha384(input);
+        }
+
+        std::string sha512(const std::string &input)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.sha512(input);
+        }
+
+        std::string blake2b(const std::string &input)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.blake2b(input);
+        }
+
+        std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.scrypt(input, salt, ensureHigh);
+        }
+
+        std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.Hasher.scrypt(input, salt, computationCost, blockSizeCost, threadsCost, derivedLength);
+        }
+    } // namespace hasher
+
+    namespace streamCipher
+    {
+        std::string aesEncrypt(std::string input, std::string iv, std::string ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.aesEncrypt(input, iv, ik);
+        }
+
+        std::string aesDecrypt(std::string input, std::string iv, std::string ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.aesDecrypt(input, iv, ik);
+        }
+
+        std::string xChaCha20encrypt(std::string input, std::string iv, std::string ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.xChaCha20encrypt(input, iv, ik);
+        }
+
+        std::string xChaCha20decrypt(std::string input, std::string iv, std::string ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.xChaCha20decrypt(input, iv, ik);
+        }
+
+        std::string rc6encrypt(std::string input, std::string iv, std::string ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.rc6encrypt(input, iv, ik);
+        }
+
+        std::string rc6decrypt(std::string input, std::string iv, std::string ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.rc6decrypt(input, iv, ik);
+        }
+    } // namespace streamCipher
+
+} // namespace cryptography
+} // namespace utilityFunctions
+
 } // namespace libprcpp
 
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
