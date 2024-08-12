@@ -23,6 +23,12 @@
 #include <cryptopp/aes.h>
 #include <cryptopp/chacha.h>
 #include <cryptopp/rc6.h>
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+#include <openssl/evp.h>
+#include <openssl/rand.h>
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 namespace libprcpp
 {
@@ -30,6 +36,7 @@ namespace libprcpp
 /**
  * @brief cryptography module class
  * 
+ * @note TODO: split module using OpenSSL lib and CryptoPP lib
  */
 class CCryptographyModule
 {
@@ -42,6 +49,7 @@ public:
 
     struct SHash
     {
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha1
          * 
@@ -51,7 +59,9 @@ public:
          * @return std::string 
          */
         std::string sha1(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha224
          * 
@@ -61,7 +71,9 @@ public:
          * @return std::string 
          */
         std::string sha224(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha256
          * 
@@ -71,7 +83,9 @@ public:
          * @return std::string 
          */
         std::string sha256(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha384
          * 
@@ -81,7 +95,9 @@ public:
          * @return std::string 
          */
         std::string sha384(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha512
          * 
@@ -91,7 +107,9 @@ public:
          * @return std::string 
          */
         std::string sha512(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate blake2b
          * 
@@ -101,7 +119,9 @@ public:
          * @return std::string 
          */
         std::string blake2b(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate scrypt hasher default
          * 
@@ -111,7 +131,9 @@ public:
          * @return std::string 
          */
         std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate scrypt hasher
          * 
@@ -124,11 +146,29 @@ public:
          * @return std::string 
          */
         std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        /**
+         * @brief equivalent to scrypt
+         * 
+         * @note using OpenSSL lib
+         * 
+         * @param input 
+         * @param salt 
+         * @param ensureHigh 
+         * @return std::string 
+         */
+        std::string scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
+
+        std::string toHexaStringOpenSSL(const std::string &input);
+    #endif
     };
     SHash Hasher = SHash();
 
     struct SStreamCipher
     {
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief encrypt input using CBC AES Rijndael stream cipher
          * 
@@ -147,7 +187,9 @@ public:
          * @return std::string 
          */
         std::string aesDecrypt(std::string input, std::string iv, std::string ik);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief encrypt input using XChaCha20 stream cipher
          * 
@@ -166,7 +208,9 @@ public:
          * @return std::string 
          */
         std::string xChaCha20decrypt(std::string input, std::string iv, std::string ik);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief encrypt input using CBC R6 stream cipher
          * 
@@ -185,6 +229,7 @@ public:
          * @return std::string 
          */
         std::string rc6decrypt(std::string input, std::string iv, std::string ik);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     };
     SStreamCipher StreamCipher = SStreamCipher();
 };
@@ -196,6 +241,7 @@ namespace cryptography
 {
     namespace hasher
     {
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha1
          * 
@@ -205,7 +251,9 @@ namespace cryptography
          * @return std::string 
          */
         std::string sha1(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha224
          * 
@@ -215,6 +263,7 @@ namespace cryptography
          * @return std::string 
          */
         std::string sha224(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
         /**
          * @brief generate sha256
@@ -226,6 +275,7 @@ namespace cryptography
          */
         std::string sha256(const std::string &input);
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha384
          * 
@@ -235,7 +285,9 @@ namespace cryptography
          * @return std::string 
          */
         std::string sha384(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha512
          * 
@@ -245,7 +297,9 @@ namespace cryptography
          * @return std::string 
          */
         std::string sha512(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate blake2b
          * 
@@ -255,7 +309,9 @@ namespace cryptography
          * @return std::string 
          */
         std::string blake2b(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate scrypt hasher default
          * 
@@ -265,7 +321,9 @@ namespace cryptography
          * @return std::string 
          */
         std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate scrypt hasher
          * 
@@ -278,10 +336,26 @@ namespace cryptography
          * @return std::string 
          */
         std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        /**
+         * @brief equivalent to scrypt
+         * 
+         * @note using OpenSSL lib
+         * 
+         * @param input 
+         * @param salt 
+         * @param ensureHigh 
+         * @return std::string 
+         */
+        std::string scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
     } // namespace hasher
 
     namespace streamCipher
     {
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief encrypt input using CBC AES Rijndael stream cipher
          * 
@@ -300,7 +374,9 @@ namespace cryptography
          * @return std::string 
          */
         std::string aesDecrypt(std::string input, std::string iv, std::string ik);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief encrypt input using XChaCha20 stream cipher
          * 
@@ -319,7 +395,9 @@ namespace cryptography
          * @return std::string 
          */
         std::string xChaCha20decrypt(std::string input, std::string iv, std::string ik);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief encrypt input using CBC R6 stream cipher
          * 
@@ -338,13 +416,12 @@ namespace cryptography
          * @return std::string 
          */
         std::string rc6decrypt(std::string input, std::string iv, std::string ik);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     } // namespace streamCipher
 } // namespace cryptography
 
 } // namespace utilityFunctions
 
 } // namespace libprcpp
-
-#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #endif // LIBPRCPP_CRYPTOGRAPHY_MODULE_H
