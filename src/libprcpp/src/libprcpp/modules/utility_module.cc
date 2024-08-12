@@ -1038,6 +1038,48 @@ double generateRandomNumber(const double min, const double max)
     return Utility.generateRandomNumber(min, max);
 }
 
+std::string generateRandomAlphanumeric(int length)
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomAlphanumeric(length);
+}
+
+std::string generateRandomAlphanumericWithSpecialCharacter(int length)
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomAlphanumericWithSpecialCharacter(length);
+}
+
+std::string changeInputLetterCase(const std::string input, const int letterCase)
+{
+    CUtilityModule Utility;
+    return Utility.changeInputLetterCase(input, letterCase);
+}
+
+bool checkInputIsAlphabetic(const std::string input)
+{
+    CUtilityModule Utility;
+    return Utility.checkInputIsAlphabetic(input);
+}
+
+bool checkInputIsAlphaNumeric(const std::string input)
+{
+    CUtilityModule Utility;
+    return Utility.checkInputIsAlphaNumeric(input);
+}
+
+bool checkInputPasswordMeetRequirement(const std::string &input, const ERequirementPasswordInput::Enum &requirement)
+{
+    CUtilityModule Utility;
+    return Utility.checkInputPasswordMeetRequirement(input, requirement);
+}
+
+bool checkInputUsernameMeetRequirement(const std::string &input, const ERequirementUsernameInput::Enum &requirement)
+{
+    CUtilityModule Utility;
+    return Utility.checkInputUsernameMeetRequirement(input, requirement);
+}
+
 #if LIBPRCPP_PROJECT_USING_OPENSSL
 std::string base64encode(const std::string &input)
 {
@@ -1053,6 +1095,163 @@ std::string base64decode(const std::string &input)
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 } // namespace utilityFunctions
+
+namespace dateAndTime
+{
+
+namespace UTC
+{
+
+    namespace timeZone
+    {
+        std::string toString()
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.TimeZone.toString();
+        }
+
+        std::string toString(const int &timeOffset, const bool &ISO8601 = true)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.TimeZone.toString(timeOffset, ISO8601);
+        }
+    } // namespace timeZone
+
+    namespace year
+    {
+        int toInt(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Year.toInt(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Year.toString(timeOffset);
+        }
+    } // namespace year
+
+    namespace month
+    {
+        int toInt(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Month.toInt(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Month.toString(timeOffset);
+        }
+    } // namespace month
+
+    namespace day
+    {
+        int toInt(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Day.toInt(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Day.toString(timeOffset);
+        }
+    } // namespace day
+
+    namespace hour
+    {
+        int toInt(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Hour.toInt(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Hour.toString(timeOffset);
+        }
+    } // namespace hour
+
+    namespace second
+    {
+        int toInt(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Second.toInt(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.Second.toString(timeOffset);
+        }
+    } // namespace second
+
+    namespace YYYYMMDD
+    {
+        int toInt(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDD.toInt(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDD.toString(timeOffset);
+        }
+
+        std::string toStringISO8601(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDD.toStringISO8601(timeOffset);
+        }
+    } // namespace YYYYMMDD
+
+    namespace hhmmss
+    {
+        int toInt(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.hhmmss.toInt(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.hhmmss.toString(timeOffset);
+        }
+    } // namespace hhmmss
+
+    namespace YYYYMMDDhhmmss
+    {
+        long toInt64(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toInt64(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toString(timeOffset);
+        }
+
+        std::string toStringSecondsOffset(const int &secondsOffset = 0)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toStringSecondsOffset(secondsOffset);
+        }
+    } // namespace YYYYMMDDhhmmss
+
+} // namespace UTC
+
+} // namespace dateAndTime
 
 } // namespace libprcpp
 
