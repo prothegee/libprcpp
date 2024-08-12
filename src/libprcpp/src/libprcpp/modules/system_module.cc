@@ -334,7 +334,7 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 {
     bool result = false;
 
-    if (encryptDecryptMode == EEncDecMode::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
     {
         std::cerr << "ERROR FileEncDec fileEncrypt: OpenSSL library is not configured\n";
         return result;
@@ -382,7 +382,7 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
 {
     bool result = false;
 
-    if (encryptDecryptMode == EEncDecMode::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
     {
         std::cerr << "ERROR FileEncDec fileDecrypt: OpenSSL library is not configured\n";
         return result;
@@ -656,6 +656,21 @@ namespace utilityFunction
             return SYSTEM.FileJSON.saveToCSV(input, output);
         }
     } // namespace json
+
+    namespace fileEncDec
+    {
+        bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileEncDec.fileEncrypt(encryptDecryptMode, input, output, iv, ik);
+        }
+
+        bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.FileEncDec.fileDecrypt(encryptDecryptMode, input, output, iv, ik);
+        }
+    } // namespace fileEncDec
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
 } // namespace utilityFunction

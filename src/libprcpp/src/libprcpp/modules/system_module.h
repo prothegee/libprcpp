@@ -174,8 +174,28 @@ public:
      */
     struct SFileEncDec
     {
+        /**
+         * @brief encrypt file
+         * 
+         * @param encryptDecryptMode 
+         * @param input 
+         * @param output 
+         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
+         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @return true if ok
+         */
         bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
 
+        /**
+         * @brief decrypt file
+         * 
+         * @param encryptDecryptMode 
+         * @param input 
+         * @param output 
+         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
+         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @return true if ok
+         */
         bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
 
     protected:
@@ -263,6 +283,33 @@ namespace utilityFunction
         bool saveToCSV(const std::string &input, const std::string &output);
     } // namespace json
     #endif // LIBPRCPP_PROJECT_USING_JSONCPP
+
+    namespace fileEncDec
+    {
+        /**
+         * @brief encrypt file
+         * 
+         * @param encryptDecryptMode 
+         * @param input 
+         * @param output 
+         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
+         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @return true if ok
+         */
+        bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+
+        /**
+         * @brief decrypt file
+         * 
+         * @param encryptDecryptMode 
+         * @param input 
+         * @param output 
+         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
+         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @return true if ok
+         */
+        bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+    } // namespace fileEncDec
 
 } // namespace utilityFunction
 

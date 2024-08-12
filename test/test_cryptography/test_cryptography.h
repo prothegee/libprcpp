@@ -109,6 +109,17 @@ public:
             std::cout << "\n";
         }
 
+        // scrypt openssl
+        {
+            std::cout << "TEST Scrypt OpenSSL: with \"" << m_password_input << "\" and \"" << m_password_salt << "\":\n";
+
+            auto result = Cryptography.Hasher.scryptOpenSSL(m_password_input, m_password_salt);
+            std::cout << result << "\n";
+
+            std::cout << "TEST Scrypt OpenSSL: finished\n";
+            std::cout << "\n";
+        }
+
         // aes
         {
             std::cout << "TEST AES: with message: \"" << m_secret_message << "\":\n";
