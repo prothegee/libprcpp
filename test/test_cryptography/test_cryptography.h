@@ -134,6 +134,20 @@ public:
             std::cout << "\n";
         }
 
+        // aes openssl
+        {
+            std::cout << "TEST AES OpenSSL: with message: \"" << m_secret_message << "\":\n";
+
+            auto enc = Cryptography.StreamCipher.aesEncryptOpenSSL(m_secret_message, m_iv_aes, m_ik_aes);
+            auto dec = Cryptography.StreamCipher.aesDecryptOpenSSL(enc, m_iv_aes, m_ik_aes);
+
+            std::cout << "encrypted: " << enc << "\n";
+            std::cout << "decrypted: " << dec << "\n";
+
+            std::cout << "TEST AES OpenSSL: finished\n";
+            std::cout << "\n";
+        }
+
         // rc6
         {
             std::cout << "TEST RC6: with message: \"" << m_secret_message << "\":\n";
