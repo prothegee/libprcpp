@@ -312,6 +312,146 @@ std::string CCryptographyModule::SStreamCipher::aesDecrypt(std::string input, st
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+std::string CCryptographyModule::SStreamCipher::aesEncryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
+{
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+
+    if (!ctx)
+    {
+        throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesEncryptOpenSSL\": failed to create cipher context\n");
+    }
+
+    if (EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, reinterpret_cast<const unsigned char *>(ik.c_str()), reinterpret_cast<const unsigned char *>(iv.c_str())) != 1)
+    {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesEncryptOpenSSL\": failed to initialize encryption\n");
+    }
+
+    int len = 0, ciphertext_len = 0;
+    std::vector<unsigned char> ciphertext(input.size() + AES_BLOCK_SIZE);
+
+    if (EVP_EncryptUpdate(ctx, ciphertext.data(), &len, reinterpret_cast<const unsigned char *>(input.c_str()), input.size()) != 1)
+    {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesEncryptOpenSSL\": failed to encrypt data\n");
+    }
+    ciphertext_len = len;
+
+    if (EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len) != 1)
+    {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesEncryptOpenSSL\": failed to finalize encryption\n");
+    }
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    std::string result(ciphertext.begin(), ciphertext.begin() + ciphertext_len);
+
+    return toCustomBase62OpenSSL(result);
+}
+std::string CCryptographyModule::SStreamCipher::aesDecryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
+{
+    std::string binary_input = fromCustomBase62OpenSSL(input);
+
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+
+    if (!ctx)
+    {
+        throw std::runtime_error("Failed to create cipher context");
+    }
+
+    if (EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, reinterpret_cast<const unsigned char *>(ik.c_str()), reinterpret_cast<const unsigned char *>(iv.c_str())) != 1)
+    {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesDecryptOpenSSL\": failed to initialize decryption\n");
+    }
+
+    int len = 0, plaintext_len = 0;
+    std::vector<unsigned char> plaintext(binary_input.size() + AES_BLOCK_SIZE);
+
+    if (EVP_DecryptUpdate(ctx, plaintext.data(), &len, reinterpret_cast<const unsigned char *>(binary_input.c_str()), binary_input.size()) != 1)
+    {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesDecryptOpenSSL\": failed to decrypt data\n");
+    }
+    plaintext_len = len;
+
+    if (EVP_DecryptFinal_ex(ctx, plaintext.data() + len, &len) != 1)
+    {
+        std::cerr << "ERROR \"CCryptographyModule::SStreamCipher::aesDecryptOpenSSL\": EVP_DecryptFinal_ex failed. Error code: " << ERR_get_error() << std::endl;
+
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesDecryptOpenSSL\": failed to finalize decryption\n");
+    }
+    plaintext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    std::string result(plaintext.begin(), plaintext.begin() + plaintext_len);
+
+    return result;
+}
+std::string CCryptographyModule::SStreamCipher::toCustomBase62OpenSSL(const std::string &input)
+{
+    std::string result;
+
+    static const char base64digits[] = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    int bits = 0;
+    unsigned int value = 0;
+
+    for (unsigned char byte : input)
+    {
+        value = (value << 8) | byte;
+        bits += 8;
+
+        while (bits >= 6)
+        {
+            bits -= 6;
+            result.push_back(base64digits[(value >> bits) & 0x3F]); // mask for 6 bits (0x3F)
+        }
+    }
+
+    if (bits > 0)
+    {
+        result.push_back(base64digits[(value << (6 - bits)) & 0x3F]);
+    }
+
+    return result;
+}
+std::string CCryptographyModule::SStreamCipher::fromCustomBase62OpenSSL(const std::string &input)
+{
+    std::string result;
+
+    static const std::string base64digits = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    int bits = 0;
+    unsigned int value = 0;
+
+    for (char c : input)
+    {
+        int index = base64digits.find(c);
+        if (index == std::string::npos)
+        {
+            throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::fromCustomBase62OpenSSL\": invalid character in input string\n");
+        }
+
+        bits += 6;
+        value = (value << 6) | index;
+
+        if (bits >= 8)
+        {
+            bits -= 8;
+            result.push_back((value >> bits) & 0xFF); // mask for 8 bits (0xFF)
+        }
+    }
+
+    return result;
+}
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SStreamCipher::xChaCha20encrypt(std::string input, std::string iv, std::string ik)
 {
@@ -504,7 +644,21 @@ namespace cryptography
         }
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        std::string aesEncryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.aesEncryptOpenSSL(input, iv, ik);
+        }
+
+        std::string aesDecryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
+        {
+            CCryptographyModule CRYPTOGRAPHY;
+            return CRYPTOGRAPHY.StreamCipher.aesDecryptOpenSSL(input, iv, ik);
+        }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         std::string xChaCha20encrypt(std::string input, std::string iv, std::string ik)
         {
             CCryptographyModule CRYPTOGRAPHY;
