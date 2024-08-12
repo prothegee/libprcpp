@@ -2,6 +2,8 @@
 #define LIBPRCPP_SYSTEM_MODULE_H
 #include <libprcpp/base/config.h>
 
+#include <libprcpp/enums/encdec_enums.h>
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -19,6 +21,13 @@
 #if LIBPRCPP_PROJECT_USING_JSONCPP
 #include <jsoncpp/json/json.h>
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+#include <openssl/aes.h>
+#include <openssl/rand.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 namespace libprcpp
 {
@@ -158,6 +167,34 @@ public:
     // file json access
     SFileJSON FileJSON = SFileJSON();
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
+
+    /**
+     * @brief file encrypt decrypt structure
+     * 
+     */
+    struct SFileEncDec
+    {
+        bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+
+        bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+
+    protected:
+        std::vector<unsigned char> readFile(const std::string& filePath);
+
+        bool writeFile(const std::string& filePath, const std::vector<unsigned char>& data);
+
+        std::vector<unsigned char> stringToUnsignedChar(const std::string& str, size_t requiredSize);
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        std::vector<unsigned char> encryptOpenSSL_AES(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+        std::vector<unsigned char> decryptOpenSSL_AES(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+
+        void handleOpenSSLError();
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+    };
+    // file encrypt decrypt access
+    SFileEncDec FileEncDec = SFileEncDec();
 };
 
 namespace utilityFunction
