@@ -24,7 +24,7 @@ void IScyllaDbCoreInterface::OnAuth::initialize(CassAuthenticator *pCassAuth, vo
     size_t password_size = strlen(pCredential->password);
     size_t size = username_size + password_size + 2;
 
-    char* response = cass_authenticator_response(pCassAuth, size);
+    char *response = cass_authenticator_response(pCassAuth, size);
 
     response[0] = '\0';
     memcpy(response + 1, pCredential->username, username_size);
@@ -135,7 +135,9 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
     }
     else
     {
-        std::cout << "MESSAGE: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected\n";
+        #if PROJECT_BUILD_STATUS == 1
+        std::cout << "DEBUG: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected\n";
+        #endif 
     }
 }
 
