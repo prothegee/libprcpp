@@ -56,6 +56,17 @@ public:
 
         // sha256
         {
+            std::cout << "TEST SHA256 OpenSSL: with \"" << m_email << "\":\n";
+
+            auto result = Cryptography.Hasher.sha256OpenSSL(m_email);
+            std::cout << result << "\n";
+
+            std::cout << "TEST SHA256 OpenSSL: finished\n";
+            std::cout << "\n";
+        }
+
+        // sha256 openssl
+        {
             std::cout << "TEST SHA256: with \"" << m_email << "\":\n";
 
             auto result = Cryptography.Hasher.sha256(m_email);
@@ -84,6 +95,17 @@ public:
             std::cout << result << "\n";
 
             std::cout << "TEST SHA512: finished\n";
+            std::cout << "\n";
+        }
+
+        // sha512
+        {
+            std::cout << "TEST SHA512 OpenSSL: with \"" << m_email << "\":\n";
+
+            auto result = Cryptography.Hasher.sha512OpenSSL(m_email);
+            std::cout << result << "\n";
+
+            std::cout << "TEST SHA512 OpenSSL: finished\n";
             std::cout << "\n";
         }
 

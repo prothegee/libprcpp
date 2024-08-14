@@ -3,8 +3,6 @@
 #include <libprcpp/base/config.h>
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-#include <string>
-
 #include <cryptopp/ec2n.h>
 #include <cryptopp/hex.h>
 #include <cryptopp/modes.h>
@@ -30,10 +28,14 @@
 #include <openssl/rand.h>
 #include <openssl/aes.h>
 #include <openssl/err.h>
+#include <openssl/sha.h>
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+#include <string>
+#include <sstream>
 #include <iostream>
 #include <stdexcept>
+#include <iomanip>
 
 namespace libprcpp
 {
@@ -90,6 +92,29 @@ public:
         std::string sha256(const std::string &input);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        /**
+         * @brief regenerate data to hex string
+         * 
+         * @param data 
+         * @param length 
+         * @return std::string 
+         */
+        std::string bytesToHexOpenSSL(const unsigned char *data, size_t length);
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        /**
+         * @brief generate sha256
+         * 
+         * @note return length is 64
+         * 
+         * @param input 
+         * @return std::string 
+         */
+        std::string sha256OpenSSL(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha384
@@ -113,6 +138,18 @@ public:
          */
         std::string sha512(const std::string &input);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        /**
+         * @brief generate sha512
+         * 
+         * @note return length is 64
+         * 
+         * @param input 
+         * @return std::string 
+         */
+        std::string sha512OpenSSL(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
@@ -307,6 +344,7 @@ namespace cryptography
         std::string sha224(const std::string &input);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
          * @brief generate sha256
          * 
@@ -316,6 +354,19 @@ namespace cryptography
          * @return std::string 
          */
         std::string sha256(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        /**
+         * @brief generate sha256
+         * 
+         * @note return length is 64
+         * 
+         * @param input 
+         * @return std::string 
+         */
+        std::string sha256OpenSSL(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
@@ -340,6 +391,18 @@ namespace cryptography
          */
         std::string sha512(const std::string &input);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        /**
+         * @brief generate sha512
+         * 
+         * @note return length is 64
+         * 
+         * @param input 
+         * @return std::string 
+         */
+        std::string sha512OpenSSL(const std::string &input);
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
