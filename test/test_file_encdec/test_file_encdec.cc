@@ -12,10 +12,17 @@ int main(int argc, char *argv[])
     std::string fileInRaw = "../../../test/test_file_encdec/file_in.json";
     std::string fileOutEnc = "../../../test/test_file_encdec/file_out.enc";
     std::string fileOutDec = "../../../test/test_file_encdec/file_out.dec";
+    std::string imgInRaw = "../../../test/test_file_encdec/file_in.png";
+    std::string imgOutEnc = "../../../test/test_file_encdec/file_out_enc.png";
+    std::string imgOutDec = "../../../test/test_file_encdec/file_out_dec.png";
 
     auto encryptOk = SYSTEM.FileEncDec.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, fileInRaw, fileOutEnc, iv, ik);
 
     auto decryptOk = SYSTEM.FileEncDec.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, fileOutEnc, fileOutDec, iv, ik);
+
+    auto imgEncryptOk = SYSTEM.FileEncDec.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, imgInRaw, imgOutEnc, iv, ik);
+
+    auto imgDecryptOk = SYSTEM.FileEncDec.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, imgOutEnc, imgOutDec, iv, ik);
 
     if (encryptOk)
     {
@@ -33,5 +40,23 @@ int main(int argc, char *argv[])
     else
     {
         std::cout << "MESSAGE: decrypt file fail\n";
+    }
+
+    if (imgEncryptOk)
+    {
+        std::cout << "MESSAGE: encrypt img file ok\n";
+    }
+    else
+    {
+        std::cout << "MESSAGE: encrypt img file fail\n";
+    }
+
+    if (imgDecryptOk)
+    {
+        std::cout << "MESSAGE: decrypt img file ok\n";
+    }
+    else
+    {
+        std::cout << "MESSAGE: decrypt img file fail\n";
     }
 }
