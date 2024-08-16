@@ -158,6 +158,20 @@ double CUtilityModule::generateRandomNumber(const double min, const double max)
     return result;
 }
 
+std::array<uint8_t, 16> CUtilityModule::generateRandomBytes()
+{
+    std::array<uint8_t, 16> bytes;
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution<uint8_t> distribution(0, 255);
+
+    for (auto &byte : bytes) {
+        byte = distribution(generator);
+    }
+
+    return bytes;
+}
+
 std::string CUtilityModule::generateRandomAlphanumeric(int length)
 {
     std::string result;
@@ -249,6 +263,68 @@ std::string CUtilityModule::changeInputLetterCase(const std::string input, const
     }
 
     return result;
+}
+
+std::string CUtilityModule::generateUuidV1()
+{
+    auto now = std::chrono::high_resolution_clock::now();
+    auto duration = now.time_since_epoch();
+    auto timestamp = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
+
+    // byte sequence
+    std::array<uint8_t, 16> uuid_bytes = generateRandomBytes();
+    
+    // timestamp
+    uuid_bytes[0] = (timestamp >> 40) & 0xFF;
+    uuid_bytes[1] = (timestamp >> 32) & 0xFF;
+    uuid_bytes[2] = (timestamp >> 24) & 0xFF;
+    uuid_bytes[3] = (timestamp >> 16) & 0xFF;
+    uuid_bytes[4] = (timestamp >> 8) & 0xFF;
+    uuid_bytes[5] = timestamp & 0xFF;
+
+    // version 1
+    uuid_bytes[6] = (uuid_bytes[6] & 0x0F) | 0x10;
+
+    // variant to 10xx
+    uuid_bytes[8] = (uuid_bytes[8] & 0x3F) | 0x80;
+
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+
+    for (size_t i = 0; i < uuid_bytes.size(); ++i)
+    {
+        if (i == 4 || i == 6 || i == 8 || i == 10)
+        {
+            oss << '-';
+        }
+        oss << std::setw(2) << static_cast<int>(uuid_bytes[i]);
+    }
+
+    return oss.str();
+}
+
+std::string CUtilityModule::generateUuidV4()
+{
+    auto random_bytes = generateRandomBytes();
+
+    // version 4
+    random_bytes[6] = (random_bytes[6] & 0x0F) | 0x40;
+
+    // variant 10xx (RFC4122)
+    random_bytes[8] = (random_bytes[8] & 0x3F) | 0x80;
+
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+
+    for (size_t i = 0; i < random_bytes.size(); ++i)
+    {
+        if (i == 4 || i == 6 || i == 8 || i == 10) {
+            oss << '-';
+        }
+        oss << std::setw(2) << static_cast<int>(random_bytes[i]);
+    }
+
+    return oss.str();
 }
 
 bool CUtilityModule::checkInputIsAlphabetic(const std::string input) const
@@ -1038,6 +1114,12 @@ double generateRandomNumber(const double min, const double max)
     return Utility.generateRandomNumber(min, max);
 }
 
+std::array<uint8_t, 16> generateRandomBytes()
+{
+    CUtilityModule Utility;
+    return Utility.generateRandomBytes();
+}
+
 std::string generateRandomAlphanumeric(int length)
 {
     CUtilityModule Utility;
@@ -1054,6 +1136,18 @@ std::string changeInputLetterCase(const std::string input, const int letterCase)
 {
     CUtilityModule Utility;
     return Utility.changeInputLetterCase(input, letterCase);
+}
+
+std::string generateUuidV1()
+{
+    CUtilityModule Utility;
+    return Utility.generateUuidV1();
+}
+
+std::string generateUuidV4()
+{
+    CUtilityModule Utility;
+    return Utility.generateUuidV4();
 }
 
 bool checkInputIsAlphabetic(const std::string input)

@@ -13,12 +13,18 @@ endif()
 # openssl
 set(LIBPRCPP_PROJECT_USING_OPENSSL false)
 
-find_file(OPENSSL_INCLUDE_DIRS "openssl")
-if(OPENSSL_INCLUDE_DIRS)
+find_package(OpenSSL CONFIG)
+if(OpenSSL_FOUND)
     set(LIBPRCPP_PROJECT_USING_OPENSSL true)
     message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package found")
 else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package not found")
+    message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package not found, try using dir")
+
+    find_path(OPENSSL_INCLUDE_DIRS "openssl/evp.h")
+    if(OPENSSL_INCLUDE_DIRS)
+        set(LIBPRCPP_PROJECT_USING_OPENSSL true)
+        message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package found as path in ${OPENSSL_INCLUDE_DIRS}")
+    endif()
 endif()
 
 

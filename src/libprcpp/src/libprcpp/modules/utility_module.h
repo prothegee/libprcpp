@@ -14,6 +14,10 @@
 #include <ctime>
 #include <chrono>
 #include <regex>
+#include <stdexcept>
+#include <iostream>
+#include <sstream>
+#include <array>
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
 #include <openssl/bio.h>
@@ -140,6 +144,13 @@ public:
     double generateRandomNumber(const double min, const double max);
 
     /**
+     * @brief generate 16 random bytes in array
+     * 
+     * @return std::array<uint8_t, 16> 
+     */
+    std::array<uint8_t, 16> generateRandomBytes();
+
+    /**
      * @brief generate random alphanumeric
      * 
      * @param length 
@@ -163,6 +174,24 @@ public:
      * @return std::string 
      */
     std::string changeInputLetterCase(const std::string input, const int letterCase);
+
+    /**
+     * @brief generate uuid v1 ( MAC address & clock sequence ) for current system
+     * 
+     * @note please use try catch, since platform dependent may caught exception
+     * 
+     * @return std::string 
+     */
+    std::string generateUuidV1();
+
+    /**
+     * @brief generate uuid v4 for current system
+     * 
+     * @note please use try catch, since platform dependent may caught exception
+     * 
+     * @return std::string 
+     */
+    std::string generateUuidV4();
 
     /**
      * @brief check if input is alphabetic value
@@ -430,6 +459,13 @@ float generateRandomNumber(const float min, const float max);
 double generateRandomNumber(const double min, const double max);
 
 /**
+ * @brief generate 16 random bytes in array
+ * 
+ * @return std::array<uint8_t, 16> 
+ */
+std::array<uint8_t, 16> generateRandomBytes();
+
+/**
  * @brief generate random alphanumeric
  * 
  * @param length 
@@ -453,6 +489,24 @@ std::string generateRandomAlphanumericWithSpecialCharacter(int length);
  * @return std::string 
  */
 std::string changeInputLetterCase(const std::string input, const int letterCase);
+
+/**
+ * @brief generate uuid v1 ( MAC address & clock sequence ) for current system
+ * 
+ * @note please use try catch, since platform dependent may caught exception
+ * 
+ * @return std::string 
+ */
+std::string generateUuidV1();
+
+/**
+ * @brief generate uuid v4 for current system
+ * 
+ * @note please use try catch, since platform dependent may caught exception
+ * 
+ * @return std::string 
+ */
+std::string generateUuidV4();
 
 /**
  * @brief check if input is alphabetic value
