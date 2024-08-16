@@ -26,6 +26,16 @@ __*NOTES:*__
 
 ---
 
+## tested operating system
+
+- [?] Apple MacOS/OSX
+- [?] Microsoft Windows
+- [V] GNU\Linux Debian 12
+
+<br>
+
+---
+
 ## cmake
 
 `cmake conf`
