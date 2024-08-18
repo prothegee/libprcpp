@@ -75,7 +75,7 @@ std::string CCryptographyModule::SHash::bytesToHexOpenSSL(const unsigned char *d
 
     for (size_t i = 0; i < length; ++i)
     {
-        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(data[i]);
+        ss << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << static_cast<int>(data[i]);
     }
 
     return ss.str();
@@ -285,14 +285,14 @@ std::string CCryptographyModule::SHash::toHexaStringOpenSSL(const std::string &i
 {
     std::string result;
 
-    static const char hex_digits[] = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    static const char hex_digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     result.reserve(input.length() * 2);
 
     for (unsigned char byte : input)
     {
         result.push_back(hex_digits[byte >> 4]);
-        result.push_back(hex_digits[byte & 0x3E]);
+        result.push_back(hex_digits[byte & 0x1F]);
     }
 
     return result;
@@ -300,7 +300,7 @@ std::string CCryptographyModule::SHash::toHexaStringOpenSSL(const std::string &i
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-std::string CCryptographyModule::SStreamCipher::aesEncrypt(std::string input, std::string iv, std::string ik)
+std::string CCryptographyModule::SStreamCipher::aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik)
 {
     std::string tmp, result;
 
@@ -323,7 +323,7 @@ std::string CCryptographyModule::SStreamCipher::aesEncrypt(std::string input, st
 
     return result;
 }
-std::string CCryptographyModule::SStreamCipher::aesDecrypt(std::string input, std::string iv, std::string ik)
+std::string CCryptographyModule::SStreamCipher::aesDecrypt(const std::string &input, const std::string &iv, const std::string &ik)
 {
     std::string tmp, result;
 
@@ -385,11 +385,11 @@ std::string CCryptographyModule::SStreamCipher::aesEncryptOpenSSL(const std::str
 
     std::string result(ciphertext.begin(), ciphertext.begin() + ciphertext_len);
 
-    return toCustomBase62OpenSSL(result);
+    return toCustomBase36OpenSSL(result);
 }
 std::string CCryptographyModule::SStreamCipher::aesDecryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
 {
-    std::string binary_input = fromCustomBase62OpenSSL(input);
+    std::string binary_input = fromCustomBase36OpenSSL(input);
 
     EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
 
@@ -429,58 +429,58 @@ std::string CCryptographyModule::SStreamCipher::aesDecryptOpenSSL(const std::str
 
     return result;
 }
-std::string CCryptographyModule::SStreamCipher::toCustomBase62OpenSSL(const std::string &input)
+std::string CCryptographyModule::SStreamCipher::toCustomBase36OpenSSL(const std::string &input)
 {
     std::string result;
+    static const std::string base36_digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    static const char base64digits[] = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    int bits = 0;
     unsigned int value = 0;
+    int bits = 0;
 
     for (unsigned char byte : input)
     {
         value = (value << 8) | byte;
         bits += 8;
 
-        while (bits >= 6)
+        while (bits >= 5)
         {
-            bits -= 6;
-            result.push_back(base64digits[(value >> bits) & 0x3F]); // mask for 6 bits (0x3F)
+            bits -= 5;
+            result.push_back(base36_digits[(value >> bits) & 0x1F]); // Mask for 5 bits (0x1F)
         }
     }
 
     if (bits > 0)
     {
-        result.push_back(base64digits[(value << (6 - bits)) & 0x3F]);
+        result.push_back(base36_digits[(value << (5 - bits)) & 0x1F]);
     }
 
     return result;
 }
-std::string CCryptographyModule::SStreamCipher::fromCustomBase62OpenSSL(const std::string &input)
+std::string CCryptographyModule::SStreamCipher::fromCustomBase36OpenSSL(const std::string &input)
 {
     std::string result;
+    static const std::string base36_digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    static const std::string base64digits = "abcdefghijklmnopqestuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    int bits = 0;
     unsigned int value = 0;
+    int bits = 0;
 
-    for (char c : input)
+    // for (char c : input)
+    for (unsigned char c : input)
     {
-        int index = base64digits.find(c);
+        int index = base36_digits.find(c);
         if (index == std::string::npos)
         {
-            throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::fromCustomBase62OpenSSL\": invalid character in input string\n");
+            std::cerr << "ERROR: Character '" << static_cast<int>(c) << "' not found in base62 character set.\n";
+            throw std::runtime_error("Invalid character in input string");
         }
 
-        bits += 6;
-        value = (value << 6) | index;
+        value = (value << 5) | index;
+        bits += 5;
 
         if (bits >= 8)
         {
             bits -= 8;
-            result.push_back((value >> bits) & 0xFF); // mask for 8 bits (0xFF)
+            result.push_back((value >> bits) & 0xFF); // Mask for 8 bits (0xFF)
         }
     }
 
@@ -489,7 +489,7 @@ std::string CCryptographyModule::SStreamCipher::fromCustomBase62OpenSSL(const st
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-std::string CCryptographyModule::SStreamCipher::xChaCha20encrypt(std::string input, std::string iv, std::string ik)
+std::string CCryptographyModule::SStreamCipher::xChaCha20encrypt(const std::string &input, const std::string &iv, const std::string &ik)
 {
     std::string tmp, result;
 
@@ -512,7 +512,7 @@ std::string CCryptographyModule::SStreamCipher::xChaCha20encrypt(std::string inp
 
     return result;
 }
-std::string CCryptographyModule::SStreamCipher::xChaCha20decrypt(std::string input, std::string iv, std::string ik)
+std::string CCryptographyModule::SStreamCipher::xChaCha20decrypt(const std::string &input, const std::string &iv, const std::string &ik)
 {
     std::string tmp, result;
 
@@ -538,7 +538,7 @@ std::string CCryptographyModule::SStreamCipher::xChaCha20decrypt(std::string inp
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-std::string CCryptographyModule::SStreamCipher::rc6encrypt(std::string input, std::string iv, std::string ik)
+std::string CCryptographyModule::SStreamCipher::rc6encrypt(const std::string &input, const std::string &iv, const std::string &ik)
 {
     std::string tmp, result;
 
@@ -561,7 +561,7 @@ std::string CCryptographyModule::SStreamCipher::rc6encrypt(std::string input, st
 
     return result;
 }
-std::string CCryptographyModule::SStreamCipher::rc6decrypt(std::string input, std::string iv, std::string ik)
+std::string CCryptographyModule::SStreamCipher::rc6decrypt(const std::string &input, const std::string &iv, const std::string &ik)
 {
     std::string tmp, result;
 
@@ -684,12 +684,12 @@ namespace cryptography
     namespace streamCipher
     {
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string aesEncrypt(std::string input, std::string iv, std::string ik)
+        std::string aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik)
         {
             CCryptographyModule CRYPTOGRAPHY;
             return CRYPTOGRAPHY.StreamCipher.aesEncrypt(input, iv, ik);
         }
-        std::string aesDecrypt(std::string input, std::string iv, std::string ik)
+        std::string aesDecrypt(const std::string &input, const std::string &iv, const std::string &ik)
         {
             CCryptographyModule CRYPTOGRAPHY;
             return CRYPTOGRAPHY.StreamCipher.aesDecrypt(input, iv, ik);
@@ -711,12 +711,12 @@ namespace cryptography
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string xChaCha20encrypt(std::string input, std::string iv, std::string ik)
+        std::string xChaCha20encrypt(const std::string &input, const std::string &iv, const std::string &ik)
         {
             CCryptographyModule CRYPTOGRAPHY;
             return CRYPTOGRAPHY.StreamCipher.xChaCha20encrypt(input, iv, ik);
         }
-        std::string xChaCha20decrypt(std::string input, std::string iv, std::string ik)
+        std::string xChaCha20decrypt(const std::string &input, const std::string &iv, const std::string &ik)
         {
             CCryptographyModule CRYPTOGRAPHY;
             return CRYPTOGRAPHY.StreamCipher.xChaCha20decrypt(input, iv, ik);
@@ -724,12 +724,12 @@ namespace cryptography
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string rc6encrypt(std::string input, std::string iv, std::string ik)
+        std::string rc6encrypt(const std::string &input, const std::string &iv, const std::string &ik)
         {
             CCryptographyModule CRYPTOGRAPHY;
             return CRYPTOGRAPHY.StreamCipher.rc6encrypt(input, iv, ik);
         }
-        std::string rc6decrypt(std::string input, std::string iv, std::string ik)
+        std::string rc6decrypt(const std::string &input, const std::string &iv, const std::string &ik)
         {
             CCryptographyModule CRYPTOGRAPHY;
             return CRYPTOGRAPHY.StreamCipher.rc6decrypt(input, iv, ik);
