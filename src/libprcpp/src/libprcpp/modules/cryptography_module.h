@@ -219,7 +219,7 @@ public:
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string aesEncrypt(std::string input, std::string iv, std::string ik);
+        std::string aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik);
         /**
          * @brief decrypt input using CBC AES Rijndael stream cipher
          * 
@@ -228,7 +228,7 @@ public:
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string aesDecrypt(std::string input, std::string iv, std::string ik);
+        std::string aesDecrypt(const std::string &input, const std::string &iv, const std::string &ik);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_PROJECT_USING_OPENSSL
@@ -252,20 +252,20 @@ public:
         std::string aesDecryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik);
 
         /**
-         * @brief get result to custom base 62 with openssl lib
+         * @brief get result to custom base 36 with openssl lib
          * 
          * @param input 
          * @return std::string 
          */
-        std::string toCustomBase62OpenSSL(const std::string &input);
+        std::string toCustomBase36OpenSSL(const std::string &input);
 
         /**
-         * @brief get result from custom base 62 with openssl lib
+         * @brief get result from custom base 36 with openssl lib
          * 
          * @param input 
          * @return std::string 
          */
-        std::string fromCustomBase62OpenSSL(const std::string &input);
+        std::string fromCustomBase36OpenSSL(const std::string &input);
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
@@ -277,7 +277,7 @@ public:
          * @param ik ik recomendation length is 32
          * @return std::string 
          */
-        std::string xChaCha20encrypt(std::string input, std::string iv, std::string ik);
+        std::string xChaCha20encrypt(const std::string &input, const std::string &iv, const std::string &ik);
         /**
          * @brief decrypt input using XChaCha20 stream cipher
          * 
@@ -286,7 +286,7 @@ public:
          * @param ik ik recomendation length is 32
          * @return std::string 
          */
-        std::string xChaCha20decrypt(std::string input, std::string iv, std::string ik);
+        std::string xChaCha20decrypt(const std::string &input, const std::string &iv, const std::string &ik);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
@@ -298,7 +298,7 @@ public:
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string rc6encrypt(std::string input, std::string iv, std::string ik);
+        std::string rc6encrypt(const std::string &input, const std::string &iv, const std::string &ik);
         /**
          * @brief encrypt input using CBC R6 stream cipher
          * 
@@ -307,7 +307,7 @@ public:
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string rc6decrypt(std::string input, std::string iv, std::string ik);
+        std::string rc6decrypt(const std::string &input, const std::string &iv, const std::string &ik);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     };
     SStreamCipher StreamCipher = SStreamCipher();
@@ -469,7 +469,7 @@ namespace cryptography
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string aesEncrypt(std::string input, std::string iv, std::string ik);
+        std::string aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik);
         /**
          * @brief decrypt input using CBC AES Rijndael stream cipher
          * 
@@ -478,7 +478,7 @@ namespace cryptography
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string aesDecrypt(std::string input, std::string iv, std::string ik);
+        std::string aesDecrypt(const std::string &input, const std::string &iv, const std::string &ik);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_PROJECT_USING_OPENSSL
@@ -512,7 +512,7 @@ namespace cryptography
          * @param ik ik recomendation length is 32
          * @return std::string 
          */
-        std::string xChaCha20encrypt(std::string input, std::string iv, std::string ik);
+        std::string xChaCha20encrypt(const std::string &input, const std::string &iv, const std::string &ik);
         /**
          * @brief decrypt input using XChaCha20 stream cipher
          * 
@@ -521,7 +521,7 @@ namespace cryptography
          * @param ik ik recomendation length is 32
          * @return std::string 
          */
-        std::string xChaCha20decrypt(std::string input, std::string iv, std::string ik);
+        std::string xChaCha20decrypt(const std::string &input, const std::string &iv, const std::string &ik);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
@@ -533,7 +533,7 @@ namespace cryptography
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string rc6encrypt(std::string input, std::string iv, std::string ik);
+        std::string rc6encrypt(const std::string &input, const std::string &iv, const std::string &ik);
         /**
          * @brief encrypt input using CBC R6 stream cipher
          * 
@@ -542,7 +542,7 @@ namespace cryptography
          * @param ik ik recomendation length is 16 to 32
          * @return std::string 
          */
-        std::string rc6decrypt(std::string input, std::string iv, std::string ik);
+        std::string rc6decrypt(const std::string &input, const std::string &iv, const std::string &ik);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     } // namespace streamCipher
 } // namespace cryptography
