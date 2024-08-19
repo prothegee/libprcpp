@@ -9,7 +9,7 @@ class CTestCryptography
 private:
     const std::string m_email = "foo@bar.baz";
 
-    const std::string m_password_salt = "mysalt";
+    const std::string m_password_salt = "mysalt1234567890";
     const std::string m_password_input = "myspassword123!";
 
     const std::string m_iv_aes = "Bmw4jqaYDXYfRM2U";
@@ -155,23 +155,52 @@ public:
 
         // scrypt
         {
+            auto start = std::chrono::high_resolution_clock::now();
+
             std::cout << "TEST Scrypt: with \"" << m_password_input << "\" and \"" << m_password_salt << "\":\n";
 
             auto result = Cryptography.Hasher.scrypt(m_password_input, m_password_salt);
             std::cout << result << "\n";
 
-            std::cout << "TEST Scrypt: finished\n";
+            auto end = std::chrono::high_resolution_clock::now();
+
+            std::chrono::duration<double> duration = end - start;
+
+            std::cout << "TEST Scrypt: finished in " << duration.count() << " seconds\n";
             std::cout << "\n";
         }
 
         // scrypt OpenSSL
         {
+            auto start = std::chrono::high_resolution_clock::now();
+
             std::cout << "TEST Scrypt OpenSSL: with \"" << m_password_input << "\" and \"" << m_password_salt << "\":\n";
 
             auto result = Cryptography.Hasher.scryptOpenSSL(m_password_input, m_password_salt);
             std::cout << result << "\n";
 
-            std::cout << "TEST Scrypt OpenSSL: finished\n";
+            auto end = std::chrono::high_resolution_clock::now();
+
+            std::chrono::duration<double> duration = end - start;
+
+            std::cout << "TEST Scrypt OpenSSL: finished in " << duration.count() << " seconds\n";
+            std::cout << "\n";
+        }
+
+        // argon2
+        {
+            auto start = std::chrono::high_resolution_clock::now();
+
+            std::cout << "TEST argon2: with \"" << m_password_input << "\" and \"" << m_password_salt << "\":\n";
+
+            auto result = Cryptography.Hasher.argon2(m_password_input, m_password_salt);
+            std::cout << result << "\n";
+
+            auto end = std::chrono::high_resolution_clock::now();
+
+            std::chrono::duration<double> duration = end - start;
+
+            std::cout << "TEST argon2: finished in " << duration.count() << " seconds\n";
             std::cout << "\n";
         }
 

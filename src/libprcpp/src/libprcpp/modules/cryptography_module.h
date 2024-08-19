@@ -31,6 +31,10 @@
 #include <openssl/sha.h>
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+#if LIBPRCPP_PROJECT_USING_ARGON
+#include <argon2.h>
+#endif // LIBPRCPP_PROJECT_USING_ARGON
+
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -201,46 +205,52 @@ public:
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         /**
-         * @brief generate scrypt hasher default
+         * @brief scrypt password hasher using cryptopp
          * 
          * @param input 
          * @param salt 
-         * @param ensureHigh 
+         * @param computationCost 
+         * @param blockSizeCost 
+         * @param threadsCost 
+         * @param derivedLength 
          * @return std::string 
          */
-        std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        /**
-         * @brief generate scrypt hasher
-         * 
-         * @param input 
-         * @param salt 
-         * @param computationCost default: 2 << 16 if !ensureHigh
-         * @param blockSizeCost default: 8 if !ensureHigh
-         * @param threadsCost default: 1 if !ensureHigh
-         * @param derivedLength default: 32
-         * @return std::string 
-         */
-        std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength);
+        std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost = (2<<16), const CryptoPP::word64 &blockSizeCost = 8, const CryptoPP::word64 &threadsCost = 12, const uint32_t &derivedLength = 32);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_PROJECT_USING_OPENSSL
         /**
-         * @brief equivalent to scrypt
-         * 
-         * @note using OpenSSL lib
+         * @brief scrypt password hasher using OpenSSL
          * 
          * @param input 
          * @param salt 
-         * @param ensureHigh 
+         * @param computationCost 
+         * @param blockSizeCost 
+         * @param threadsCost 
+         * @param derivedLength 
          * @return std::string 
          */
-        std::string scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
+        std::string scryptOpenSSL(const std::string &input, const std::string &salt, const uint32_t &computationCost = (2<<16), const uint32_t &blockSizeCost = 8, const uint32_t &threadsCost = 12, const uint32_t &derivedLength = 32);
 
         std::string toHexaStringOpenSSL(const std::string &input);
     #endif
+
+    #if LIBPRCPP_PROJECT_USING_ARGON
+        /**
+         * @brief argon2 password hasher
+         * 
+         * @param input 
+         * @param salt required at least 16 characters
+         * @param computationCost 
+         * @param blockSizeCost 
+         * @param threadsCost 
+         * @param derivedLength 
+         * @return std::string 
+         */
+        std::string argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost = (2<<20), const uint32_t &blockSizeCost = 8, const uint32_t &threadsCost = 12, const uint32_t &derivedLength = 32);
+
+        std::string toHexaStringArgon2(const std::vector<uint8_t> &data);
+    #endif // LIBPRCPP_PROJECT_USING_ARGON
     };
     SHash Hasher = SHash();
 
@@ -487,44 +497,48 @@ namespace hasher
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     /**
-     * @brief generate scrypt hasher default
-     * 
-     * @param input 
-     * @param salt 
-     * @param ensureHigh 
-     * @return std::string 
-     */
-    std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
-#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    /**
      * @brief generate scrypt hasher
      * 
      * @param input 
      * @param salt 
-     * @param computationCost default: 2 << 16 if !ensureHigh
-     * @param blockSizeCost default: 8 if !ensureHigh
-     * @param threadsCost default: 1 if !ensureHigh
-     * @param derivedLength default: 32
+     * @param computationCost 
+     * @param blockSizeCost 
+     * @param threadsCost 
+     * @param derivedLength 
      * @return std::string 
      */
-    std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength);
+    std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost = (2<<16), const CryptoPP::word64 &blockSizeCost = 8, const CryptoPP::word64 &threadsCost = 12, const uint32_t &derivedLength = 32);
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
     /**
-     * @brief equivalent to scrypt
-     * 
-     * @note using OpenSSL lib
+     * @brief scrypt password hasher using OpenSSL
      * 
      * @param input 
      * @param salt 
-     * @param ensureHigh 
+     * @param computationCost 
+     * @param blockSizeCost 
+     * @param threadsCost 
+     * @param derivedLength 
      * @return std::string 
      */
-    std::string scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh = true);
+    std::string scryptOpenSSL(const std::string &input, const std::string &salt, const uint32_t &computationCost = (2<<16), const uint32_t &blockSizeCost = 8, const uint32_t &threadsCost = 12, const uint32_t &derivedLength = 32);
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_ARGON
+    /**
+     * @brief argon2 password hasher
+     * 
+     * @param input 
+     * @param salt required at least 16 characters
+     * @param computationCost 
+     * @param blockSizeCost 
+     * @param threadsCost 
+     * @param derivedLength 
+     * @return std::string 
+     */
+    std::string argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost = (2<<20), const uint32_t &blockSizeCost = 8, const uint32_t &threadsCost = 12, const uint32_t &derivedLength = 32);
+#endif // LIBPRCPP_PROJECT_USING_ARGON
 } // namespace hasher
 
 namespace streamCipher
