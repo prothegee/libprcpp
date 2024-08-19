@@ -602,6 +602,87 @@ void CSystemModule::SFileEncDec::handleOpenSSLError()
 // RESERVED
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
+{
+    bool result = false;
+
+#if PROJECT_BUILD_TARGET == 1
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (sockfd < 0)
+    {
+        std::cerr << "ERROR portIsAvailable: Socket creation failed\n";
+        return false;
+    }
+
+    sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_port = htons(port);
+
+    int bindResult = bind(sockfd, (sockaddr*)&addr, sizeof(addr));
+
+    close(sockfd);
+
+    result = bindResult == 0;
+#elif PROJECT_BUILD_TARGET == 2
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+    {
+        std::cerr << "ERROR portIsAvailable: WSAStartup failed\n";
+        return false;
+    }
+
+    SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    if (sock == INVALID_SOCKET) {
+        std::cerr << "ERROR portIsAvailable: Socket creation failed\n";
+        WSACleanup();
+        return false;
+    }
+
+    sockaddr_in addr;
+
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_port = htons(port);
+
+    int bindResult = bind(sock, (SOCKADDR*)&addr, sizeof(addr));
+
+    closesocket(sock);
+    WSACleanup();
+
+    result = bindResult == 0;
+#elif PROJECT_BUILD_TARGET == 3
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (sockfd < 0)
+    {
+        std::cerr << "ERROR portIsAvailable: Socket creation failed\n";
+        return false;
+    }
+
+    sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = INADDR_ANY;
+    addr.sin_port = htons(port);
+
+    int bindResult = bind(sockfd, (sockaddr*)&addr, sizeof(addr));
+
+    close(sockfd);
+
+    result = bindResult == 0;
+#else
+    std::cerr << "ERROR portIsAvailable: build target is unknown\n";
+#endif // #if PROJECT_BUILD_TARGET == 1
+
+    return result;
+}
+
 namespace utilityFunctions
 {
 
@@ -692,6 +773,15 @@ namespace utilityFunctions
         }
     } // namespace fileEncDec
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
+
+    namespace systemEnvironment
+    {
+        bool portIsAvailable(int port)
+        {
+            CSystemModule SYSTEM;
+            return SYSTEM.SystemEnvironment.portIsAvailable(port);
+        }
+    } // namespace systemEnvironment
 
 } // namespace utilityFunctions
 

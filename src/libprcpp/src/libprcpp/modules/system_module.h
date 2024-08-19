@@ -12,6 +12,29 @@
 #include <algorithm>
 #include <thread>
 #include <sstream>
+#include <cstring>
+#include <unistd.h>
+
+// includes os specification
+#if PROJECT_BUILD_TARGET == 1
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#elif PROJECT_BUILD_TARGET == 2
+#include <iostream>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
+#pragma comment(lib, "ws2_32.lib")
+#elif PROJECT_BUILD_TARGET == 3
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#else
+// nothing to include
+#endif // PROJECT_BUILD_TARGET
 
 #if LIBPRCPP_PROJECT_USING_LIBHARU
 #include "hpdf.h"
@@ -223,15 +246,24 @@ public:
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::vector<unsigned char> aesEncryptCryptoPP(const std::vector<unsigned char>& plaintext, const CryptoPP::byte iv[CryptoPP::AES::BLOCKSIZE], const CryptoPP::byte ik[CryptoPP::AES::DEFAULT_KEYLENGTH]);
-
-        void handleCryptoPPError(const std::string &error);
-
-        void stringToByteArray(const std::string &str, CryptoPP::byte *array, size_t arraySize);
+        // RESERVED
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     };
     // file encrypt decrypt access
     SFileEncDec FileEncDec = SFileEncDec();
+
+    struct SSystemEnvironment
+    {
+        /**
+         * @brief check if port is avaiable
+         * 
+         * @param port 
+         * @return true if available
+         */
+        bool portIsAvailable(int port);
+    };
+    // system environment access
+    SSystemEnvironment SystemEnvironment = SSystemEnvironment();
 };
 
 namespace utilityFunctions
@@ -327,6 +359,17 @@ namespace utilityFunctions
          */
         bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
     } // namespace fileEncDec
+
+    namespace systemEnvironment
+    {
+        /**
+         * @brief check if port is avaiable
+         * 
+         * @param port 
+         * @return true if available
+         */
+        bool portIsAvailable(int port);
+    } // namespace systemEnvironment
 
 } // namespace utilityFunctions
 
