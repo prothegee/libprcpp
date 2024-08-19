@@ -43,6 +43,17 @@ public:
             std::cout << "\n";
         }
 
+        // sha1 OpenSSL
+        {
+            std::cout << "TEST SHA1 OpenSSL: with \"" << m_email << "\":\n";
+
+            auto result = Cryptography.Hasher.sha1OpenSSL(m_email);
+            std::cout << result << "\n";
+
+            std::cout << "TEST SHA1 OpenSSL: finished\n";
+            std::cout << "\n";
+        }
+
         // sha224
         {
             std::cout << "TEST SHA224: with \"" << m_email << "\":\n";
@@ -51,6 +62,17 @@ public:
             std::cout << result << "\n";
 
             std::cout << "TEST SHA224: finished\n";
+            std::cout << "\n";
+        }
+
+        // sha224 OpenSSL
+        {
+            std::cout << "TEST SHA224 OpenSSL: with \"" << m_email << "\":\n";
+
+            auto result = Cryptography.Hasher.sha224OpenSSL(m_email);
+            std::cout << result << "\n";
+
+            std::cout << "TEST SHA224 OpenSSL: finished\n";
             std::cout << "\n";
         }
 
@@ -65,7 +87,7 @@ public:
             std::cout << "\n";
         }
 
-        // sha256 openssl
+        // sha256 OpenSSL
         {
             std::cout << "TEST SHA256 OpenSSL: with \"" << m_email << "\":\n";
 
@@ -87,6 +109,17 @@ public:
             std::cout << "\n";
         }
 
+        // sha384 OpenSSL
+        {
+            std::cout << "TEST SHA384 OpenSSL: with \"" << m_email << "\":\n";
+
+            auto result = Cryptography.Hasher.sha384OpenSSL(m_email);
+            std::cout << result << "\n";
+
+            std::cout << "TEST SHA384 OpenSSL: finished\n";
+            std::cout << "\n";
+        }
+
         // sha512
         {
             std::cout << "TEST SHA512: with \"" << m_email << "\":\n";
@@ -98,7 +131,7 @@ public:
             std::cout << "\n";
         }
 
-        // sha512
+        // sha512 OpenSSL
         {
             std::cout << "TEST SHA512 OpenSSL: with \"" << m_email << "\":\n";
 
@@ -131,7 +164,7 @@ public:
             std::cout << "\n";
         }
 
-        // scrypt openssl
+        // scrypt OpenSSL
         {
             std::cout << "TEST Scrypt OpenSSL: with \"" << m_password_input << "\" and \"" << m_password_salt << "\":\n";
 
@@ -156,7 +189,7 @@ public:
             std::cout << "\n";
         }
 
-        // aes openssl
+        // aes OpenSSL
         {
             std::cout << "TEST AES OpenSSL: with message: \"" << m_secret_message << "\":\n";
 

@@ -29,6 +29,15 @@
 #include <openssl/err.h>
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+#include <cryptopp/cryptlib.h>
+#include <cryptopp/aes.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/osrng.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/files.h>
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
 namespace libprcpp
 {
 
@@ -180,8 +189,8 @@ public:
          * @param encryptDecryptMode 
          * @param input 
          * @param output 
-         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
-         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @param iv min is 16 length
+         * @param ik min is 32 length
          * @return true if ok
          */
         bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
@@ -192,8 +201,8 @@ public:
          * @param encryptDecryptMode 
          * @param input 
          * @param output 
-         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
-         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @param iv min is 16 length
+         * @param ik min is 32 length
          * @return true if ok
          */
         bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
@@ -206,18 +215,26 @@ public:
         std::vector<unsigned char> stringToUnsignedChar(const std::string& str, size_t requiredSize);
 
     #if LIBPRCPP_PROJECT_USING_OPENSSL
-        std::vector<unsigned char> encryptOpenSSL_AES(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+        std::vector<unsigned char> aesEncryptOpenSSL(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
 
-        std::vector<unsigned char> decryptOpenSSL_AES(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+        std::vector<unsigned char> aesDecryptOpenSSL(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
 
         void handleOpenSSLError();
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+        std::vector<unsigned char> aesEncryptCryptoPP(const std::vector<unsigned char>& plaintext, const CryptoPP::byte iv[CryptoPP::AES::BLOCKSIZE], const CryptoPP::byte ik[CryptoPP::AES::DEFAULT_KEYLENGTH]);
+
+        void handleCryptoPPError(const std::string &error);
+
+        void stringToByteArray(const std::string &str, CryptoPP::byte *array, size_t arraySize);
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     };
     // file encrypt decrypt access
     SFileEncDec FileEncDec = SFileEncDec();
 };
 
-namespace utilityFunction
+namespace utilityFunctions
 {
 
     namespace directory
@@ -292,8 +309,8 @@ namespace utilityFunction
          * @param encryptDecryptMode 
          * @param input 
          * @param output 
-         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
-         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
+         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
          * @return true if ok
          */
         bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
@@ -304,14 +321,14 @@ namespace utilityFunction
          * @param encryptDecryptMode 
          * @param input 
          * @param output 
-         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 16 length
-         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES is 32 length
+         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
+         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
          * @return true if ok
          */
         bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
     } // namespace fileEncDec
 
-} // namespace utilityFunction
+} // namespace utilityFunctions
 
 } // namespace libprcpp
 
