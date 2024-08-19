@@ -59,6 +59,8 @@
 #include <cryptopp/osrng.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/files.h>
+#include <cryptopp/chacha.h>
+#include <cryptopp/rc6.h>
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 namespace libprcpp
@@ -212,7 +214,7 @@ public:
          * @param encryptDecryptMode 
          * @param input 
          * @param output 
-         * @param iv min is 16 length
+         * @param iv min is 16 length ( 24 for xChaCha20 )
          * @param ik min is 32 length
          * @return true if ok
          */
@@ -224,7 +226,7 @@ public:
          * @param encryptDecryptMode 
          * @param input 
          * @param output 
-         * @param iv min is 16 length
+         * @param iv min is 16 length ( 24 for xChaCha20 )
          * @param ik min is 32 length
          * @return true if ok
          */
@@ -246,7 +248,17 @@ public:
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        // RESERVED
+        std::vector<unsigned char> aesEncryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+        std::vector<unsigned char> aesDecryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+
+        std::vector<unsigned char> xChaCha20encryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+        std::vector<unsigned char> xChaCha20decryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+
+        std::vector<unsigned char> rc6encryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+        std::vector<unsigned char> rc6decryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     };
     // file encrypt decrypt access

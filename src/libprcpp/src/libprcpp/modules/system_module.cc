@@ -340,7 +340,23 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
         return result;
     }
 
-    // RESERVED
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
+    {
+        std::cerr << "ERROR FileEncDec fileEncrypt: CryptoPP cmake library is not configured\n";
+        return result;
+    }
+
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
+    {
+        std::cerr << "ERROR FileEncDec fileEncrypt: CryptoPP cmake library is not configured\n";
+        return result;
+    }
+
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
+    {
+        std::cerr << "ERROR FileEncDec fileEncrypt: CryptoPP cmake library is not configured\n";
+        return result;
+    }
 
     auto plaintext = readFile(input);
 
@@ -372,7 +388,38 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        // RESERVED
+        case EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP:
+        {
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto ciphertext = aesEncryptCryptoPP(plaintext, _iv.data(), _ik.data());
+
+            result = writeFile(output, ciphertext);
+        }
+        break;
+
+        case EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP:
+        {
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto ciphertext = xChaCha20encryptCryptoPP(plaintext, _iv.data(), _ik.data());
+
+            result = writeFile(output, ciphertext);
+        }
+        break;
+
+        case EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP:
+        {
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto ciphertext = rc6encryptCryptoPP(plaintext, _iv.data(), _ik.data());
+
+            result = writeFile(output, ciphertext);
+        }
+        break;
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
         default:
@@ -396,7 +443,23 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
         return result;
     }
 
-    // RESERVED
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
+    {
+        std::cerr << "ERROR FileEncDec fileDecrypt: CryptoPP cmake library is not configured\n";
+        return result;
+    }
+
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
+    {
+        std::cerr << "ERROR FileEncDec fileDecrypt: CryptoPP cmake library is not configured\n";
+        return result;
+    }
+
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
+    {
+        std::cerr << "ERROR FileEncDec fileDecrypt: CryptoPP cmake library is not configured\n";
+        return result;
+    }
 
     auto ciphertext = readFile(input);
 
@@ -428,7 +491,38 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        // RESERVED
+        case EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP:
+        {
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto plaintext = aesDecryptCryptoPP(ciphertext, _iv.data(), _ik.data());
+
+            result = writeFile(output, plaintext);
+        }
+        break;
+
+        case EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP:
+        {
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto plaintext = xChaCha20decryptCryptoPP(ciphertext, _iv.data(), _ik.data());
+
+            result = writeFile(output, plaintext);
+        }
+        break;
+
+        case EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP:
+        {
+            std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
+            std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
+
+            auto plaintext = rc6decryptCryptoPP(ciphertext, _iv.data(), _ik.data());
+
+            result = writeFile(output, plaintext);
+        }
+        break;
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
         default:
@@ -597,6 +691,152 @@ void CSystemModule::SFileEncDec::handleOpenSSLError()
     abort();
 }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+std::vector<unsigned char> CSystemModule::SFileEncDec::aesEncryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
+{
+    std::vector<unsigned char> ciphertext;
+
+    try
+    {
+        CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption encryption;
+        encryption.SetKeyWithIV(ik, CryptoPP::AES::DEFAULT_KEYLENGTH, iv);
+
+        CryptoPP::StringSource ss(plaintext.data(), plaintext.size(), true,
+            new CryptoPP::StreamTransformationFilter(encryption,
+                new CryptoPP::VectorSink(ciphertext)
+            ) // StreamTransformationFilter
+        ); // StringSource
+    }
+    catch (const CryptoPP::Exception& e)
+    {
+        std::cerr << "ERROR FileEncDec aesEncryptCryptoPP: " << e.what() << std::endl;
+        abort();
+    }
+
+    return ciphertext;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::aesDecryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
+{
+    std::vector<unsigned char> plaintext;
+
+    try
+    {
+        CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption decryption;
+        decryption.SetKeyWithIV(ik, CryptoPP::AES::DEFAULT_KEYLENGTH, iv);
+
+        CryptoPP::StringSource ss(ciphertext.data(), ciphertext.size(), true,
+            new CryptoPP::StreamTransformationFilter(decryption,
+                new CryptoPP::VectorSink(plaintext)
+            ) // StreamTransformationFilter
+        ); // StringSource
+    }
+    catch (const CryptoPP::Exception& e)
+    {
+        std::cerr << "ERROR FileEncDec aesDecryptCryptoPP: " << e.what() << std::endl;
+        abort();
+    }
+
+    return plaintext;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::xChaCha20encryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
+{
+    std::vector<unsigned char> ciphertext;
+
+    try
+    {
+        CryptoPP::XChaCha20::Encryption encryption;
+        encryption.SetKeyWithIV(ik, CryptoPP::XChaCha20::DEFAULT_KEYLENGTH, iv);
+
+        CryptoPP::StringSource ss(plaintext.data(), plaintext.size(), true,
+            new CryptoPP::StreamTransformationFilter(encryption,
+                new CryptoPP::VectorSink(ciphertext)
+            ) // StreamTransformationFilter
+        ); // StringSource
+    }
+    catch (const CryptoPP::Exception& e)
+    {
+        std::cerr << "ERROR FileEncDec xChaCha20encryptCryptoPP: " << e.what() << std::endl;
+        abort();
+    }
+
+    return ciphertext;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::xChaCha20decryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
+{
+    std::vector<unsigned char> plaintext;
+
+    try
+    {
+        CryptoPP::XChaCha20::Decryption decryption;
+        decryption.SetKeyWithIV(ik, CryptoPP::XChaCha20::DEFAULT_KEYLENGTH, iv);
+
+        CryptoPP::StringSource ss(ciphertext.data(), ciphertext.size(), true,
+            new CryptoPP::StreamTransformationFilter(decryption,
+                new CryptoPP::VectorSink(plaintext)
+            ) // StreamTransformationFilter
+        ); // StringSource
+    }
+    catch (const CryptoPP::Exception& e)
+    {
+        std::cerr << "ERROR FileEncDec xChaCha20decryptCryptoPP: " << e.what() << std::endl;
+        abort();
+    }
+
+    return plaintext;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::rc6encryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
+{
+    std::vector<unsigned char> ciphertext;
+
+    try
+    {
+        CryptoPP::CBC_Mode<CryptoPP::RC6>::Encryption encryption;
+        encryption.SetKeyWithIV(ik, CryptoPP::RC6::DEFAULT_KEYLENGTH, iv);
+
+        CryptoPP::StringSource ss(plaintext.data(), plaintext.size(), true,
+            new CryptoPP::StreamTransformationFilter(encryption,
+                new CryptoPP::VectorSink(ciphertext)
+            ) // StreamTransformationFilter
+        ); // StringSource
+    }
+    catch (const CryptoPP::Exception& e)
+    {
+        std::cerr << "ERROR FileEncDec rc6encryptCryptoPP: " << e.what() << std::endl;
+        abort();
+    }
+
+    return ciphertext;
+}
+
+std::vector<unsigned char> CSystemModule::SFileEncDec::rc6decryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
+{
+    std::vector<unsigned char> plaintext;
+
+    try
+    {
+        CryptoPP::CBC_Mode<CryptoPP::RC6>::Decryption decryption;
+        decryption.SetKeyWithIV(ik, CryptoPP::RC6::DEFAULT_KEYLENGTH, iv);
+
+        CryptoPP::StringSource ss(ciphertext.data(), ciphertext.size(), true,
+            new CryptoPP::StreamTransformationFilter(decryption,
+                new CryptoPP::VectorSink(plaintext)
+            ) // StreamTransformationFilter
+        ); // StringSource
+    }
+    catch (const CryptoPP::Exception& e)
+    {
+        std::cerr << "ERROR FileEncDec rc6decryptCryptoPP: " << e.what() << std::endl;
+        abort();
+    }
+
+    return plaintext;
+}
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 // RESERVED
