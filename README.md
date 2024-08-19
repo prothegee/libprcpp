@@ -8,6 +8,7 @@ one stop c++ library for c++ project integration
 
 ## package that might required
 
+- [argon2](https://github.com/P-H-C/phc-winner-argon2)
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - [openssl](https://github.com/openssl/openssl)
 - [jwt cpp](https://github.com/Thalhammer/jwt-cpp)
