@@ -195,65 +195,11 @@ std::string CCryptographyModule::SHash::bytesToHexOpenSSL(const unsigned char *d
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-std::string CCryptographyModule::SHash::scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh)
-{
-    std::string result;
-
-    std::string passwd_input(input), salt_input(salt);
-
-    CryptoPP::word64 computation, blockSize, threads;
-
-    if (ensureHigh)
-    {
-        computation=2<<16, blockSize=8, threads=16;
-    }
-    else
-    {
-        computation=1<<16, blockSize=6, threads=1;
-    }
-
-    try
-    {
-        CryptoPP::SecByteBlock derived(32);
-        CryptoPP::Scrypt scrypt;
-
-        CryptoPP::AlgorithmParameters params = 
-            CryptoPP::MakeParameters("Cost", computation)
-            ("BlockSize", blockSize)("Parallelization", threads)
-            ("Salt", CryptoPP::ConstByteArrayParameter(
-                (const CryptoPP::byte*)&salt_input[0], salt_input.size()));
-
-        scrypt.DeriveKey(derived, derived.size(),
-            (const CryptoPP::byte*)&passwd_input[0], passwd_input.size(), params);
-
-        CryptoPP::StringSource(derived, derived.size(), true,
-            new CryptoPP::HexEncoder(new CryptoPP::StringSink(result)));
-    }
-    catch(const CryptoPP::Exception &e)
-    {
-        std::cerr << "ERROR: \"CCryptographyModule::SHash::scrypt\":\n" << e.what() << '\n';
-    }
-
-    return result;
-}
-#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SHash::scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength)
 {
     std::string result;
 
     std::string passwd_input(input), salt_input(salt);
-
-    CryptoPP::word64 computation=computationCost, blockSize=blockSizeCost, threads=threadsCost;
-
-    if (computation <= 0) computation = 1<<16;
-    if (blockSize <= 0) blockSize = 8;
-    if (threads <= 0) threads = 1;
-
-    uint32_t _derivedLength = derivedLength;
-
-    if (_derivedLength <= 32) _derivedLength = 32;
 
     try
     {
@@ -262,8 +208,8 @@ std::string CCryptographyModule::SHash::scrypt(const std::string &input, const s
         CryptoPP::Scrypt scrypt;
 
         CryptoPP::AlgorithmParameters params = 
-            CryptoPP::MakeParameters("Cost", computation)
-            ("BlockSize", blockSize)("Parallelization", threads)
+            CryptoPP::MakeParameters("Cost", computationCost)
+            ("BlockSize", blockSizeCost)("Parallelization", threadsCost)
             ("Salt", CryptoPP::ConstByteArrayParameter(
                 (const CryptoPP::byte*)&salt_input[0], salt_input.size()));
 
@@ -283,29 +229,24 @@ std::string CCryptographyModule::SHash::scrypt(const std::string &input, const s
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-std::string CCryptographyModule::SHash::scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh)
+std::string CCryptographyModule::SHash::scryptOpenSSL(const std::string &input, const std::string &salt, const uint32_t &computationCost, const uint32_t &blockSizeCost, const uint32_t &threadsCost, const uint32_t &derivedLength)
 {
     std::string result;
 
     std::string passwd_input(input), salt_input(salt);
 
-    int computation, blockSize, threads;
+    uint32_t computation = computationCost, blockSize = blockSizeCost, threads = threadsCost, derived = derivedLength;
 
-    if (ensureHigh)
+    if (computation >= 16384) // has limit
     {
-        computation=16384, blockSize=8, threads=32;
-    }
-    else
-    {
-        computation=8192, blockSize=6, threads=16;
+        computation = 16384;
     }
 
-    int derivedSize = 32;
+    std::vector<unsigned char> deriveKey(derivedLength);
 
-    std::vector<unsigned char> deriveKey(derivedSize);
-
-    if (EVP_PBE_scrypt(input.c_str(), input.length(), reinterpret_cast<const unsigned char*>(salt.c_str()), salt.length(), computation, blockSize, threads, 0, deriveKey.data(), deriveKey.size()) != 1)
+    if (EVP_PBE_scrypt(input.c_str(), input.length(), reinterpret_cast<const unsigned char*>(salt.c_str()), salt.length(), reinterpret_cast<uint32_t>(computation), blockSize, threads, 0, deriveKey.data(), deriveKey.size()) != 1)
     {
+        ERR_print_errors_fp(stderr);
         throw std::runtime_error("ERROR scryptOpenSSL: deriving key with scrypt\n");
     }
 
@@ -331,6 +272,49 @@ std::string CCryptographyModule::SHash::toHexaStringOpenSSL(const std::string &i
     return result;
 }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_ARGON
+std::string CCryptographyModule::SHash::argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost, const uint32_t &blockSizeCost, const uint32_t &threadsCost, const uint32_t &derivedLength)
+{
+    std::string result;
+
+    std::vector<uint8_t> hash(derivedLength);
+
+    // Perform Argon2 hashing
+    int status = argon2i_hash_raw(
+        blockSizeCost,
+        computationCost,
+        threadsCost,
+        input.data(),
+        input.size(),
+        salt.data(),
+        salt.size(),
+        hash.data(),
+        hash.size()
+    );
+
+    if (status != ARGON2_OK) {
+        throw std::runtime_error("ERROR argon2: Hashing failed with error code: " + std::to_string(status));
+    }
+
+    result = toHexaStringArgon2(hash);
+
+    return result;
+}
+
+std::string CCryptographyModule::SHash::toHexaStringArgon2(const std::vector<uint8_t> &data)
+{
+    static const char hex_digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    std::string hex_string;
+    hex_string.reserve(data.size() * 2);
+    for (uint8_t byte : data)
+    {
+        hex_string.push_back(hex_digits[byte >> 4]);
+        hex_string.push_back(hex_digits[byte & 0x0F]);
+    }
+    return hex_string;
+}
+#endif // LIBPRCPP_PROJECT_USING_ARGON
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SStreamCipher::aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik)
@@ -712,14 +696,6 @@ namespace hasher
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh)
-    {
-        CCryptographyModule CRYPTOGRAPHY;
-        return CRYPTOGRAPHY.Hasher.scrypt(input, salt, ensureHigh);
-    }
-#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength)
     {
         CCryptographyModule CRYPTOGRAPHY;
@@ -728,12 +704,20 @@ namespace hasher
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-    std::string scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh)
+    std::string scryptOpenSSL(const std::string &input, const std::string &salt, const uint32_t &computationCost, const uint32_t &blockSizeCost, const uint32_t &threadsCost, const uint32_t &derivedLength)
     {
         CCryptographyModule CRYPTOGRAPHY;
-        return CRYPTOGRAPHY.Hasher.scryptOpenSSL(input, salt, ensureHigh);
+        return CRYPTOGRAPHY.Hasher.scryptOpenSSL(input, salt, computationCost, blockSizeCost, threadsCost, derivedLength);
     }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_ARGON
+    std::string argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost, const uint32_t &blockSizeCost, const uint32_t &threadsCost, const uint32_t &derivedLength)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.argon2(input, salt, computationCost, blockSizeCost, threadsCost, derivedLength);
+    }
+#endif // LIBPRCPP_PROJECT_USING_ARGON
 } // namespace hasher
 
 namespace streamCipher
