@@ -30,6 +30,17 @@ std::string CCryptographyModule::SHash::sha1(const std::string &input)
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+std::string CCryptographyModule::SHash::sha1OpenSSL(const std::string &input)
+{
+    unsigned char hash[SHA_DIGEST_LENGTH];
+
+    SHA1(reinterpret_cast<const unsigned char*>(input.c_str()), input.size(), hash);
+
+    return bytesToHexOpenSSL(hash, SHA_DIGEST_LENGTH);
+}
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SHash::sha224(const std::string &input)
 {
@@ -49,6 +60,17 @@ std::string CCryptographyModule::SHash::sha224(const std::string &input)
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+std::string CCryptographyModule::SHash::sha224OpenSSL(const std::string &input)
+{
+    unsigned char hash[SHA224_DIGEST_LENGTH];
+
+    SHA224(reinterpret_cast<const unsigned char*>(input.c_str()), input.size(), hash);
+
+    return bytesToHexOpenSSL(hash, SHA224_DIGEST_LENGTH);
+}
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SHash::sha256(const std::string &input)
 {
@@ -67,20 +89,6 @@ std::string CCryptographyModule::SHash::sha256(const std::string &input)
     return result;
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-#if LIBPRCPP_PROJECT_USING_OPENSSL
-std::string CCryptographyModule::SHash::bytesToHexOpenSSL(const unsigned char *data, size_t length)
-{
-    std::stringstream ss;
-
-    for (size_t i = 0; i < length; ++i)
-    {
-        ss << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << static_cast<int>(data[i]);
-    }
-
-    return ss.str();
-}
-#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
 std::string CCryptographyModule::SHash::sha256OpenSSL(const std::string &input)
@@ -111,6 +119,17 @@ std::string CCryptographyModule::SHash::sha384(const std::string &input)
     return result;
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+std::string CCryptographyModule::SHash::sha384OpenSSL(const std::string &input)
+{
+    unsigned char hash[SHA384_DIGEST_LENGTH];
+
+    SHA384(reinterpret_cast<const unsigned char*>(input.c_str()), input.size(), hash);
+
+    return bytesToHexOpenSSL(hash, SHA384_DIGEST_LENGTH);
+}
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SHash::sha512(const std::string &input)
@@ -160,6 +179,20 @@ std::string CCryptographyModule::SHash::blake2b(const std::string &input)
     return result;
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+std::string CCryptographyModule::SHash::bytesToHexOpenSSL(const unsigned char *data, size_t length)
+{
+    std::stringstream ss;
+
+    for (size_t i = 0; i < length; ++i)
+    {
+        ss << std::hex << std::uppercase << std::setw(2) << std::setfill('0') << static_cast<int>(data[i]);
+    }
+
+    return ss.str();
+}
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SHash::scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh)
@@ -586,158 +619,178 @@ std::string CCryptographyModule::SStreamCipher::rc6decrypt(const std::string &in
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
-namespace utilityFunctions
+namespace cryptographyyFunctions
 {
-namespace cryptography
+namespace hasher
 {
-    namespace hasher
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string sha1(const std::string &input)
     {
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string sha1(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.sha1(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha1(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string sha224(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.sha224(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string sha256(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.sha256(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
-        std::string sha256OpenSSL(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.sha256OpenSSL(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string sha384(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.sha384(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string sha512(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.sha512(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
-        std::string sha512OpenSSL(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.sha512OpenSSL(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string blake2b(const std::string &input)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.blake2b(input);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.scrypt(input, salt, ensureHigh);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.scrypt(input, salt, computationCost, blockSizeCost, threadsCost, derivedLength);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
-        std::string scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.Hasher.scryptOpenSSL(input, salt, ensureHigh);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
-    } // namespace hasher
-
-    namespace streamCipher
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+    std::string sha1OpenSSL(const std::string &input)
     {
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.aesEncrypt(input, iv, ik);
-        }
-        std::string aesDecrypt(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.aesDecrypt(input, iv, ik);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha1OpenSSL(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
-        std::string aesEncryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.aesEncryptOpenSSL(input, iv, ik);
-        }
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string sha224(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha224(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
-        std::string aesDecryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.aesDecryptOpenSSL(input, iv, ik);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+    std::string sha224OpenSSL(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha224OpenSSL(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string xChaCha20encrypt(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.xChaCha20encrypt(input, iv, ik);
-        }
-        std::string xChaCha20decrypt(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.xChaCha20decrypt(input, iv, ik);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string sha256(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha256(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::string rc6encrypt(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.rc6encrypt(input, iv, ik);
-        }
-        std::string rc6decrypt(const std::string &input, const std::string &iv, const std::string &ik)
-        {
-            CCryptographyModule CRYPTOGRAPHY;
-            return CRYPTOGRAPHY.StreamCipher.rc6decrypt(input, iv, ik);
-        }
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    } // namespace streamCipher
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+    std::string sha256OpenSSL(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha256OpenSSL(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-} // namespace cryptography
-} // namespace utilityFunctions
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string sha384(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha384(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+    std::string sha384OpenSSL(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha384OpenSSL(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string sha512(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha512(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+    std::string sha512OpenSSL(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.sha512OpenSSL(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string blake2b(const std::string &input)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.blake2b(input);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string scrypt(const std::string &input, const std::string &salt, const bool &ensureHigh)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.scrypt(input, salt, ensureHigh);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string scrypt(const std::string &input, const std::string &salt, const CryptoPP::word64 &computationCost, const CryptoPP::word64 &blockSizeCost, const CryptoPP::word64 &threadsCost, const uint32_t &derivedLength)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.scrypt(input, salt, computationCost, blockSizeCost, threadsCost, derivedLength);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+    std::string scryptOpenSSL(const std::string &input, const std::string &salt, const bool &ensureHigh)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.Hasher.scryptOpenSSL(input, salt, ensureHigh);
+    }
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+} // namespace hasher
+
+namespace streamCipher
+{
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.aesEncrypt(input, iv, ik);
+    }
+    std::string aesDecrypt(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.aesDecrypt(input, iv, ik);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL
+    std::string aesEncryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.aesEncryptOpenSSL(input, iv, ik);
+    }
+
+    std::string aesDecryptOpenSSL(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.aesDecryptOpenSSL(input, iv, ik);
+    }
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string xChaCha20encrypt(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.xChaCha20encrypt(input, iv, ik);
+    }
+    std::string xChaCha20decrypt(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.xChaCha20decrypt(input, iv, ik);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+    std::string rc6encrypt(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.rc6encrypt(input, iv, ik);
+    }
+    std::string rc6decrypt(const std::string &input, const std::string &iv, const std::string &ik)
+    {
+        CCryptographyModule CRYPTOGRAPHY;
+        return CRYPTOGRAPHY.StreamCipher.rc6decrypt(input, iv, ik);
+    }
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+} // namespace streamCipher
+} // namespace cryptographyyFunctions
 
 } // namespace libprcpp

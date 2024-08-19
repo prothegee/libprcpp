@@ -10,53 +10,54 @@ int main(int argc, char *argv[])
     std::string ik = "abcdefghijklmnopqrstuvwxyz012345";
 
     std::string fileInRaw = "../../../test/test_file_encdec/file_in.json";
-    std::string fileOutEnc = "../../../test/test_file_encdec/file_out.enc";
-    std::string fileOutDec = "../../../test/test_file_encdec/file_out.dec";
+
     std::string imgInRaw = "../../../test/test_file_encdec/file_in.png";
-    std::string imgOutEnc = "../../../test/test_file_encdec/file_out_enc.png";
-    std::string imgOutDec = "../../../test/test_file_encdec/file_out_dec.png";
 
-    auto encryptOk = SYSTEM.FileEncDec.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, fileInRaw, fileOutEnc, iv, ik);
+    std::string fileOutEnc1 = "../../../test/test_file_encdec/file_out1.enc";
+    std::string fileOutDec1 = "../../../test/test_file_encdec/file_out1.dec";
 
-    auto decryptOk = SYSTEM.FileEncDec.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, fileOutEnc, fileOutDec, iv, ik);
+    std::string imgOutEnc1 = "../../../test/test_file_encdec/file_out_enc1.png";
+    std::string imgOutDec1 = "../../../test/test_file_encdec/file_out_dec1.png";
 
-    auto imgEncryptOk = SYSTEM.FileEncDec.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, imgInRaw, imgOutEnc, iv, ik);
+    auto encryptOk1 = SYSTEM.FileEncDec.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, fileInRaw, fileOutEnc1, iv, ik);
+    auto decryptOk1 = SYSTEM.FileEncDec.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, fileOutEnc1, fileOutDec1, iv, ik);
 
-    auto imgDecryptOk = SYSTEM.FileEncDec.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES, imgOutEnc, imgOutDec, iv, ik);
+    auto imgEncryptOk1 = SYSTEM.FileEncDec.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, imgInRaw, imgOutEnc1, iv, ik);
+    auto imgDecryptOk1 = SYSTEM.FileEncDec.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, imgOutEnc1, imgOutDec1, iv, ik);
 
-    if (encryptOk)
+    if (encryptOk1)
     {
-        std::cout << "MESSAGE: encrypt file ok\n";
+        std::cout << "MESSAGE: encryptOk1 file ok\n";
     }
     else
     {
-        std::cout << "MESSAGE: encrypt file fail\n";
+        std::cout << "MESSAGE: encryptOk1 file fail\n";
     }
 
-    if (decryptOk)
+    if (decryptOk1)
     {
-        std::cout << "MESSAGE: decrypt file ok\n";
+        std::cout << "MESSAGE: decryptOk1 file ok\n";
     }
     else
     {
-        std::cout << "MESSAGE: decrypt file fail\n";
+        std::cout << "MESSAGE: decryptOk1 file fail\n";
     }
 
-    if (imgEncryptOk)
+    if (imgEncryptOk1)
     {
-        std::cout << "MESSAGE: encrypt img file ok\n";
+        std::cout << "MESSAGE: imgEncryptOk1 img file ok\n";
     }
     else
     {
-        std::cout << "MESSAGE: encrypt img file fail\n";
+        std::cout << "MESSAGE: imgEncryptOk1 img file fail\n";
     }
 
-    if (imgDecryptOk)
+    if (imgDecryptOk1)
     {
-        std::cout << "MESSAGE: decrypt img file ok\n";
+        std::cout << "MESSAGE: imgDecryptOk1 img file ok\n";
     }
     else
     {
-        std::cout << "MESSAGE: decrypt img file fail\n";
+        std::cout << "MESSAGE: imgDecryptOk1 img file fail\n";
     }
 }

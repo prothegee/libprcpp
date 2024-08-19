@@ -334,11 +334,13 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 {
     bool result = false;
 
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL && !LIBPRCPP_PROJECT_USING_OPENSSL)
     {
         std::cerr << "ERROR FileEncDec fileEncrypt: OpenSSL library is not configured\n";
         return result;
     }
+
+    // RESERVED
 
     auto plaintext = readFile(input);
 
@@ -350,7 +352,8 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 
     switch (encryptDecryptMode)
     {
-        case EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES:
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        case EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL:
         {
             OpenSSL_add_all_algorithms();
             ERR_load_crypto_strings();
@@ -358,7 +361,7 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
-            auto ciphertext = encryptOpenSSL_AES(plaintext, _iv.data(), _ik.data());
+            auto ciphertext = aesEncryptOpenSSL(plaintext, _iv.data(), _ik.data());
 
             result = writeFile(output, ciphertext);
 
@@ -366,6 +369,11 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
             ERR_free_strings();
         }
         break;
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+        // RESERVED
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
         default:
         {
@@ -382,11 +390,13 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
 {
     bool result = false;
 
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES && !LIBPRCPP_PROJECT_USING_OPENSSL)
+    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL && !LIBPRCPP_PROJECT_USING_OPENSSL)
     {
         std::cerr << "ERROR FileEncDec fileDecrypt: OpenSSL library is not configured\n";
         return result;
     }
+
+    // RESERVED
 
     auto ciphertext = readFile(input);
 
@@ -398,7 +408,8 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
 
     switch (encryptDecryptMode)
     {
-        case EEncDecMode::Enum::ENC_DEC_MODE_OPENSSL_AES:
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
+        case EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL:
         {
             OpenSSL_add_all_algorithms();
             ERR_load_crypto_strings();
@@ -406,7 +417,7 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
-            auto plaintext = decryptOpenSSL_AES(ciphertext, _iv.data(), _ik.data());
+            auto plaintext = aesDecryptOpenSSL(ciphertext, _iv.data(), _ik.data());
 
             result = writeFile(output, plaintext);
 
@@ -414,6 +425,11 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
             ERR_free_strings();
         }
         break;
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+        // RESERVED
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
         default:
         {
@@ -485,7 +501,7 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::stringToUnsignedChar(cons
 }
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-std::vector<unsigned char> CSystemModule::SFileEncDec::encryptOpenSSL_AES(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik)
+std::vector<unsigned char> CSystemModule::SFileEncDec::aesEncryptOpenSSL(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik)
 {
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
@@ -530,7 +546,7 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::encryptOpenSSL_AES(const 
     return ciphertext;
 }
 
-std::vector<unsigned char> CSystemModule::SFileEncDec::decryptOpenSSL_AES(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik)
+std::vector<unsigned char> CSystemModule::SFileEncDec::aesDecryptOpenSSL(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik)
 {
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
@@ -582,7 +598,11 @@ void CSystemModule::SFileEncDec::handleOpenSSLError()
 }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-namespace utilityFunction
+#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+// RESERVED
+#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+
+namespace utilityFunctions
 {
 
     namespace directory
@@ -673,6 +693,6 @@ namespace utilityFunction
     } // namespace fileEncDec
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
-} // namespace utilityFunction
+} // namespace utilityFunctions
 
 } // namespace libprcpp
