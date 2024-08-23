@@ -491,7 +491,7 @@ std::string CUtilityModule::base64decode(const std::string &input)
 }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toString()
+std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toStringTZ()
 {
     std::string result;
     std::stringstream ss;
@@ -506,7 +506,7 @@ std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toString()
     return result;
 }
 
-std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toString(const int &timeOffset, const bool &ISO8601)
+std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toStringTZ(const int &timeOffset, const bool &ISO8601)
 {
     std::string result;
     std::string utcNegativeOrPositive, utcFormat;
@@ -991,7 +991,7 @@ std::string CUtilityModule::SDateAndTime::SUTC::SUTCHourMinuteSecond::toString(c
     return result;
 }
 
-long CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toInt64(const int &timeOffset)
+TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toInt64(const int &timeOffset)
 {
     std::string result;
     std::stringstream ss;
@@ -1013,6 +1013,34 @@ long CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toInt
     return std::stol(result);
 }
 
+TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toMillis(const std::string &YYYYMMDDhhmmss)
+{
+    TInt64 result;
+
+    std::tm time = {};
+    std::istringstream ss(YYYYMMDDhhmmss);
+
+    if (YYYYMMDDhhmmss.find("T") != std::string::npos)
+    {
+        ss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
+    }
+    else
+    {
+        ss >> std::get_time(&time, "%Y-%m-%d %H:%M:%S");
+    }
+
+    if (ss.fail())
+    {
+        throw std::runtime_error("ERROR YYYYMMDDhhmmss: Failed to parse time string");
+    }
+
+    time_t time_since_epoch = mktime(&time);
+
+    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
+
+    return result;
+}
+
 std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toString(const int &timeOffset)
 {
     std::string result;
@@ -1029,6 +1057,35 @@ std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond
     std::time_t now_time_utc = now_time + adjustTimeOffset;
 
     ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d%H%M%S");
+
+    result = ss.str();
+
+    return result;
+}
+
+std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toStringHuman(const int &timeOffset, const bool &useTimeSign)
+{
+    std::string result;
+    std::stringstream ss;
+    int timezoneOffset = timeOffset;
+
+    if (timezoneOffset <= -11) { timezoneOffset = -11; }
+    if (timezoneOffset >= 14) { timezoneOffset = 14; }
+
+    auto adjustTimeOffset = timezoneOffset * 3600;
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::time_t now_time_utc = now_time + adjustTimeOffset;
+
+    if (useTimeSign)
+    {
+        ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%dT%H%M%S");
+    }
+    else
+    {
+        ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d %H%M%S");
+    }
 
     result = ss.str();
 
@@ -1201,13 +1258,13 @@ namespace UTC
         std::string toString()
         {
             CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.TimeZone.toString();
+            return Utility.DateAndTime.UTC.TimeZone.toStringTZ();
         }
 
         std::string toString(const int &timeOffset, const bool &ISO8601 = true)
         {
             CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.TimeZone.toString(timeOffset, ISO8601);
+            return Utility.DateAndTime.UTC.TimeZone.toStringTZ(timeOffset, ISO8601);
         }
     } // namespace timeZone
 
@@ -1324,16 +1381,28 @@ namespace UTC
 
     namespace YYYYMMDDhhmmss
     {
-        long toInt64(const int &timeOffset = 0)
+        TInt64 toInt64(const int &timeOffset = 0)
         {
             CUtilityModule Utility;
             return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toInt64(timeOffset);
+        }
+
+        TInt64 toMillis(const std::string &YYYYMMDDhhmmss)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toMillis(YYYYMMDDhhmmss);
         }
 
         std::string toString(const int &timeOffset = 0)
         {
             CUtilityModule Utility;
             return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toString(timeOffset);
+        }
+
+        std::string toStringHuman(const int &timeOffset, const bool &useTimeSign)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toStringHuman(timeOffset, useTimeSign);
         }
 
         std::string toStringSecondsOffset(const int &secondsOffset = 0)
