@@ -120,7 +120,7 @@ public:
         utilityFunctions::findAndReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
         utilityFunctions::findAndReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
 
-        std::string currentTz = UTILITY.DateAndTime.UTC.TimeZone.toString();
+        std::string currentTz = UTILITY.DateAndTime.UTC.TimeZone.toStringTZ();
         utilityFunctions::findAndReplaceAll(query, "{REPLACE_TIME_TEXT}", currentTz);
 
         if (IScyllaDb.executeQuery(IScyllaDb.getCassSessionPtr(), query.c_str()) != CASS_OK)

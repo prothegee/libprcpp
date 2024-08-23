@@ -256,11 +256,11 @@ public:
             // timezone utc structure
             struct STimeZone
             {
-                // default: UTC +00:00
-                std::string toString();
+                // default: with UTC +00:00
+                std::string toStringTZ();
 
                 // @param timeOffset from -11 to 14
-                std::string toString(const int &timeOffset, const bool &ISO8601 = true);
+                std::string toStringTZ(const int &timeOffset, const bool &ISO8601 = true);
             };
             // time zone utc data access
             STimeZone TimeZone = STimeZone();
@@ -350,9 +350,14 @@ public:
             // utc YYYYMMDDhhmmss structure
             struct SUTCYearMonthDayHourMinuteSecond
             {
-                long toInt64(const int &timeOffset = 0);
+                TInt64 toInt64(const int &timeOffset = 0);
+
+                TInt64 toMillis(const std::string &YYYYMMDDhhmmss);
 
                 std::string toString(const int &timeOffset = 0);
+
+                // YYYY-MM-DDThh:mm:ss or YYYY-MM-DD hh:mm:ss if false
+                std::string toStringHuman(const int &timeOffset = 0, const bool &useTimeSign = true);
 
                 std::string toStringSecondsOffset(const int &secondsOffset = 0);
             };
@@ -630,9 +635,14 @@ namespace UTC
 
     namespace YYYYMMDDhhmmss
     {
-        long toInt64(const int &timeOffset = 0);
+        TInt64 toInt64(const int &timeOffset = 0);
+
+        TInt64 toMillis(const std::string &YYYYMMDDhhmmss);
 
         std::string toString(const int &timeOffset = 0);
+
+        // YYYY-MM-DDThh:mm:ss or YYYY-MM-DD hh:mm:ss if false
+        std::string toStringHuman(const int &timeOffset = 0, const bool &useTimeSign = true);
 
         std::string toStringSecondsOffset(const int &secondsOffset = 0);
     } // namespace YYYYMMDDhhmmss

@@ -16,10 +16,10 @@ typedef int64_t TInt64;
 #endif // UINT64_MAX
 
 // alter type of uint32_t
-typedef uint32_t TUint32;
+typedef uint32_t TUInt32;
 
 // alter type of uint64_t
-typedef uint64_t TUint64;
+typedef uint64_t TUInt64;
 
 } // namespace libprcpp
 
