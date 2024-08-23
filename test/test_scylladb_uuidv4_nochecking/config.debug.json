@@ -1,0 +1,13 @@
+{
+    "keyspace": "libprcpp_db_test",
+    "strategy": 3, // 0:undefined 1:SimpleStrategy 2:NetworkTopologyStrategy 3:LocalStrategy 4:EverywhereStrategy
+    "replication_factor": 3,
+    "connection":
+    {
+        "auth": 2, // 0:undefined 1:AllowAllAuthenticator 2:PasswordAuthenticator 3:com.scylladb.auth.TransitionalAuthenticator
+        "hosts": "127.0.0.1",
+        "username": "CHANGE_ME",
+        "password": "CHANGE_ME"
+    },
+    "_": "don't use me"
+}
