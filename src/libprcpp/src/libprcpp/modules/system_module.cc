@@ -334,30 +334,6 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 {
     bool result = false;
 
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL && !LIBPRCPP_PROJECT_USING_OPENSSL)
-    {
-        std::cerr << "ERROR FileEncDec fileEncrypt: OpenSSL library is not configured\n";
-        return result;
-    }
-
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
-    {
-        std::cerr << "ERROR FileEncDec fileEncrypt: CryptoPP cmake library is not configured\n";
-        return result;
-    }
-
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
-    {
-        std::cerr << "ERROR FileEncDec fileEncrypt: CryptoPP cmake library is not configured\n";
-        return result;
-    }
-
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
-    {
-        std::cerr << "ERROR FileEncDec fileEncrypt: CryptoPP cmake library is not configured\n";
-        return result;
-    }
-
     auto plaintext = readFile(input);
 
     if (plaintext.empty())
@@ -436,30 +412,6 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
 {
     bool result = false;
-
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL && !LIBPRCPP_PROJECT_USING_OPENSSL)
-    {
-        std::cerr << "ERROR FileEncDec fileDecrypt: OpenSSL library is not configured\n";
-        return result;
-    }
-
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
-    {
-        std::cerr << "ERROR FileEncDec fileDecrypt: CryptoPP cmake library is not configured\n";
-        return result;
-    }
-
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
-    {
-        std::cerr << "ERROR FileEncDec fileDecrypt: CryptoPP cmake library is not configured\n";
-        return result;
-    }
-
-    if (encryptDecryptMode == EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP && !LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
-    {
-        std::cerr << "ERROR FileEncDec fileDecrypt: CryptoPP cmake library is not configured\n";
-        return result;
-    }
 
     auto ciphertext = readFile(input);
 

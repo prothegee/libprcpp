@@ -13,10 +13,10 @@
 #include <thread>
 #include <sstream>
 #include <cstring>
-#include <unistd.h>
 
 // includes os specification
 #if PROJECT_BUILD_TARGET == 1
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -28,6 +28,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 #elif PROJECT_BUILD_TARGET == 3
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -42,7 +43,7 @@
 #endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
 #if LIBPRCPP_PROJECT_USING_JSONCPP
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL

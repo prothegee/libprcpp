@@ -6,7 +6,7 @@
 #include <any>
 
 #if LIBPRCPP_PROJECT_USING_JSONCPP
-#include <jsoncpp/json/json.h>
+#include <json/json.h>
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
 namespace libprcpp

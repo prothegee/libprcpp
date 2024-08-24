@@ -259,21 +259,19 @@ std::string CCryptographyModule::SHash::toHexaStringOpenSSL(const std::string &i
 {
     std::string result;
 
-    static const char hex_digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
     result.reserve(input.length() * 2);
 
     for (unsigned char byte : input)
     {
-        result.push_back(hex_digits[byte >> 4]);
-        result.push_back(hex_digits[byte & 0x1F]);
+        result.push_back(HEX_DIGITS[byte >> 4]);
+        result.push_back(HEX_DIGITS[byte & 0x1F]);
     }
 
     return result;
 }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-#if LIBPRCPP_PROJECT_USING_ARGON
+#if LIBPRCPP_PROJECT_USING_ARGON2
 std::string CCryptographyModule::SHash::argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost, const uint32_t &blockSizeCost, const uint32_t &threadsCost, const uint32_t &derivedLength)
 {
     std::string result;
@@ -304,17 +302,16 @@ std::string CCryptographyModule::SHash::argon2(const std::string &input, const s
 
 std::string CCryptographyModule::SHash::toHexaStringArgon2(const std::vector<uint8_t> &data)
 {
-    static const char hex_digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     std::string hex_string;
     hex_string.reserve(data.size() * 2);
     for (uint8_t byte : data)
     {
-        hex_string.push_back(hex_digits[byte >> 4]);
-        hex_string.push_back(hex_digits[byte & 0x0F]);
+        hex_string.push_back(HEX_DIGITS[byte >> 4]);
+        hex_string.push_back(HEX_DIGITS[byte & 0x0F]);
     }
     return hex_string;
 }
-#endif // LIBPRCPP_PROJECT_USING_ARGON
+#endif // LIBPRCPP_PROJECT_USING_ARGON2
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 std::string CCryptographyModule::SStreamCipher::aesEncrypt(const std::string &input, const std::string &iv, const std::string &ik)
@@ -449,7 +446,6 @@ std::string CCryptographyModule::SStreamCipher::aesDecryptOpenSSL(const std::str
 std::string CCryptographyModule::SStreamCipher::toCustomBase36OpenSSL(const std::string &input)
 {
     std::string result;
-    static const std::string base36_digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     unsigned int value = 0;
     int bits = 0;
@@ -462,13 +458,13 @@ std::string CCryptographyModule::SStreamCipher::toCustomBase36OpenSSL(const std:
         while (bits >= 5)
         {
             bits -= 5;
-            result.push_back(base36_digits[(value >> bits) & 0x1F]); // Mask for 5 bits (0x1F)
+            result.push_back(BASE36_DIGITS[(value >> bits) & 0x1F]); // Mask for 5 bits (0x1F)
         }
     }
 
     if (bits > 0)
     {
-        result.push_back(base36_digits[(value << (5 - bits)) & 0x1F]);
+        result.push_back(BASE36_DIGITS[(value << (5 - bits)) & 0x1F]);
     }
 
     return result;
@@ -476,7 +472,6 @@ std::string CCryptographyModule::SStreamCipher::toCustomBase36OpenSSL(const std:
 std::string CCryptographyModule::SStreamCipher::fromCustomBase36OpenSSL(const std::string &input)
 {
     std::string result;
-    static const std::string base36_digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     unsigned int value = 0;
     int bits = 0;
@@ -484,7 +479,7 @@ std::string CCryptographyModule::SStreamCipher::fromCustomBase36OpenSSL(const st
     // for (char c : input)
     for (unsigned char c : input)
     {
-        int index = base36_digits.find(c);
+        int index = BASE36_DIGITS.find(c);
         if (index == std::string::npos)
         {
             std::cerr << "ERROR: Character '" << static_cast<int>(c) << "' not found in base62 character set.\n";
@@ -711,13 +706,13 @@ namespace hasher
     }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-#if LIBPRCPP_PROJECT_USING_ARGON
+#if LIBPRCPP_PROJECT_USING_ARGON2
     std::string argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost, const uint32_t &blockSizeCost, const uint32_t &threadsCost, const uint32_t &derivedLength)
     {
         CCryptographyModule CRYPTOGRAPHY;
         return CRYPTOGRAPHY.Hasher.argon2(input, salt, computationCost, blockSizeCost, threadsCost, derivedLength);
     }
-#endif // LIBPRCPP_PROJECT_USING_ARGON
+#endif // LIBPRCPP_PROJECT_USING_ARGON2
 } // namespace hasher
 
 namespace streamCipher

@@ -32,6 +32,7 @@ public:
     {
         CCryptographyModule Cryptography;
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // sha1
         {
             std::cout << "TEST SHA1: with \"" << m_email << "\":\n";
@@ -42,7 +43,9 @@ public:
             std::cout << "TEST SHA1: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
         // sha1 OpenSSL
         {
             std::cout << "TEST SHA1 OpenSSL: with \"" << m_email << "\":\n";
@@ -53,7 +56,9 @@ public:
             std::cout << "TEST SHA1 OpenSSL: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // sha224
         {
             std::cout << "TEST SHA224: with \"" << m_email << "\":\n";
@@ -64,7 +69,9 @@ public:
             std::cout << "TEST SHA224: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
         // sha224 OpenSSL
         {
             std::cout << "TEST SHA224 OpenSSL: with \"" << m_email << "\":\n";
@@ -75,7 +82,9 @@ public:
             std::cout << "TEST SHA224 OpenSSL: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // sha256
         {
             std::cout << "TEST SHA256: with \"" << m_email << "\":\n";
@@ -86,7 +95,9 @@ public:
             std::cout << "TEST SHA256: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
         // sha256 OpenSSL
         {
             std::cout << "TEST SHA256 OpenSSL: with \"" << m_email << "\":\n";
@@ -97,7 +108,9 @@ public:
             std::cout << "TEST SHA256 OpenSSL: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // sha384
         {
             std::cout << "TEST SHA384: with \"" << m_email << "\":\n";
@@ -108,7 +121,9 @@ public:
             std::cout << "TEST SHA384: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
         // sha384 OpenSSL
         {
             std::cout << "TEST SHA384 OpenSSL: with \"" << m_email << "\":\n";
@@ -119,7 +134,9 @@ public:
             std::cout << "TEST SHA384 OpenSSL: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // sha512
         {
             std::cout << "TEST SHA512: with \"" << m_email << "\":\n";
@@ -130,7 +147,9 @@ public:
             std::cout << "TEST SHA512: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
         // sha512 OpenSSL
         {
             std::cout << "TEST SHA512 OpenSSL: with \"" << m_email << "\":\n";
@@ -141,7 +160,9 @@ public:
             std::cout << "TEST SHA512 OpenSSL: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // blake2b
         {
             std::cout << "TEST BLAKE2b: with \"" << m_email << "\":\n";
@@ -152,7 +173,9 @@ public:
             std::cout << "TEST BLAKE2b: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // scrypt
         {
             auto start = std::chrono::high_resolution_clock::now();
@@ -169,7 +192,9 @@ public:
             std::cout << "TEST Scrypt: finished in " << duration.count() << " seconds\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
         // scrypt OpenSSL
         {
             auto start = std::chrono::high_resolution_clock::now();
@@ -186,7 +211,9 @@ public:
             std::cout << "TEST Scrypt OpenSSL: finished in " << duration.count() << " seconds\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+    #if LIBPRCPP_PROJECT_USING_ARGON2
         // argon2
         {
             auto start = std::chrono::high_resolution_clock::now();
@@ -203,7 +230,9 @@ public:
             std::cout << "TEST argon2: finished in " << duration.count() << " seconds\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_ARGON2
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // aes
         {
             std::cout << "TEST AES: with message: \"" << m_secret_message << "\":\n";
@@ -217,7 +246,9 @@ public:
             std::cout << "TEST AES: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_OPENSSL
         // aes OpenSSL
         {
             std::cout << "TEST AES OpenSSL: with message: \"" << m_secret_message << "\":\n";
@@ -231,7 +262,9 @@ public:
             std::cout << "TEST AES OpenSSL: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // rc6
         {
             std::cout << "TEST RC6: with message: \"" << m_secret_message << "\":\n";
@@ -245,7 +278,9 @@ public:
             std::cout << "TEST RC6: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
+    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
         // xchacha20
         {
             std::cout << "TEST XCHACHA20: with message: \"" << m_secret_message << "\":\n";
@@ -259,6 +294,7 @@ public:
             std::cout << "TEST XCHACHA20: finished\n";
             std::cout << "\n";
         }
+    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     }
 };
 
