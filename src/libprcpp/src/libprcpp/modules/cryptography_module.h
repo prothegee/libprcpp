@@ -31,9 +31,9 @@
 #include <openssl/sha.h>
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-#if LIBPRCPP_PROJECT_USING_ARGON
+#if LIBPRCPP_PROJECT_USING_ARGON2
 #include <argon2.h>
-#endif // LIBPRCPP_PROJECT_USING_ARGON
+#endif // LIBPRCPP_PROJECT_USING_ARGON2
 
 #include <string>
 #include <sstream>
@@ -43,6 +43,9 @@
 
 namespace libprcpp
 {
+
+inline static const char HEX_DIGITS[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+inline static const std::string BASE36_DIGITS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 /**
  * @brief cryptography module class
@@ -235,7 +238,7 @@ public:
         std::string toHexaStringOpenSSL(const std::string &input);
     #endif
 
-    #if LIBPRCPP_PROJECT_USING_ARGON
+    #if LIBPRCPP_PROJECT_USING_ARGON2
         /**
          * @brief argon2 password hasher
          * 
@@ -250,7 +253,7 @@ public:
         std::string argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost = (2<<20), const uint32_t &blockSizeCost = 8, const uint32_t &threadsCost = 12, const uint32_t &derivedLength = 32);
 
         std::string toHexaStringArgon2(const std::vector<uint8_t> &data);
-    #endif // LIBPRCPP_PROJECT_USING_ARGON
+    #endif // LIBPRCPP_PROJECT_USING_ARGON2
     };
     SHash Hasher = SHash();
 
@@ -525,7 +528,7 @@ namespace hasher
     std::string scryptOpenSSL(const std::string &input, const std::string &salt, const uint32_t &computationCost = (2<<16), const uint32_t &blockSizeCost = 8, const uint32_t &threadsCost = 12, const uint32_t &derivedLength = 32);
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
-#if LIBPRCPP_PROJECT_USING_ARGON
+#if LIBPRCPP_PROJECT_USING_ARGON2
     /**
      * @brief argon2 password hasher
      * 
@@ -538,7 +541,7 @@ namespace hasher
      * @return std::string 
      */
     std::string argon2(const std::string &input, const std::string &salt, const uint32_t &computationCost = (2<<20), const uint32_t &blockSizeCost = 8, const uint32_t &threadsCost = 12, const uint32_t &derivedLength = 32);
-#endif // LIBPRCPP_PROJECT_USING_ARGON
+#endif // LIBPRCPP_PROJECT_USING_ARGON2
 } // namespace hasher
 
 namespace streamCipher

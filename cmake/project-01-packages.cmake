@@ -1,3 +1,18 @@
+include(FindPackageHandleStandardArgs)
+
+
+# check toolchain and depend on target build
+if(PROJECT_BUILD_TARGET EQUAL 2)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   build target is windows, checking toolchain")
+    if(${CMAKE_TOOLCHAIN_FILE} STREQUAL "")
+        message(NOTICE "-- ${PROJECT_NAME}:\n   cmake toolchain file is empty")
+        else()
+        message(NOTICE "-- ${PROJECT_NAME}:\n   including cmake toolchain file \"${CMAKE_TOOLCHAIN_FILE}\"")
+        include(${CMAKE_TOOLCHAIN_FILE})
+    endif()
+endif()
+
+
 # jsoncpp
 set(LIBPRCPP_PROJECT_USING_JSONCPP false)
 
@@ -6,13 +21,7 @@ if(jsoncpp_FOUND)
     set(LIBPRCPP_PROJECT_USING_JSONCPP true)
     message(NOTICE "-- ${PROJECT_NAME}:\n   jsoncpp package found")
 else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   jsoncpp package not found, try find path")
-
-    find_path(LIBPRCPP_JSONCPP_INCLUDE_DIR "json/")
-    if(LIBPRCPP_JSONCPP_INCLUDE_DIR)
-        set(LIBPRCPP_PROJECT_USING_JSONCPP true)
-        message(NOTICE "-- ${PROJECT_NAME}:\n   jsoncpp path found in ${LIBPRCPP_JSONCPP_INCLUDE_DIR}")
-    endif()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   jsoncpp package not found")
 endif()
 
 
@@ -24,12 +33,20 @@ if(OpenSSL_FOUND)
     set(LIBPRCPP_PROJECT_USING_OPENSSL true)
     message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package found")
 else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package not found, try find path")
-
-    find_path(LIBPRCPP_OPENSSL_INCLUDE_DIRS "openssl/")
-    if(LIBPRCPP_OPENSSL_INCLUDE_DIRS)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package not found, try find path default include dir")
+    if(OPENSSL_INCLUDE_DIR)
+        message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package found as path in ${OPENSSL_INCLUDE_DIR}")
         set(LIBPRCPP_PROJECT_USING_OPENSSL true)
-        message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL path found as path in ${LIBPRCPP_OPENSSL_INCLUDE_DIRS}")
+        include_directories(${OPENSSL_LIBRARIES})
+    else()
+        message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL package not found, in default dir, try find file")
+        find_file(LIBPRCPP_OPENSSL_INCLUDE_DIRS "openssl/evp.h")
+        if(LIBPRCPP_OPENSSL_INCLUDE_DIRS)
+            set(LIBPRCPP_PROJECT_USING_OPENSSL true)
+            message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL path found as path in ${LIBPRCPP_OPENSSL_INCLUDE_DIRS}")
+        else()
+            message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL path not found in default include dir and when try to find file")
+        endif()
     endif()
 endif()
 
@@ -59,11 +76,11 @@ endif()
 
 
 # argon2
-set(LIBPRCPP_PROJECT_USING_ARGON false)
+set(LIBPRCPP_PROJECT_USING_ARGON2 false)
 
-find_file(LIBPRCPP_ARGON2_INCLUDE_DIRS "include/argon2.h") # unix only, not sure in windows for now
+find_file(LIBPRCPP_ARGON2_INCLUDE_DIRS "argon2.h") # unix only, not sure in windows for now
 if(LIBPRCPP_ARGON2_INCLUDE_DIRS)
-    set(LIBPRCPP_PROJECT_USING_ARGON true)
+    set(LIBPRCPP_PROJECT_USING_ARGON2 true)
     message(NOTICE "-- ${PROJECT_NAME}:\n   argon.h found in ${LIBPRCPP_ARGON2_INCLUDE_DIRS}")
 else()
     message(NOTICE "-- ${PROJECT_NAME}:\n   argon.h not found")
