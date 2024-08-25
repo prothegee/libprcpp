@@ -462,7 +462,7 @@ std::string CUtilityModule::base64encode(const std::string &input)
     bio = BIO_new(BIO_s_mem());
     bio = BIO_push(b64, bio);
 
-    BIO_write(bio, input.c_str(), input.length());
+    BIO_write(bio, input.c_str(), (int)input.length());
     BIO_flush(bio);
     BIO_get_mem_ptr(bio, &bufferPtr);
 
@@ -476,7 +476,6 @@ std::string CUtilityModule::base64encode(const std::string &input)
 std::string CUtilityModule::base64decode(const std::string &input)
 {
     BIO *bio, *b64;
-    BUF_MEM *bufferPtr;
 
     bio = BIO_new_mem_buf(input.c_str(), -1);
     b64 = BIO_new(BIO_f_base64());
@@ -485,7 +484,7 @@ std::string CUtilityModule::base64decode(const std::string &input)
 
     char* output = new char[input.size()];
 
-    int decodedLength = BIO_read(bio, output, input.size());
+    int decodedLength = BIO_read(bio, output, (int)input.size());
 
     BIO_free_all(bio);
 

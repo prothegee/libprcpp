@@ -113,7 +113,7 @@ bool CSystemModule::SFilePDF::generateTable(const std::vector<std::vector<std::s
 #if LIBPRCPP_PROJECT_USING_JSONCPP
 std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const int &indent, const int &precision)
 {
-    int _indent, _precision;
+    int _indent = indent, _precision = precision;
 
     if (indent >= 4) { _indent = 4; }
     if (indent <= 3) { _indent = 0; }
@@ -157,7 +157,7 @@ Json::Value CSystemModule::SFileJSON::fromString(const std::string &input, const
 {
     Json::Value result;
 
-    int _indent, _precision;
+    int _indent = indent, _precision = precision;
 
     if (indent >= 4) { _indent = 4; }
     if (indent <= 3) { _indent = 0; }
@@ -598,7 +598,7 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::aesEncryptOpenSSL(const s
 
     std::vector<unsigned char> ciphertext(plaintext.size() + AES_BLOCK_SIZE);
 
-    if (1 != EVP_EncryptUpdate(ctx, ciphertext.data(), &len, plaintext.data(), plaintext.size()))
+    if (1 != EVP_EncryptUpdate(ctx, ciphertext.data(), &len, plaintext.data(), (int)plaintext.size()))
     {
         handleOpenSSLError();
     }
@@ -643,7 +643,7 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::aesDecryptOpenSSL(const s
 
     std::vector<unsigned char> plaintext(ciphertext.size());
 
-    if (1 != EVP_DecryptUpdate(ctx, plaintext.data(), &len, ciphertext.data(), ciphertext.size()))
+    if (1 != EVP_DecryptUpdate(ctx, plaintext.data(), &len, ciphertext.data(), (int)ciphertext.size()))
     {
         handleOpenSSLError();
     }
@@ -870,7 +870,14 @@ bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
 
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(port);
+
+#if PROJECT_BUILD_COMPILER_ID == 2
+    #pragma warning (push)
+    #pragma warning (disable : 4242)
+    #pragma warning (disable : 4244)
+    addr.sin_port = htons(port); // TMP: ignored, figure it out to handle when MAY data loss
+    #pragma warning (pop)
+#endif // PROJECT_BUILD_COMPILER_ID
 
     int bindResult = bind(sock, (SOCKADDR*)&addr, sizeof(addr));
 
