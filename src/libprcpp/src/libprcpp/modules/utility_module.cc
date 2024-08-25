@@ -217,7 +217,7 @@ std::string CUtilityModule::changeInputLetterCase(const std::string input, const
     {
         case 0:
         {
-            for (int i = 0; i < input.length(); i++)
+            for (size_t i = 0; i < input.length(); i++)
             {
                 result += tolower(input[i]);
             }
@@ -226,7 +226,7 @@ std::string CUtilityModule::changeInputLetterCase(const std::string input, const
 
         case 1:
         {
-            for (int i = 0; i < input.length(); i++)
+            for (size_t i = 0; i < input.length(); i++)
             {
                 result += toupper(input[i]);
             }
@@ -235,7 +235,7 @@ std::string CUtilityModule::changeInputLetterCase(const std::string input, const
 
         case 2:
         {
-            for (int i = 0; i < input.length(); i++)
+            for (size_t i = 0; i < input.length(); i++)
             {
                 //  0 is lower, 1 is upper
                 int mixedcase = generateRandomNumber(0, 1);
@@ -319,7 +319,8 @@ std::string CUtilityModule::generateUuidV4()
 
     for (size_t i = 0; i < random_bytes.size(); ++i)
     {
-        if (i == 4 || i == 6 || i == 8 || i == 10) {
+        if (i == 4 || i == 6 || i == 8 || i == 10)
+        {
             oss << '-';
         }
         oss << std::setw(2) << static_cast<int>(random_bytes[i]);
@@ -368,9 +369,9 @@ bool CUtilityModule::checkInputPasswordMeetRequirement(const std::string &input,
 
             if (input.length() >= 6)
             {
-                for (int i = 0; i < m_alphabet.length(); i++)
+                for (size_t i = 0; i < m_alphabet.length(); i++)
                 {
-                    for (int j = 0; j < input.length(); j++)
+                    for (size_t j = 0; j < input.length(); j++)
                     {
                         if (m_alphabet[i] == input[j])
                         {
@@ -380,9 +381,9 @@ bool CUtilityModule::checkInputPasswordMeetRequirement(const std::string &input,
                     }
                 }
 
-                for (int i = 0; i < m_numeric.length(); i++)
+                for (size_t i = 0; i < m_numeric.length(); i++)
                 {
-                    for (int j = 0; j < input.length(); j++)
+                    for (size_t j = 0; j < input.length(); j++)
                     {
                         if (m_numeric[i] == input[j])
                         {
@@ -392,9 +393,9 @@ bool CUtilityModule::checkInputPasswordMeetRequirement(const std::string &input,
                     }
                 }
 
-                for (int i = 0; i < m_specialCharacter.length(); i++)
+                for (size_t i = 0; i < m_specialCharacter.length(); i++)
                 {
-                    for (int j = 0; j < input.length(); j++)
+                    for (size_t j = 0; j < input.length(); j++)
                     {
                         if (m_specialCharacter[i] == input[j])
                         {
@@ -482,13 +483,7 @@ std::string CUtilityModule::base64decode(const std::string &input)
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
     bio = BIO_push(b64, bio);
 
-#if PROJECT_BUILD_TARGET == 1
-    char output[input.size()];
-#elif PROJECT_BUILD_TARGET == 2
     char* output = new char[input.size()];
-#elif PROJECT_BUILD_TARGET == 3
-    char output[input.size()];
-#endif // PROJECT_BUILD_TARGET
 
     int decodedLength = BIO_read(bio, output, input.size());
 
@@ -496,13 +491,7 @@ std::string CUtilityModule::base64decode(const std::string &input)
 
     std::string result(output, decodedLength);
 
-#if PROJECT_BUILD_TARGET == 1
-    // 
-#elif PROJECT_BUILD_TARGET == 2
     delete[] output;
-#elif PROJECT_BUILD_TARGET == 3
-    // 
-#endif // PROJECT_BUILD_TARGET
 
     return result;
 }

@@ -297,7 +297,8 @@ std::string CCryptographyModule::SHash::argon2(const std::string &input, const s
         hash.size()
     );
 
-    if (status != ARGON2_OK) {
+    if (status != ARGON2_OK)
+    {
         throw std::runtime_error("ERROR argon2: Hashing failed with error code: " + std::to_string(status));
     }
 
@@ -485,7 +486,7 @@ std::string CCryptographyModule::SStreamCipher::fromCustomBase36OpenSSL(const st
     // for (char c : input)
     for (unsigned char c : input)
     {
-        int index = BASE36_DIGITS.find(c);
+        size_t index = BASE36_DIGITS.find(c);
         if (index == std::string::npos)
         {
             std::cerr << "ERROR: Character '" << static_cast<int>(c) << "' not found in base62 character set.\n";
