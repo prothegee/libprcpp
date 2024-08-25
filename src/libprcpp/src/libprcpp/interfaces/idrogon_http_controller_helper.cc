@@ -1,5 +1,13 @@
 #include "idrogon_http_controller_helper.h"
 
+#if PROJECT_BUILD_COMPILER_ID == 1
+// RESERVED
+#elif PROJECT_BUILD_COMPILER_ID == 2
+// RESERVED
+#elif PROJECT_BUILD_COMPILER_ID == 3
+// RESERVED
+#endif
+
 namespace libprcpp
 {
 
@@ -81,14 +89,7 @@ bool IDrogonHttpControllerHelper::SIBeforeCallback::checkOriginIsFromWhitelist(c
 
 void IDrogonHttpControllerHelper::SIStartBundle::frontendJsModule(const std::string &bundleName, HttpViewData &viewData, const int &scriptMode)
 {
-    bool useBundleJs = false;
-
     std::string bundle;
-
-    if (bundleName.length() > 0)
-    {
-        useBundleJs = true;
-    }
 
     if (scriptMode == 0)
     {
@@ -120,14 +121,7 @@ void IDrogonHttpControllerHelper::SIStartBundle::frontendJsModule(const std::str
 
 void IDrogonHttpControllerHelper::SIStartBundle::frontendCssModule(const std::string &bundleName, HttpViewData &viewData)
 {
-    bool useBundleCss = false;
-
     std::string bundle;
-
-    if (bundleName.length() > 0)
-    {
-        useBundleCss = true;
-    }
 
     bundle += "<link rel=\"stylesheet\" href=\"";
     bundle += bundleName;
@@ -246,3 +240,11 @@ void IDrogonHttpControllerHelper::SIStartInvokeMeta::video(const std::string &in
 #endif // LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 
 } // namespace libprcpp
+
+#if PROJECT_BUILD_COMPILER_ID == 1
+// RESERVED
+#elif PROJECT_BUILD_COMPILER_ID == 2
+// RESERVED
+#elif PROJECT_BUILD_COMPILER_ID == 3
+// RESERVED
+#endif
