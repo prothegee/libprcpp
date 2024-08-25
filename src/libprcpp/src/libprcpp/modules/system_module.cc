@@ -123,7 +123,7 @@ std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const i
     Json::StreamWriterBuilder writter;
     
     std::string _indentString = "";
-    for (auto i = 0; i < indent; i++)
+    for (auto i = 0; i < _indent; i++)
     {
         _indentString += " ";
     }
@@ -165,7 +165,7 @@ Json::Value CSystemModule::SFileJSON::fromString(const std::string &input, const
     if (precision <= 2) { _precision = 2; }
 
     std::string _indentString = "";
-    for (auto i = 0; i < indent; i++)
+    for (auto i = 0; i < _indent; i++)
     {
         _indentString += " ";
     }
@@ -859,7 +859,8 @@ bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
 
     SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-    if (sock == INVALID_SOCKET) {
+    if (sock == INVALID_SOCKET)
+    {
         std::cerr << "ERROR portIsAvailable: Socket creation failed\n";
         WSACleanup();
         return false;

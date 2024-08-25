@@ -136,10 +136,27 @@ public:
      */
     struct SFilePDF
     {
+    #if PROJECT_BUILD_COMPILER_ID == 1
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wunused-parameter"
+    #elif PROJECT_BUILD_COMPILER_ID == 2
+    // RESERVED
+    #elif PROJECT_BUILD_COMPILER_ID == 3
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wunused-parameter"
+    #endif
         static void filePDFerrorHandler(HPDF_STATUS error_no, HPDF_STATUS detail_no, void *user_data)
         {
             std::cerr << "ERROR FilePDF: error_no=" << error_no << ", detail_no=" << detail_no << "\n";
         }
+    #if PROJECT_BUILD_COMPILER_ID == 1
+    #pragma GCC diagnostic pop
+    #elif PROJECT_BUILD_COMPILER_ID == 2
+    // RESERVED
+    #elif PROJECT_BUILD_COMPILER_ID == 3
+    // RESERVED
+    #pragma clang diagnostic pop
+    #endif
 
         /**
          * @brief generate table pdf file
