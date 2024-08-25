@@ -4,6 +4,16 @@
 
 #include <cstring>
 
+#if PROJECT_BUILD_COMPILER_ID == 1
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#elif PROJECT_BUILD_COMPILER_ID == 2
+// RESERVED
+#elif PROJECT_BUILD_COMPILER_ID == 3
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
+
 namespace libprcpp
 {
 
@@ -253,3 +263,12 @@ CassUuid IScyllaDbCoreInterface::SIScyllaDb::stringToCassUuid(const std::string 
 #endif // LIBPRCPP_PROJECT_USING_SCYLLADB
 
 } // namespace libprcpp
+
+#if PROJECT_BUILD_COMPILER_ID == 1
+#pragma GCC diagnostic pop
+#elif PROJECT_BUILD_COMPILER_ID == 2
+// RESERVED
+#elif PROJECT_BUILD_COMPILER_ID == 3
+// RESERVED
+#pragma clang diagnostic pop
+#endif

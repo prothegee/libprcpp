@@ -22,6 +22,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(PROJECT_BUILD_COMPILER_ID 1)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
         -Wno-unused-value
         -Wno-unused-variable
         -Wno-reorder
@@ -44,6 +47,9 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
     set(PROJECT_BUILD_COMPILER_ID 3)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
         -Wno-unused-value
         -Wno-unused-variable
         -Wno-reorder
