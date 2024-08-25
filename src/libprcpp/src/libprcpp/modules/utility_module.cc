@@ -163,9 +163,10 @@ std::array<uint8_t, 16> CUtilityModule::generateRandomBytes()
     std::array<uint8_t, 16> bytes;
     std::random_device rd;
     std::mt19937 generator(rd());
-    std::uniform_int_distribution<uint8_t> distribution(0, 255);
+    std::uniform_int_distribution<int32_t> distribution(0, 255);
 
-    for (auto &byte : bytes) {
+    for (auto &byte : bytes)
+    {
         byte = distribution(generator);
     }
 
@@ -481,12 +482,28 @@ std::string CUtilityModule::base64decode(const std::string &input)
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
     bio = BIO_push(b64, bio);
 
+#if PROJECT_BUILD_TARGET == 1
     char output[input.size()];
+#elif PROJECT_BUILD_TARGET == 2
+    char* output = new char[input.size()];
+#elif PROJECT_BUILD_TARGET == 3
+    char output[input.size()];
+#endif // PROJECT_BUILD_TARGET
+
     int decodedLength = BIO_read(bio, output, input.size());
 
     BIO_free_all(bio);
 
     std::string result(output, decodedLength);
+
+#if PROJECT_BUILD_TARGET == 1
+    // 
+#elif PROJECT_BUILD_TARGET == 2
+    delete[] output;
+#elif PROJECT_BUILD_TARGET == 3
+    // 
+#endif // PROJECT_BUILD_TARGET
+
     return result;
 }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL

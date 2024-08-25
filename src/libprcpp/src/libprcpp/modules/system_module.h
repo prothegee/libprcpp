@@ -71,32 +71,7 @@ namespace internal
 {
 
 // check if string index is number
-static bool isNumber(const std::string& s)
-{
-    if (s.empty()) return false;
-
-    std::string::const_iterator it = s.begin();
-
-    if (*it == '-' || *it == '+') ++it;
-
-    bool hasDigits = false;
-
-    while (it != s.end() && std::isdigit(*it))
-    {
-        hasDigits = true;
-        ++it;
-    }
-
-    if (it == s.end()) return hasDigits;
-    
-    if (*it == '.' && ++it != s.end())
-    {
-        while (it != s.end() && std::isdigit(*it)) ++it;
-        return it == s.end() && hasDigits;
-    }
-
-    return false;
-} // isNumber
+static bool isNumber(const std::string& s);
 
 } // namespace internal
 

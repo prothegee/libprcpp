@@ -3,6 +3,7 @@
 namespace libprcpp
 {
 
+#if LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 IDrogonHttpControllerHelper::~IDrogonHttpControllerHelper()
 {
 }
@@ -241,5 +242,7 @@ void IDrogonHttpControllerHelper::SIStartInvokeMeta::video(const std::string &in
 {
     viewData.insert("{VIDEO}", input);
 }
+
+#endif // LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 
 } // namespace libprcpp

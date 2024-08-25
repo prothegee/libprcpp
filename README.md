@@ -29,9 +29,9 @@ __*NOTES:*__
 
 ## tested operating system
 
-- [?] Apple MacOS/OSX
-- [?] Microsoft Windows
 - [V] GNU\Linux Debian 12
+- [?] Microsoft Windows
+- [?] Apple MacOS/OSX
 
 <br>
 
@@ -42,23 +42,28 @@ __*NOTES:*__
 `cmake conf`
 ```sh
 # required
--DPROJECT_BUILD_STATUS=1                  # 0:undefined 1:debug 2:staging 3:demo 4:release
+# 0:undefined 1:debug 2:staging 3:demo 4:release
+-DPROJECT_BUILD_STATUS=1
 
 # required
--DPROJECT_BUILD_TARGET=1                  # 0:undefined 1:linux 2:windows 3:osx
+# 0:undefined 1:linux 2:windows 3:osx
+-DPROJECT_BUILD_TARGET=1
 
 # not required | default false
--DLIBPRCPP_PROJECT_BUILD_TEST=true                 # will add test directory execute-able
+# error for windows if true, on false is ok
+# will add test directory execute-able
+-DLIBPRCPP_PROJECT_BUILD_TEST=true
 
 # not required | default false
--DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true # will make output under PROJECT_BUILD_TAGET_DIRECTORY
+# will make output under PROJECT_BUILD_TAGET_DIRECTORY
+-DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true
 ```
 
 look on [cmake directory for more info](./cmake)
 
 <br>
 
-`cmake build debug`
+`cmake build debug - linux`
 ```sh
 mkdir -p build/debug;
 cmake -B build/debug -DCMAKE_CXX_FLAGS="-std=c++17" -DCMAKE_BUILD_TYPE=Debug -DPROJECT_BUILD_STATUS=1 -DPROJECT_BUILD_TARGET=1 -DLIBPRCPP_PROJECT_BUILD_TEST=false -DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true;

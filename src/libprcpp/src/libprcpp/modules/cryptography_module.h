@@ -40,6 +40,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <iomanip>
+#include <vector>
 
 namespace libprcpp
 {
