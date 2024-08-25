@@ -1,3 +1,4 @@
+if(LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK)
 cmake_minimum_required(VERSION 3.15...3.30)
 project(test_scylladb_drogon)
 
@@ -65,3 +66,4 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         ${TEST_SCYLLADB_DROGON_DIR_PLUGINS}
 )
+endif()

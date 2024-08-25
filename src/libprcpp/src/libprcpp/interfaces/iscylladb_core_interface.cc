@@ -4,10 +4,10 @@
 
 #include <cstring>
 
-#if LIBPRCPP_PROJECT_USING_SCYLLADB
-
 namespace libprcpp
 {
+
+#if LIBPRCPP_PROJECT_USING_SCYLLADB
 
 IScyllaDbCoreInterface::~IScyllaDbCoreInterface()
 {
