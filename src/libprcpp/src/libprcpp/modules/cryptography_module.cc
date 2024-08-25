@@ -327,8 +327,8 @@ std::string CCryptographyModule::SStreamCipher::aesEncrypt(const std::string &in
 
     try
     {
-        const int ivLength = iv.size();
-        const int keyLength = ik.size();
+        const size_t ivLength = iv.size();
+        const size_t keyLength = ik.size();
 
         CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption enc;
         enc.SetKeyWithIV((const CryptoPP::byte*)ik.data(), keyLength, (const CryptoPP::byte*)iv.data(), ivLength);
@@ -350,8 +350,8 @@ std::string CCryptographyModule::SStreamCipher::aesDecrypt(const std::string &in
 
     try
     {
-        const int ivLength = iv.size();
-        const int keyLength = ik.size();
+        const size_t ivLength = iv.size();
+        const size_t keyLength = ik.size();
 
         CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption dec;
         dec.SetKeyWithIV((const CryptoPP::byte*)ik.data(), keyLength, (const CryptoPP::byte*)iv.data(), ivLength);
@@ -388,7 +388,7 @@ std::string CCryptographyModule::SStreamCipher::aesEncryptOpenSSL(const std::str
     int len = 0, ciphertext_len = 0;
     std::vector<unsigned char> ciphertext(input.size() + AES_BLOCK_SIZE);
 
-    if (EVP_EncryptUpdate(ctx, ciphertext.data(), &len, reinterpret_cast<const unsigned char *>(input.c_str()), input.size()) != 1)
+    if (EVP_EncryptUpdate(ctx, ciphertext.data(), &len, reinterpret_cast<const unsigned char *>(input.c_str()), (int)input.size()) != 1)
     {
         EVP_CIPHER_CTX_free(ctx);
         throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesEncryptOpenSSL\": failed to encrypt data\n");
@@ -428,7 +428,7 @@ std::string CCryptographyModule::SStreamCipher::aesDecryptOpenSSL(const std::str
     int len = 0, plaintext_len = 0;
     std::vector<unsigned char> plaintext(binary_input.size() + AES_BLOCK_SIZE);
 
-    if (EVP_DecryptUpdate(ctx, plaintext.data(), &len, reinterpret_cast<const unsigned char *>(binary_input.c_str()), binary_input.size()) != 1)
+    if (EVP_DecryptUpdate(ctx, plaintext.data(), &len, reinterpret_cast<const unsigned char *>(binary_input.c_str()), (int)binary_input.size()) != 1)
     {
         EVP_CIPHER_CTX_free(ctx);
         throw std::runtime_error("ERROR \"CCryptographyModule::SStreamCipher::aesDecryptOpenSSL\": failed to decrypt data\n");
@@ -493,7 +493,7 @@ std::string CCryptographyModule::SStreamCipher::fromCustomBase36OpenSSL(const st
             throw std::runtime_error("Invalid character in input string");
         }
 
-        value = (value << 5) | index;
+        value = (value << 5) | static_cast<unsigned int>(index);
         bits += 5;
 
         if (bits >= 8)
@@ -514,8 +514,8 @@ std::string CCryptographyModule::SStreamCipher::xChaCha20encrypt(const std::stri
 
     try
     {
-        const int ivLength = iv.size();
-        const int keyLength = ik.size();
+        const size_t ivLength = iv.size();
+        const size_t keyLength = ik.size();
 
         CryptoPP::XChaCha20::Encryption enc;
         enc.SetKeyWithIV((const CryptoPP::byte*)ik.data(), keyLength, (const CryptoPP::byte*)iv.data(), ivLength);
@@ -537,8 +537,8 @@ std::string CCryptographyModule::SStreamCipher::xChaCha20decrypt(const std::stri
 
     try
     {
-        const int ivLength = iv.size();
-        const int keyLength = ik.size();
+        const size_t ivLength = iv.size();
+        const size_t keyLength = ik.size();
 
         CryptoPP::XChaCha20::Decryption dec;
         dec.SetKeyWithIV((const CryptoPP::byte*)ik.data(), keyLength, (const CryptoPP::byte*)iv.data(), ivLength);
@@ -563,8 +563,8 @@ std::string CCryptographyModule::SStreamCipher::rc6encrypt(const std::string &in
 
     try
     {
-        const int ivLength = iv.size();
-        const int keyLength = ik.size();
+        const size_t ivLength = iv.size();
+        const size_t keyLength = ik.size();
 
         CryptoPP::CBC_Mode<CryptoPP::RC6>::Encryption enc;
         enc.SetKeyWithIV((const CryptoPP::byte*)ik.data(), keyLength, (const CryptoPP::byte*)iv.data(), ivLength);
@@ -586,8 +586,8 @@ std::string CCryptographyModule::SStreamCipher::rc6decrypt(const std::string &in
 
     try
     {
-        const int ivLength = iv.size();
-        const int keyLength = ik.size();
+        const size_t ivLength = iv.size();
+        const size_t keyLength = ik.size();
 
         CryptoPP::CBC_Mode<CryptoPP::RC6>::Decryption dec;
         dec.SetKeyWithIV((const CryptoPP::byte*)ik.data(), keyLength, (const CryptoPP::byte*)iv.data(), ivLength);
