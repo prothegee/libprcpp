@@ -2,6 +2,8 @@
 
 one stop c++ library for c++ project integration
 
+currently for personal use, as module and just reference
+
 <br>
 
 ---
@@ -30,8 +32,8 @@ __*NOTES:*__
 ## tested operating system
 
 - [V] GNU\Linux Debian 12
-- [?] Microsoft Windows
-- [?] Apple MacOS/OSX
+- [?] Microsoft Windows (__has error when build test__)
+- [X] Apple MacOS/OSX
 
 <br>
 

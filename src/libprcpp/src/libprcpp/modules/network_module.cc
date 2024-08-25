@@ -72,9 +72,9 @@ Content-Type: text/html; charset="UTF-8"
 
         if (std::thread::hardware_concurrency() >= 2)
         {
-            #if PROJECT_BUILD_STATUS == 1
+        #if PROJECT_BUILD_STATUS == 1
             std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: system has multiple threads\n";
-            #endif // PROJECT_BUILD_STATUS
+        #endif // PROJECT_BUILD_STATUS
 
             auto status = std::async(std::launch::async, system, CMD.c_str());
 
@@ -86,9 +86,9 @@ Content-Type: text/html; charset="UTF-8"
         }
         else
         {
-            #if PROJECT_BUILD_STATUS == 1
+        #if PROJECT_BUILD_STATUS == 1
             std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: system has single thread\n";
-            #endif // PROJECT_BUILD_STATUS
+        #endif // PROJECT_BUILD_STATUS
 
             auto status = system(CMD.c_str());
 
@@ -108,7 +108,7 @@ Content-Type: text/html; charset="UTF-8"
 
     auto statusAndResult = responseFuture.get();
 
-    #if PROJECT_BUILD_STATUS == 1
+#if PROJECT_BUILD_STATUS == 1
     if (statusAndResult == EResult::Enum::RESULT_OK)
     {
         std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: result ok\n";
@@ -117,8 +117,89 @@ Content-Type: text/html; charset="UTF-8"
     {
         std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: result error\n";
     }
-    #endif // PROJECT_BUILD_STATUS
+#endif // PROJECT_BUILD_STATUS
     return statusAndResult;
 }
+
+#if LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
+CNetworkModule::SSparkpostDrogon::SSparkpostDrogon()
+{
+}
+
+CNetworkModule::SSparkpostDrogon::~SSparkpostDrogon()
+{
+}
+EResult::Enum CNetworkModule::SSparkpostDrogon::sendMailByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &sparkpostApiKey, const std::string &sparkpostSenderName, const std::string &sparkpostUrl, const std::string &sparkpostEndpoint, const std::string &senderUserAgent, const bool &enableTracking)
+{
+    std::promise<EResult::Enum> responsePromise;
+    std::future<EResult::Enum> responseFuture = responsePromise.get_future();
+
+    CUtilityModule Utility;
+
+    std::stringstream ss;
+    std::ifstream f(templateHtml);
+
+    std::string RECIPIENT_CONTENT_HTML;
+
+    Json::Value root, content, recipients, options;
+
+    ss << f.rdbuf();
+
+    RECIPIENT_CONTENT_HTML = ss.str();
+
+    for (auto &data : templateLookAndReplace)
+    {
+        Utility.findAndReplaceAll(RECIPIENT_CONTENT_HTML, data.to_look, data.to_replace);
+    }
+
+    content["from"] = sparkpostSenderName;
+    content["subject"] = templateTitle;
+    content["text"] = RECIPIENT_CONTENT_HTML;
+    content["html"] = RECIPIENT_CONTENT_HTML;
+
+    recipients["address"] = templateRecipient;
+
+    root["content"] = content;
+    root["recipients"].append(recipients);
+    root["options"]["click_tracking"] = enableTracking;
+
+    auto pClient = HttpClient::newHttpClient(sparkpostUrl);
+    auto pRequest = HttpRequest::newHttpJsonRequest(root);
+
+    pClient->setUserAgent(senderUserAgent);
+
+    pRequest->setPath(sparkpostEndpoint);
+    pRequest->setContentTypeCode(CT_APPLICATION_JSON);
+    pRequest->addHeader("accept", "*/*");
+    pRequest->addHeader("authorization", sparkpostApiKey);
+    pRequest->setMethod(Post);
+
+    pClient->sendRequest(pRequest, [&responsePromise](ReqResult result, const HttpResponsePtr &pResp)
+    {
+        EResult::Enum tmpVal1 = EResult::Enum::RESULT_ERROR;
+
+        if (result == ReqResult::Ok && pResp->getStatusCode() == k200OK)
+        {
+        #if PROJECT_BUILD_STATUS == 1
+            std::cout << "DEBUG CNetworkModule::SSparkpostDrogon::sendMailByTemplate: sparkpost reponse ok\n";
+        #endif
+            tmpVal1 = EResult::Enum::RESULT_OK;
+
+            responsePromise.set_value(tmpVal1);
+        }
+        else
+        {
+        #if PROJECT_BUILD_STATUS == 1
+            std::cout << "DEBUG CNetworkModule::SSparkpostDrogon::sendMailByTemplate: sparkpost status code is " << pResp->getStatusCode() << "\n";
+        #endif
+            responsePromise.set_value(tmpVal1);
+        }
+    });
+
+    f.close();
+
+    return responseFuture.get();
+}
+#endif // LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 
 } // namespace libprcpp

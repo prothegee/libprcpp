@@ -13,6 +13,13 @@
 #include <future>
 #include <thread>
 
+#if LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
+#include <drogon/drogon.h>
+#include <json/json.h>
+
+using namespace drogon;
+#endif // LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
+
 namespace libprcpp
 {
 
@@ -59,7 +66,39 @@ public:
     // curl cmd object access
     SCurlCmd CurlCmd = SCurlCmd();
 
+#if LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
     // RESERVED: SSparkpostDrogon
+    /**
+     * @brief sparkpost drogon structure
+     * 
+     */
+    struct SSparkpostDrogon
+    {
+        SSparkpostDrogon();
+        ~SSparkpostDrogon();
+
+        /**
+         * @brief send mail by template
+         * 
+         * @note this is using promise & future and automatically get
+         * 
+         * @param templateHtml template html file
+         * @param templateTitle head title
+         * @param templateRecipient email recipient
+         * @param templateLookAndReplace look and replace array
+         * @param sparkpostApiKey your_sparkpost_api_key
+         * @param sparkpostSenderName e.g. no-reply@domain.tld
+         * @param sparkpostUrl e.g. https://api.sparkpost.com
+         * @param sparkpostEndpoint e.g. /api/v1/transmissions
+         * @param senderUserAgent your sender user agent, default is "org.drogon-sparkpost"
+         * @param enableTracking if true, some url will change to click not as original data pass from templateLookAndReplace
+         * @return EResult::Enum 
+         */
+        EResult::Enum sendMailByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &sparkpostApiKey, const std::string &sparkpostSenderName, const std::string &sparkpostUrl, const std::string &sparkpostEndpoint, const std::string &senderUserAgent = "org.drogon-sparkpost", const bool &enableTracking = false);
+    };
+    // sparkpost drogon object access
+    SSparkpostDrogon SparkpostDrogon = SSparkpostDrogon();
+#endif // LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 };
 
 } // namespace libprcpp
