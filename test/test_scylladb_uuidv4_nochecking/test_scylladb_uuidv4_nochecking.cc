@@ -98,24 +98,13 @@ public:
         // n/a
     }
 
-    void generateUuidV4forCheck(int64_t errorCount, int64_t iterCount, const int64_t &maxIter)
+    void generateUuidV4forCheck(int64_t errorCount, int64_t iterCount, int64_t collideCount, const int64_t &maxIter)
     {
         std::lock_guard<std::mutex> lock(printMutex);
 
-        if (iterCount == maxIter)
-        {
-            std::cout << "\n";
-        }
-
-        if (iterCount < maxIter)
-        {
-            std::cout << "\r    \r";
-            std::cout << "-- NOTE: current iter is " << iterCount+1 << std::flush;
-        }
-
         CUtilityModule UTILITY;
 
-        std::string query = "insert into {KEYSPACE}.{TABLE_NAME} (id, time_text) values (uuid(), '{REPLACE_TIME_TEXT}');";
+        std::string query = "insert into {KEYSPACE}.{TABLE_NAME} (id, time_text) values (uuid(), '{REPLACE_TIME_TEXT}') if not exists;";
 
         utilityFunctions::findAndReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
         utilityFunctions::findAndReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
@@ -123,12 +112,48 @@ public:
         std::string currentTz = UTILITY.DateAndTime.UTC.TimeZone.toStringTZ();
         utilityFunctions::findAndReplaceAll(query, "{REPLACE_TIME_TEXT}", currentTz);
 
-        if (IScyllaDb.executeQuery(IScyllaDb.getCassSessionPtr(), query.c_str()) != CASS_OK)
+        size_t parameterCounts = 0;
+
+        auto pStatement = cass_statement_new(query.c_str(), 0);
+
+        auto pFuture = cass_session_execute(IScyllaDb.getCassSessionPtr(), pStatement);
+        cass_future_wait(pFuture);
+
+        auto status = cass_future_error_code(pFuture);
+
+        if (status != CASS_OK)
         {
             errorCount += 1;
-            IScyllaDb.printError(IScyllaDb.getCassFuturePtr(), "#4");
-            std::cout << "-- ERROR: at " << errorCount << " at " << currentTz << " \n";
         }
+        else
+        {
+            auto pResult = cass_future_get_result(pFuture);
+            auto pFirstRow = cass_result_first_row(pResult);
+
+            cass_bool_t applied;
+            cass_value_get_bool(cass_row_get_column_by_name(pFirstRow, "[applied]"), &applied);
+
+            if (!applied)
+            {
+                collideCount += 1;
+            }
+
+            cass_result_free(pResult);
+        }
+
+        if (iterCount < maxIter)
+        {
+            std::cout << "\r    \r";
+            std::cout << "-- NOTE: current iter is " << iterCount+1 << " with " << errorCount << " error & " << collideCount << " collide" << std::flush;
+        }
+
+        if (iterCount == maxIter)
+        {
+            std::cout << "\n";
+        }
+        
+        cass_statement_free(pStatement);
+        cass_future_free(pFuture);
     }
 };
 
@@ -147,17 +172,20 @@ int main(int argc, char *argv[])
 
     int64_t baseIter = 0;
     int64_t errorCount = 0;
+    int64_t collideCount = 0;
 
     const int64_t MAX_ITER = 1000000;
     const int64_t NUM_THREADS = std::thread::hardware_concurrency();
 
     std::vector<std::future<void>> futures;
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     while (true)
     {
         baseIter++;
 
-        futures.push_back(std::async(std::launch::async, &CBaseDb::generateUuidV4forCheck, &table, std::ref(errorCount), std::ref(baseIter), std::ref(MAX_ITER)));
+        futures.push_back(std::async(std::launch::async, &CBaseDb::generateUuidV4forCheck, &table, std::ref(errorCount), std::ref(baseIter), std::ref(collideCount), std::ref(MAX_ITER)));
 
         if (baseIter >= MAX_ITER)
         {
@@ -168,13 +196,17 @@ int main(int argc, char *argv[])
         futures[baseIter - 1].get();
     }
 
-    if (errorCount > 0)
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> duration = end - start;
+
+    if (errorCount > 0 || collideCount > 0)
     {
-        std::cout << "-- NOTE: found " << errorCount << " error while executing insertion\n";
+        std::cout << "-- NOTE: found " << errorCount << " error & " << collideCount << " collide, while executing insertion in " << duration.count() << "seconds\n";
     }
     else
     {
-        std::cout << "-- NOTE: no error found\n";
+        std::cout << "-- NOTE: no error & collide found in " << duration.count() << " seconds\n";
     }
 
     table.cleanup();
