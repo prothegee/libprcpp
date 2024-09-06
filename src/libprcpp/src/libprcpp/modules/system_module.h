@@ -105,7 +105,7 @@ public:
          * @param path 
          * @return true if ok
          */
-        bool createDirectory(const std::string &path);
+        bool createDir(const std::string &path);
 
         /**
          * @brief delete driectory
@@ -115,7 +115,7 @@ public:
          * @param path 
          * @return true if ok
          */
-        bool deleteDirectory(const std::string &path);
+        bool deleteDir(const std::string &path);
 
         /**
          * @brief get current directory
@@ -128,6 +128,22 @@ public:
     };
     // directory object access
     SDirectory Directory = SDirectory();
+
+    /**
+     * @brief file structure
+     * 
+     */
+    struct SFile
+    {
+        /**
+         * @brief delete filePath param
+         * 
+         * @param filePath 
+         * @return true if ok
+         */
+        bool deleteFile(const std::string &filePath);
+    };
+    SFile File = SFile();
 
 #if LIBPRCPP_PROJECT_USING_LIBHARU
     /**
@@ -284,7 +300,7 @@ namespace utilityFunctions
          * @param path 
          * @return true if ok
          */
-        bool createDirectory(const std::string &path);
+        bool createDir(const std::string &path);
 
         /**
          * @brief delete driectory
@@ -294,7 +310,7 @@ namespace utilityFunctions
          * @param path 
          * @return true if ok
          */
-        bool deleteDirectory(const std::string &path);
+        bool deleteDir(const std::string &path);
 
         /**
          * @brief get current directory
