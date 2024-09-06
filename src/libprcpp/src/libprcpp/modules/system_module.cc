@@ -41,18 +41,40 @@ CSystemModule::~CSystemModule()
 {
 }
 
-bool CSystemModule::SDirectory::createDirectory(const std::string &path)
+bool CSystemModule::SDirectory::createDir(const std::string &path)
 {
+    bool result = false;
+
     std::filesystem::path directory = path;
 
-    return fs::create_directory(directory);
+    try
+    {
+        result = fs::create_directory(directory);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "ERROR CSystemModule::SDirectory::createDir: " << e.what() << '\n';
+    }
+
+    return result;
 }
 
-bool CSystemModule::SDirectory::deleteDirectory(const std::string &path)
+bool CSystemModule::SDirectory::deleteDir(const std::string &path)
 {
+    bool result = false;
+
     std::filesystem::path directory = path;
 
-    return fs::remove(directory);
+    try
+    {
+        result = fs::remove(directory);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "ERROR CSystemModule::SDirectory::deleteDir: " << e.what() << '\n';
+    }
+
+    return result;
 }
 
 std::string CSystemModule::SDirectory::getCurrentDir()
@@ -60,6 +82,24 @@ std::string CSystemModule::SDirectory::getCurrentDir()
     std::filesystem::path currentDir = std::filesystem::current_path();
 
     return currentDir.string();
+}
+
+bool CSystemModule::SFile::deleteFile(const std::string &filePath)
+{
+    bool result = false;
+
+    std::filesystem::path file = filePath;
+
+    try
+    {
+        result = fs::remove(file);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "ERROR CSystemModule::SFile::deleteFile: " << e.what() << '\n';
+    }
+
+    return result;
 }
 
 #if LIBPRCPP_PROJECT_USING_LIBHARU
@@ -918,16 +958,16 @@ namespace utilityFunctions
 
     namespace directory
     {
-        bool createDirectory(const std::string &path)
+        bool createDir(const std::string &path)
         {
             CSystemModule SYSTEM;
-            return SYSTEM.Directory.createDirectory(path);
+            return SYSTEM.Directory.createDir(path);
         }
 
-        bool deleteDirectory(const std::string &path)
+        bool deleteDir(const std::string &path)
         {
             CSystemModule SYSTEM;
-            return SYSTEM.Directory.deleteDirectory(path);
+            return SYSTEM.Directory.deleteDir(path);
         }
 
         std::string getCurrentDir()
