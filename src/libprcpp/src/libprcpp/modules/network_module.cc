@@ -1,6 +1,6 @@
-#include "network_module.h"
+#include "network_module.hh"
 
-#include "utility_module.h"
+#include "utility_module.hh"
 
 namespace libprcpp
 {

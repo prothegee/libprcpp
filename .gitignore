@@ -28,9 +28,13 @@ node_modules
 *.framework
 
 *config.h
+*config.hh
+*config.hpp
 *config.js
 *config.scss
 *export.h
+*export.hh
+*export.hpp
 
 *Zone.Identifier
 

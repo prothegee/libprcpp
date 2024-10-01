@@ -1,4 +1,4 @@
-#include "cryptography_module.h"
+#include "cryptography_module.hh"
 
 namespace libprcpp
 {

@@ -1,6 +1,6 @@
 #ifndef LIBPRCPP_PDF_TYPES_H
 #define LIBPRCPP_PDF_TYPES_H
-#include <libprcpp/base/config.h>
+#include <libprcpp/base/config.hh>
 
 #if LIBPRCPP_PROJECT_USING_LIBHARU
 #include "hpdf.h"

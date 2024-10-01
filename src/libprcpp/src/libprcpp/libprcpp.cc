@@ -1,4 +1,4 @@
-#include "libprcpp.h"
+#include "libprcpp.hh"
 
 namespace libprcpp
 {

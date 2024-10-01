@@ -1,6 +1,6 @@
 #ifndef LIBPRCPP_TEST_CRYPTOGRAPHY_H
 #define LIBPRCPP_TEST_CRYPTOGRAPHY_H
-#include <libprcpp/modules/cryptography_module.h>
+#include <libprcpp/modules/cryptography_module.hh>
 
 using namespace libprcpp;
 

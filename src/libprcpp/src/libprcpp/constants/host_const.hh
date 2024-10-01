@@ -1,6 +1,6 @@
 #ifndef LIBPRCPP_HOST_CONST_H
 #define LIBPRCPP_HOST_CONST_H
-#include <libprcpp/base/config.h>
+#include <libprcpp/base/config.hh>
 
 #ifndef HTTP_OR_HTTPS
     #if PROJECT_BUILD_STATUS == 1

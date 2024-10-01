@@ -1,6 +1,6 @@
 #ifndef LIBPRCPP_TIME_ENUMS_H
 #define LIBPRCPP_TIME_ENUMS_H
-#include <libprcpp/types/basic_types.h>
+#include <libprcpp/types/basic_types.hh>
 
 namespace libprcpp
 {

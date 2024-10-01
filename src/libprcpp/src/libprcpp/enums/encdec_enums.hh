@@ -1,7 +1,7 @@
 #ifndef LIBPRCPP_ENCDEC_ENUMS_H
 #define LIBPRCPP_ENCDEC_ENUMS_H
-#include <libprcpp/base/config.h>
-#include <libprcpp/types/basic_types.h>
+#include <libprcpp/base/config.hh>
+#include <libprcpp/types/basic_types.hh>
 
 namespace libprcpp
 {

@@ -1,10 +1,10 @@
 #ifndef LIBPRCPP_UTILITY_MODULE_H
 #define LIBPRCPP_UTILITY_MODULE_H
-#include <libprcpp/base/config.h>
-#include <libprcpp/base/export.h>
+#include <libprcpp/base/config.hh>
+#include <libprcpp/base/export.hh>
 
-#include <libprcpp/enums/requirement_enums.h>
-#include <libprcpp/enums/time_enums.h>
+#include <libprcpp/enums/requirement_enums.hh>
+#include <libprcpp/enums/time_enums.hh>
 
 #include <string>
 #include <random>
