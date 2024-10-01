@@ -1,6 +1,6 @@
-#include "core_plugin.h"
+#include "core_plugin.hh"
 
-#include "test_scylla.h"
+#include "test_scylla.hh"
 
 namespace test_scylladb_drogon
 {

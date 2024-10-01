@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_RESULT_ENUMS_H
-#define LIBPRCPP_RESULT_ENUMS_H
+#ifndef LIBPRCPP_RESULT_ENUMS_HH
+#define LIBPRCPP_RESULT_ENUMS_HH
 #include <libprcpp/types/basic_types.hh>
 
 namespace libprcpp
@@ -23,4 +23,4 @@ struct EResult
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_RESULT_ENUMS_H
+#endif // LIBPRCPP_RESULT_ENUMS_HH

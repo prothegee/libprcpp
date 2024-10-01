@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_PDF_TYPES_H
-#define LIBPRCPP_PDF_TYPES_H
+#ifndef LIBPRCPP_PDF_TYPES_HH
+#define LIBPRCPP_PDF_TYPES_HH
 #include <libprcpp/base/config.hh>
 
 #if LIBPRCPP_PROJECT_USING_LIBHARU
@@ -28,4 +28,4 @@ struct TPdfConfig
 
 #endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
-#endif // LIBPRCPP_PDF_TYPES_H
+#endif // LIBPRCPP_PDF_TYPES_HH

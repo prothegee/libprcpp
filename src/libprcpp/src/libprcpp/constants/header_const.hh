@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_HEADER_CONST_H
-#define LIBPRCPP_HEADER_CONST_H
+#ifndef LIBPRCPP_HEADER_CONST_HH
+#define LIBPRCPP_HEADER_CONST_HH
 #include <string>
 
 namespace libprcpp
@@ -29,4 +29,4 @@ struct HEADER
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_HEADER_CONST_H
+#endif // LIBPRCPP_HEADER_CONST_HH

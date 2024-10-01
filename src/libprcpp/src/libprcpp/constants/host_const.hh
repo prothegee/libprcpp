@@ -1,20 +1,20 @@
-#ifndef LIBPRCPP_HOST_CONST_H
-#define LIBPRCPP_HOST_CONST_H
+#ifndef LIBPRCPP_HHOST_CONST_HH
+#define LIBPRCPP_HHOST_CONST_HH
 #include <libprcpp/base/config.hh>
 
-#ifndef HTTP_OR_HTTPS
+#ifndef HTTP_OR_HHTTPS
     #if PROJECT_BUILD_STATUS == 1
-        #define HTTP_OR_HTTPS "http://"
+        #define HTTP_OR_HHTTPS "http://"
     #elif PROJECT_BUILD_STATUS == 2
-        #define HTTP_OR_HTTPS "https://"
+        #define HTTP_OR_HHTTPS "https://"
     #elif PROJECT_BUILD_STATUS == 3
-        #define HTTP_OR_HTTPS "https://"
+        #define HTTP_OR_HHTTPS "https://"
     #elif PROJECT_BUILD_STATUS == 4
-        #define HTTP_OR_HTTPS "https://"
+        #define HTTP_OR_HHTTPS "https://"
     #else
-        #define HTTP_OR_HTTPS "https://"
+        #define HTTP_OR_HHTTPS "https://"
     #endif
-#endif // HTTP_OR_HTTPS
+#endif // HTTP_OR_HHTTPS
 
 #ifndef WS_OR_WSS
     #if PROJECT_BUILD_STATUS == 1
@@ -94,4 +94,4 @@ struct CO_XENDIT
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_HOST_CONST_H
+#endif // LIBPRCPP_HHOST_CONST_HH

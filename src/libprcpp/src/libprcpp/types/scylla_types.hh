@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_SCYLLA_TYPES_H
-#define LIBPRCPP_SCYLLA_TYPES_H
+#ifndef LIBPRCPP_SCYLLA_TYPES_HH
+#define LIBPRCPP_SCYLLA_TYPES_HH
 #include <libprcpp/enums/scylla_enums.hh>
 
 namespace libprcpp
@@ -22,4 +22,4 @@ struct TScyllaDbConnection
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_SCYLLA_TYPES_H
+#endif // LIBPRCPP_SCYLLA_TYPES_HH

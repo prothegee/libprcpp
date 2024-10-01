@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_NETWORK_MODULE_H
-#define LIBPRCPP_NETWORK_MODULE_H
+#ifndef LIBPRCPP_NETWORK_MODULE_HH
+#define LIBPRCPP_NETWORK_MODULE_HH
 #include <libprcpp/base/config.hh>
 
 #include <libprcpp/enums/result_enums.hh>
@@ -103,4 +103,4 @@ public:
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_NETWORK_MODULE_H
+#endif // LIBPRCPP_NETWORK_MODULE_HH

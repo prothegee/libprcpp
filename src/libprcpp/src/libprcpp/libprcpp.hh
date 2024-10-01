@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_LIBPRCPP_H
-#define LIBPRCPP_LIBPRCPP_H
+#ifndef LIBPRCPP_LIBPRCPP_HH
+#define LIBPRCPP_LIBPRCPP_HH
 #include "base/config.hh"
 
 #include "constants/header_const.hh"
@@ -29,4 +29,4 @@ namespace libprcpp
 {
 } // namespace libprcpp
 
-#endif // LIBPRCPP_LIBPRCPP_H
+#endif // LIBPRCPP_LIBPRCPP_HH

@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_BASIC_TYPES_H
-#define LIBPRCPP_BASIC_TYPES_H
+#ifndef LIBPRCPP_BASIC_TYPES_HH
+#define LIBPRCPP_BASIC_TYPES_HH
 #include <string>
 
 namespace libprcpp
@@ -23,4 +23,4 @@ typedef uint64_t TUInt64;
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_BASIC_TYPES_H
+#endif // LIBPRCPP_BASIC_TYPES_HH

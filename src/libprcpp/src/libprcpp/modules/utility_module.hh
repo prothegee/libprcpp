@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_UTILITY_MODULE_H
-#define LIBPRCPP_UTILITY_MODULE_H
+#ifndef LIBPRCPP_UTILITY_MODULE_HH
+#define LIBPRCPP_UTILITY_MODULE_HH
 #include <libprcpp/base/config.hh>
 #include <libprcpp/base/export.hh>
 
@@ -656,4 +656,4 @@ namespace UTC
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_UTILITY_MODULE_H
+#endif // LIBPRCPP_UTILITY_MODULE_HH

@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_OS_ENUMS_H
-#define LIBPRCPP_OS_ENUMS_H
+#ifndef LIBPRCPP_OS_ENUMS_HH
+#define LIBPRCPP_OS_ENUMS_HH
 #include <libprcpp/types/basic_types.hh>
 
 namespace libprcpp
@@ -266,4 +266,4 @@ struct EOSType
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_OS_ENUMS_H
+#endif // LIBPRCPP_OS_ENUMS_HH

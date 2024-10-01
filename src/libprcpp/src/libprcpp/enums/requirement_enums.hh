@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_REQUIREMENT_ENUMS_H
-#define LIBPRCPP_REQUIREMENT_ENUMS_H
+#ifndef LIBPRCPP_REQUIREMENT_ENUMS_HH
+#define LIBPRCPP_REQUIREMENT_ENUMS_HH
 #include <libprcpp/types/basic_types.hh>
 
 namespace libprcpp
@@ -42,4 +42,4 @@ struct ERequirementUsernameInput
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_REQUIREMENT_ENUMS_H
+#endif // LIBPRCPP_REQUIREMENT_ENUMS_HH
