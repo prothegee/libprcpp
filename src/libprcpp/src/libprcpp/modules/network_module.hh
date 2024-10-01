@@ -1,10 +1,10 @@
 #ifndef LIBPRCPP_NETWORK_MODULE_H
 #define LIBPRCPP_NETWORK_MODULE_H
-#include <libprcpp/base/config.h>
+#include <libprcpp/base/config.hh>
 
-#include <libprcpp/enums/result_enums.h>
+#include <libprcpp/enums/result_enums.hh>
 
-#include <libprcpp/types/look_types.h>
+#include <libprcpp/types/look_types.hh>
 
 #include <string>
 #include <vector>

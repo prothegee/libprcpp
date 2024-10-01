@@ -1,8 +1,8 @@
 #ifndef LIBPRCPP_SYSTEM_MODULE_H
 #define LIBPRCPP_SYSTEM_MODULE_H
-#include <libprcpp/base/config.h>
+#include <libprcpp/base/config.hh>
 
-#include <libprcpp/enums/encdec_enums.h>
+#include <libprcpp/enums/encdec_enums.hh>
 
 #include <iostream>
 #include <fstream>
@@ -39,7 +39,7 @@
 
 #if LIBPRCPP_PROJECT_USING_LIBHARU
 #include "hpdf.h"
-#include <libprcpp/types/pdf_types.h>
+#include <libprcpp/types/pdf_types.hh>
 #endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
 #if LIBPRCPP_PROJECT_USING_JSONCPP

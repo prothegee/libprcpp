@@ -1,6 +1,6 @@
 #ifndef LIBPRCPP_CRYPTOGRAPHY_MODULE_H
 #define LIBPRCPP_CRYPTOGRAPHY_MODULE_H
-#include <libprcpp/base/config.h>
+#include <libprcpp/base/config.hh>
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 #include <cryptopp/ec2n.h>

@@ -1,7 +1,7 @@
-#include <libprcpp/interfaces/iscylladb_core_interface.h>
+#include <libprcpp/interfaces/iscylladb_core_interface.hh>
 
-#include <libprcpp/modules/system_module.h>
-#include <libprcpp/modules/utility_module.h>
+#include <libprcpp/modules/system_module.hh>
+#include <libprcpp/modules/utility_module.hh>
 
 #include <thread>
 #include <memory>

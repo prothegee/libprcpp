@@ -1,4 +1,4 @@
-#include <libprcpp/modules/system_module.h>
+#include <libprcpp/modules/system_module.hh>
 
 using namespace libprcpp;
 

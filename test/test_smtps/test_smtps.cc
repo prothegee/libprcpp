@@ -1,5 +1,5 @@
-#include <libprcpp/modules/system_module.h>
-#include <libprcpp/modules/network_module.h>
+#include <libprcpp/modules/system_module.hh>
+#include <libprcpp/modules/network_module.hh>
 
 struct TSMTPConf
 {

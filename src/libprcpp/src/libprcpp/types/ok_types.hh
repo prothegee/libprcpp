@@ -1,6 +1,6 @@
 #ifndef LIBPRCPP_OK_TYPES_H
 #define LIBPRCPP_OK_TYPES_H
-#include <libprcpp/base/config.h>
+#include <libprcpp/base/config.hh>
 
 #include <string>
 #include <any>

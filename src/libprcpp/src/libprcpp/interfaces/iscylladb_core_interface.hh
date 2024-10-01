@@ -1,15 +1,15 @@
 #ifndef LIBPRCPP_ISCYLLADB_CORE_INTERFACE_H
 #define LIBPRCPP_ISCYLLADB_CORE_INTERFACE_H
-#include <libprcpp/base/config.h>
+#include <libprcpp/base/config.hh>
 
 #include <string>
 #include <iostream>
 
 #if LIBPRCPP_PROJECT_USING_SCYLLADB
-#include <libprcpp/enums/scylla_enums.h>
+#include <libprcpp/enums/scylla_enums.hh>
 
-#include <libprcpp/types/auth_types.h>
-#include <libprcpp/types/scylla_types.h>
+#include <libprcpp/types/auth_types.hh>
+#include <libprcpp/types/scylla_types.hh>
 
 #include <cassandra.h>
 

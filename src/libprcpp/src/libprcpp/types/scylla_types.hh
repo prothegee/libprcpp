@@ -1,6 +1,6 @@
 #ifndef LIBPRCPP_SCYLLA_TYPES_H
 #define LIBPRCPP_SCYLLA_TYPES_H
-#include <libprcpp/enums/scylla_enums.h>
+#include <libprcpp/enums/scylla_enums.hh>
 
 namespace libprcpp
 {

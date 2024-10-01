@@ -1,4 +1,4 @@
-#include "idrogon_http_controller_helper.h"
+#include "idrogon_http_controller_helper.hh"
 
 #if PROJECT_BUILD_COMPILER_ID == 1
 // RESERVED

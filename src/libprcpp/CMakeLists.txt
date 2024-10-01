@@ -2,15 +2,15 @@ cmake_minimum_required(VERSION 3.15...3.30)
 project(libprcpp)
 
 set(LIBPRCPP_VERSION_MAJOR 0)
-set(LIBPRCPP_VERSION_MINOR 10)
+set(LIBPRCPP_VERSION_MINOR 11)
 set(LIBPRCPP_VERSION_PATCH 0)
-set(LIBPRCPP_VERSION_DATES 20240906)
+set(LIBPRCPP_VERSION_DATES 20241001)
 set(LIBPRCPP_VERSION_STRING "${LIBPRCPP_VERSION_MAJOR}.${LIBPRCPP_VERSION_MINOR}.${LIBPRCPP_VERSION_PATCH}.${LIBPRCPP_VERSION_DATES}")
 
 message(STATUS "${PROJECT_NAME} version:\n   ${LIBPRCPP_VERSION_STRING}")
 
 add_library(${PROJECT_NAME}
-    src/libprcpp/libprcpp.h
+    src/libprcpp/libprcpp.hh
     src/libprcpp/libprcpp.cc
 )
 
@@ -138,12 +138,12 @@ include(GenerateExportHeader)
 
 generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME
-        ${PROJECT_SOURCE_DIR}/src/libprcpp/base/export.h
+        ${PROJECT_SOURCE_DIR}/src/libprcpp/base/export.hh
 )
 
 configure_file(
-    ${PROJECT_SOURCE_DIR}/src/libprcpp/base/config.in.h
-    ${PROJECT_SOURCE_DIR}/src/libprcpp/base/config.h
+    ${PROJECT_SOURCE_DIR}/src/libprcpp/base/config.in.hh
+    ${PROJECT_SOURCE_DIR}/src/libprcpp/base/config.hh
 )
 
 aux_source_directory(src/libprcpp LIBPRCPP_DIR)

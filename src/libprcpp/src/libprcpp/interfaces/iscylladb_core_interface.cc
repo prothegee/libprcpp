@@ -1,6 +1,6 @@
-#include "iscylladb_core_interface.h"
+#include "iscylladb_core_interface.hh"
 
-#include <libprcpp/types/auth_types.h>
+#include <libprcpp/types/auth_types.hh>
 
 #include <cstring>
 

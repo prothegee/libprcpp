@@ -2,7 +2,7 @@
 #define TEST_SCYLLADB_DROGON_TEST_SCYLLA_H
 #include <drogon/drogon.h>
 
-#include <libprcpp/interfaces/iscylladb_core_interface.h>
+#include <libprcpp/interfaces/iscylladb_core_interface.hh>
 
 namespace test_scylladb_drogon
 {
