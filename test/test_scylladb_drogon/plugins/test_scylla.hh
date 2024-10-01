@@ -1,5 +1,5 @@
-#ifndef TEST_SCYLLADB_DROGON_TEST_SCYLLA_H
-#define TEST_SCYLLADB_DROGON_TEST_SCYLLA_H
+#ifndef TEST_SCYLLADB_DROGON_TEST_SCYLLA_HH
+#define TEST_SCYLLADB_DROGON_TEST_SCYLLA_HH
 #include <drogon/drogon.h>
 
 #include <libprcpp/interfaces/iscylladb_core_interface.hh>
@@ -26,4 +26,4 @@ public:
 
 } // namespace test_scylladb_drogon
 
-#endif // #define TEST_SCYLLADB_DROGON_TEST_SCYLLA_H
+#endif // #define TEST_SCYLLADB_DROGON_TEST_SCYLLA_HH

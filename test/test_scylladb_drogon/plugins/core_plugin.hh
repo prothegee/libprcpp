@@ -1,5 +1,5 @@
-#ifndef TEST_SCYLLADB_DROGON_CORE_PLUGIN_H
-#define TEST_SCYLLADB_DROGON_CORE_PLUGIN_H
+#ifndef TEST_SCYLLADB_DROGON_CORE_PLUGIN_HH
+#define TEST_SCYLLADB_DROGON_CORE_PLUGIN_HH
 #include <drogon/drogon.h>
 
 namespace test_scylladb_drogon
@@ -24,4 +24,4 @@ public:
 
 } // namespace test_scylladb_drogon
 
-#endif // TEST_SCYLLADB_DROGON_CORE_PLUGIN_H
+#endif // TEST_SCYLLADB_DROGON_CORE_PLUGIN_HH

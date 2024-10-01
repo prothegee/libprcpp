@@ -1,4 +1,4 @@
-#include "test_scylla.h"
+#include "test_scylla.hh"
 
 namespace test_scylladb_drogon
 {

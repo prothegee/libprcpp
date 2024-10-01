@@ -1,4 +1,4 @@
-#include "test_cryptography.h"
+#include "test_cryptography.hh"
 
 int main(int argc, char *argv[])
 {

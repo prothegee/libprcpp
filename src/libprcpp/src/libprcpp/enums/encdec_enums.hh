@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_ENCDEC_ENUMS_H
-#define LIBPRCPP_ENCDEC_ENUMS_H
+#ifndef LIBPRCPP_ENCDEC_ENUMS_HH
+#define LIBPRCPP_ENCDEC_ENUMS_HH
 #include <libprcpp/base/config.hh>
 #include <libprcpp/types/basic_types.hh>
 
@@ -32,4 +32,4 @@ struct EEncDecMode
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_ENCDEC_ENUMS_H
+#endif // LIBPRCPP_ENCDEC_ENUMS_HH

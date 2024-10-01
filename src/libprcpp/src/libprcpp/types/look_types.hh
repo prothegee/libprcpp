@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_LOOK_TYPES_H
-#define LIBPRCPP_LOOK_TYPES_H
+#ifndef LIBPRCPP_LOOK_TYPES_HH
+#define LIBPRCPP_LOOK_TYPES_HH
 #include <string>
 
 namespace libprcpp
@@ -17,4 +17,4 @@ struct TLookAndReplace
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_LOOK_TYPES_H
+#endif // LIBPRCPP_LOOK_TYPES_HH

@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_BUILD_ENUMS_H
-#define LIBPRCPP_BUILD_ENUMS_H
+#ifndef LIBPRCPP_BUILD_ENUMS_HH
+#define LIBPRCPP_BUILD_ENUMS_HH
 #include <string>
 
 namespace libprcpp
@@ -131,4 +131,4 @@ struct EBuildTarget
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_BUILD_ENUMS_H
+#endif // LIBPRCPP_BUILD_ENUMS_HH

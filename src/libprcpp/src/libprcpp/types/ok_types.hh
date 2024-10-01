@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_OK_TYPES_H
-#define LIBPRCPP_OK_TYPES_H
+#ifndef LIBPRCPP_OK_TYPES_HH
+#define LIBPRCPP_OK_TYPES_HH
 #include <libprcpp/base/config.hh>
 
 #include <string>
@@ -47,4 +47,4 @@ struct TOkAny
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_OK_TYPES_H
+#endif // LIBPRCPP_OK_TYPES_HH

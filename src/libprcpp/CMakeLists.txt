@@ -90,10 +90,10 @@ if(LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK)
     set(LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK true)
     target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
 
-    drogon_create_views(${PROJECT_NAME}
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/libprcpp/views
-        ${EXECUTABLE_OUTPUT_PATH}
-    )
+    # drogon_create_views(${PROJECT_NAME}
+    #     ${CMAKE_CURRENT_SOURCE_DIR}/src/libprcpp/views
+    #     ${EXECUTABLE_OUTPUT_PATH}
+    # )
 else()
     set(LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK false)
 endif()

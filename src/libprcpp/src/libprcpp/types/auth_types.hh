@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_AUTH_TYPES_H
-#define LIBPRCPP_AUTH_TYPES_H
+#ifndef LIBPRCPP_AUTH_TYPES_HH
+#define LIBPRCPP_AUTH_TYPES_HH
 
 namespace libprcpp
 {
@@ -16,4 +16,4 @@ struct TAuthbBasic
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_AUTH_TYPES_H
+#endif // LIBPRCPP_AUTH_TYPES_HH

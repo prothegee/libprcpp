@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15...3.30)
 project(test_cryptography)
 
 add_executable(${PROJECT_NAME}
-    test_cryptography.h
+    test_cryptography.hh
     test_cryptography.cc
 )
 

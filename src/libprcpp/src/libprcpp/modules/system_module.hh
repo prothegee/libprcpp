@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_SYSTEM_MODULE_H
-#define LIBPRCPP_SYSTEM_MODULE_H
+#ifndef LIBPRCPP_SYSTEM_MODULE_HH
+#define LIBPRCPP_SYSTEM_MODULE_HH
 #include <libprcpp/base/config.hh>
 
 #include <libprcpp/enums/encdec_enums.hh>
@@ -396,4 +396,4 @@ namespace utilityFunctions
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_SYSTEM_MODULE_H
+#endif // LIBPRCPP_SYSTEM_MODULE_HH

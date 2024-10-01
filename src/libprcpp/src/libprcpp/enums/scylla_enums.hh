@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_SCYLLADB_ENUMS_H
-#define LIBPRCPP_SCYLLADB_ENUMS_H
+#ifndef LIBPRCPP_SCYLLADB_ENUMS_HH
+#define LIBPRCPP_SCYLLADB_ENUMS_HH
 #include <libprcpp/types/basic_types.hh>
 
 namespace libprcpp
@@ -214,4 +214,4 @@ struct EScyllaDbTopologyStrat
 
 } // namespace libprcpp
 
-#endif // LIBPRCPP_SCYLLADB_ENUMS_H
+#endif // LIBPRCPP_SCYLLADB_ENUMS_HH

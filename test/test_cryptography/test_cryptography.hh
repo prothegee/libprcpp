@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_TEST_CRYPTOGRAPHY_H
-#define LIBPRCPP_TEST_CRYPTOGRAPHY_H
+#ifndef LIBPRCPP_TEST_CRYPTOGRAPHY_HH
+#define LIBPRCPP_TEST_CRYPTOGRAPHY_HH
 #include <libprcpp/modules/cryptography_module.hh>
 
 using namespace libprcpp;
@@ -298,4 +298,4 @@ public:
     }
 };
 
-#endif // LIBPRCPP_TEST_CRYPTOGRAPHY_H
+#endif // LIBPRCPP_TEST_CRYPTOGRAPHY_HH

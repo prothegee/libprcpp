@@ -1,5 +1,5 @@
-#ifndef LIBPRCPP_CONFIG_H
-#define LIBPRCPP_CONFIG_H
+#ifndef LIBPRCPP_CONFIG_HH
+#define LIBPRCPP_CONFIG_HH
 
 #ifndef PROJECT_BUILD_STATUS
     // 0:undefined 1:debug 2:staging 3:demo 4:release
@@ -72,4 +72,4 @@
     #define LIBPRCPP_VERSION_STRING "@LIBPRCPP_VERSION_STRING@"
 #endif // LIBPRCPP_VERSION_STRING
 
-#endif // LIBPRCPP_CONFIG_H
+#endif // LIBPRCPP_CONFIG_HH
