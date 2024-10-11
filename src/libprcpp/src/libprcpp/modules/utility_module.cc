@@ -996,6 +996,28 @@ std::string CUtilityModule::SDateAndTime::SUTC::SUTCHourMinuteSecond::toString(c
     return result;
 }
 
+std::string CUtilityModule::SDateAndTime::SUTC::SUTCHourMinuteSecond::toStringHuman(const int &timeOffset)
+{
+    std::string result;
+    std::stringstream ss;
+    int timezoneOffset = timeOffset;
+
+    if (timezoneOffset <= -11) { timezoneOffset = -11; }
+    if (timezoneOffset >= 14) { timezoneOffset = 14; }
+
+    auto adjustTimeOffset = timezoneOffset * 3600;
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::time_t now_time_utc = now_time + adjustTimeOffset;
+
+    ss << std::put_time(std::gmtime(&now_time_utc), "%H:%M:%S");
+
+    result = ss.str();
+
+    return result;
+}
+
 TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toInt64(const int &timeOffset)
 {
     std::string result;
@@ -1046,6 +1068,39 @@ TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toM
     return result;
 }
 
+TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toMillisNow(const int &timeOffset)
+{
+    TInt64 result;
+
+    std::string tmpStr;
+    std::stringstream ss;
+    int timezoneOffset = timeOffset;
+
+    if (timezoneOffset <= -11) { timezoneOffset = -11; }
+    if (timezoneOffset >= 14) { timezoneOffset = 14; }
+
+    auto adjustTimeOffset = timezoneOffset * 3600;
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::time_t now_time_utc = now_time + adjustTimeOffset;
+
+    ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%dT%H:%M:%S");
+
+    tmpStr = ss.str();
+
+    std::tm time = {};
+    std::stringstream sss(tmpStr);
+
+    sss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
+
+    time_t time_since_epoch = mktime(&time);
+
+    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
+
+    return result;
+}
+
 std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toString(const int &timeOffset)
 {
     std::string result;
@@ -1085,11 +1140,11 @@ std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond
 
     if (useTimeSign)
     {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%dT%H%M%S");
+        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%dT%H:%M:%S");
     }
     else
     {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d %H%M%S");
+        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%d %H:%M:%S");
     }
 
     result = ss.str();
@@ -1113,6 +1168,160 @@ std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond
     std::tm future_tm = *std::gmtime(&future_time_t);
 
     ss << std::put_time(&future_tm, "%Y%m%d%H%M%S");
+
+    result = ss.str();
+
+    return result;
+}
+
+TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toMillis(const std::string &YYYYMMDDhhmmss_mls)
+{
+    TInt64 result;
+
+    std::tm time = {};
+    std::istringstream ss(YYYYMMDDhhmmss_mls);
+
+    if (YYYYMMDDhhmmss_mls.find("T") != std::string::npos)
+    {
+        ss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
+    }
+    else
+    {
+        ss >> std::get_time(&time, "%Y-%m-%d %H:%M:%S");
+    }
+
+    if (ss.fail())
+    {
+        throw std::runtime_error("ERROR YYYYMMDDhhmmss_mls: Failed to parse time string");
+    }
+
+    time_t time_since_epoch = mktime(&time);
+
+    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
+
+    return result;
+}
+
+TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toMillisNow(const int &timeOffset)
+{
+    TInt64 result;
+
+    std::string tmpStr;
+    std::stringstream ss;
+    int timezoneOffset = timeOffset;
+
+    if (timezoneOffset <= -11) { timezoneOffset = -11; }
+    if (timezoneOffset >= 14) { timezoneOffset = 14; }
+
+    auto adjustTimeOffset = timezoneOffset * 3600;
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::time_t now_time_utc = now_time + adjustTimeOffset;
+
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
+
+    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%dT%H%M%S") << '.' << std::setw(3) << std::setfill('0') << milliseconds.count();
+
+    tmpStr = ss.str();
+
+    std::tm time = {};
+    std::stringstream sss(tmpStr);
+
+    sss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
+
+    int millis = 0;
+    if (sss.peek() == '.')
+    {
+        sss.ignore();
+        sss >> millis;
+    }
+
+    time_t time_since_epoch = mktime(&time);
+
+    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
+    result += millis;
+
+    return result;
+}
+
+std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toString(const int &timeOffset)
+{
+    std::string result;
+    std::stringstream ss;
+    int timezoneOffset = timeOffset;
+
+    if (timezoneOffset <= -11) { timezoneOffset = -11; }
+    if (timezoneOffset >= 14) { timezoneOffset = 14; }
+
+    auto adjustTimeOffset = timezoneOffset * 3600;
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::time_t now_time_utc = now_time + adjustTimeOffset;
+
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
+
+    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d%H%M%S") << std::setw(3) << std::setfill('0') << milliseconds.count();
+
+    result = ss.str();
+
+    return result;
+}
+
+std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toStringHuman(const int &timeOffset, const bool &useTimeSign)
+{
+    std::string result;
+    std::stringstream ss;
+    int timezoneOffset = timeOffset;
+
+    if (timezoneOffset <= -11) { timezoneOffset = -11; }
+    if (timezoneOffset >= 14) { timezoneOffset = 14; }
+
+    auto adjustTimeOffset = timezoneOffset * 3600;
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::time_t now_time_utc = now_time + adjustTimeOffset;
+
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
+
+    if (useTimeSign)
+    {
+        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%dT%H:%M:%S") << '.' << std::setw(3) << std::setfill('0') << milliseconds.count();
+    }
+    else
+    {
+        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%d %H%:M:%S") << '.' << std::setw(3) << std::setfill('0') << milliseconds.count();
+    }
+
+    result = ss.str();
+
+    return result;
+}
+
+std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toStringSecondOffset(const int &secondsOffset)
+{
+    std::string result;
+    std::stringstream ss;
+
+    auto now = std::chrono::system_clock::now();
+
+    auto seconds = std::chrono::seconds(secondsOffset);
+
+    auto future_time = now + seconds;
+
+    std::time_t future_time_t = std::chrono::system_clock::to_time_t(future_time);
+
+    std::tm future_tm = *std::gmtime(&future_time_t);
+
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
+
+    ss << std::put_time(&future_tm, "%Y%m%d%H%M%S") << std::setw(3) << std::setfill('0') << milliseconds.count();
 
     result = ss.str();
 
@@ -1398,6 +1607,12 @@ namespace UTC
             return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toMillis(YYYYMMDDhhmmss);
         }
 
+        TInt64 toMillisNow(const int &timeOffset)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toMillisNow(timeOffset);
+        }
+
         std::string toString(const int &timeOffset = 0)
         {
             CUtilityModule Utility;
@@ -1416,6 +1631,39 @@ namespace UTC
             return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toStringSecondsOffset(secondsOffset);
         }
     } // namespace YYYYMMDDhhmmss
+
+    namespace YYYYMMDDhhmmss_mls
+    {
+        TInt64 toMillis(const std::string &YYYYMMDDhhmmss_mls)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toMillis(YYYYMMDDhhmmss_mls);
+        }
+
+        TInt64 toMillisNow(const int &timeOffset)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toMillisNow(timeOffset);
+        }
+
+        std::string toString(const int &timeOffset)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toString(timeOffset);
+        }
+
+        std::string toStringHuman(const int &timeOffset, const bool &useTimeSign)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toStringHuman(timeOffset, useTimeSign);
+        }
+
+        std::string toStringSecondOffset(const int &secondsOffset)
+        {
+            CUtilityModule Utility;
+            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toStringSecondOffset(secondsOffset);
+        }
+    } // namespace YYYYMMDDhhmmss_mls
 
 } // namespace UTC
 
