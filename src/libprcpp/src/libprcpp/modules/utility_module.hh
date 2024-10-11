@@ -332,6 +332,7 @@ public:
 
                 std::string toString(const int &timeOffset = 0);
 
+                // e.g. YYYY-MM-DD
                 std::string toStringISO8601(const int &timeOffset = 0);
             };
             // utc YYYYMMDD data access
@@ -343,6 +344,9 @@ public:
                 int toInt(const int &timeOffset = 0);
 
                 std::string toString(const int &timeOffset = 0);
+
+                // hh:mm:ss or hh:mm:ss if false
+                std::string toStringHuman(const int &timeOffset = 0);
             };
             // utc hhmmss data access
             SUTCHourMinuteSecond hhmmss = SUTCHourMinuteSecond();
@@ -352,7 +356,11 @@ public:
             {
                 TInt64 toInt64(const int &timeOffset = 0);
 
+                // convert YYYYMMDDhhmmss to millis
                 TInt64 toMillis(const std::string &YYYYMMDDhhmmss);
+
+                // use current date and time as millis
+                TInt64 toMillisNow(const int &timeOffset = 0);
 
                 std::string toString(const int &timeOffset = 0);
 
@@ -363,6 +371,25 @@ public:
             };
             // utc YYYYMMDDhhmmss data access
             SUTCYearMonthDayHourMinuteSecond YYYYMMDDhhmmss = SUTCYearMonthDayHourMinuteSecond();
+
+            // utc YYYYMMDDhhmmss_mls structure
+            struct SUTCYearMonthDayHourMinuteSecondMillisecond
+            {
+                // convert YYYYMMDDhhmmss_mls to millis
+                TInt64 toMillis(const std::string &YYYYMMDDhhmmss_mls);
+
+                // use current date and time as millis
+                TInt64 toMillisNow(const int &timeOffset = 0);
+
+                std::string toString(const int &timeOffset = 0);
+
+                // YYYY-MM-DDThh:mm:ss.sss or YYYY-MM-DD hh:mm:ss.sss if false
+                std::string toStringHuman(const int &timeOffset = 0, const bool &useTimeSign = true);
+
+                std::string toStringSecondOffset(const int &secondsOffset = 0);
+            };
+            // utc YYYYMMDDhhmmss_mls data access
+            SUTCYearMonthDayHourMinuteSecondMillisecond YYYYMMDDhhmmss_mls = SUTCYearMonthDayHourMinuteSecondMillisecond();
         };
         // utc date and time data access
         SUTC UTC = SUTC();
@@ -637,7 +664,11 @@ namespace UTC
     {
         TInt64 toInt64(const int &timeOffset = 0);
 
+        // convert YYYYMMDDhhmmss to millis
         TInt64 toMillis(const std::string &YYYYMMDDhhmmss);
+
+        // use current date and time as millis
+        TInt64 toMillisNow(const int &timeOffset = 0);
 
         std::string toString(const int &timeOffset = 0);
 
@@ -646,7 +677,22 @@ namespace UTC
 
         std::string toStringSecondsOffset(const int &secondsOffset = 0);
     } // namespace YYYYMMDDhhmmss
-    
+
+    namespace YYYYMMDDhhmmss_mls
+    {
+        // convert YYYYMMDDhhmmss_mls to millis
+        TInt64 toMillis(const std::string &YYYYMMDDhhmmss_mls);
+
+        // use current date and time as millis
+        TInt64 toMillisNow(const int &timeOffset = 0);
+
+        std::string toString(const int &timeOffset = 0);
+
+        // YYYY-MM-DDThh:mm:ss.sss or YYYY-MM-DD hh:mm:ss.sss if false
+        std::string toStringHuman(const int &timeOffset = 0, const bool &useTimeSign = true);
+
+        std::string toStringSecondOffset(const int &secondsOffset = 0);
+    } // namespace YYYYMMDDhhmmss_mls
 
 } // namespace UTC
 
