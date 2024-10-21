@@ -8,7 +8,7 @@ namespace libprcpp
  * @brief type auth basic structure
  * 
  */
-struct TAuthbBasic
+struct TAuthBasic
 {
     const char *username;
     const char *password;

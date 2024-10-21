@@ -203,7 +203,7 @@ public:
 
         Json::Value fromCSV(const std::string &input);
 
-        bool save(const Json::Value &input, const std::string &output);
+        bool save(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
 
         bool saveToCSV(const std::string &input, const std::string &output);
     };

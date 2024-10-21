@@ -93,7 +93,15 @@ public:
             IScyllaDb.printError(IScyllaDb.getCassFuturePtr(), "#3");
         }
     }
+    void initializeIndex()
+    {
+        // n/a
+    }
     void alterizeCurrentTable()
+    {
+        // n/a
+    }
+    void alterizeMaterializedView()
     {
         // n/a
     }

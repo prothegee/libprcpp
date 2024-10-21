@@ -19,7 +19,9 @@ public:
 
     void initializeType();
     void initializeTable();
+    void initializeIndex();
     void alterizeCurrentTable();
+    void alterizeMaterializedView();
 
     void initializeKeyspaceProject();
 };
