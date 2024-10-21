@@ -45,9 +45,19 @@ void CTestScylla::initializeTable()
     std::cout << "MESSAGE: call \"CTestScylla::initializeTable\"\n";
 }
 
+void CTestScylla::initializeIndex()
+{
+    std::cout << "MESSAGE: call \"CTestScylla::initializeIndex\"\n";
+}
+
 void CTestScylla::alterizeCurrentTable()
 {
     std::cout << "MESSAGE: call \"CTestScylla::alterizeCurrentTable\"\n";
+}
+
+void CTestScylla::alterizeMaterializedView()
+{
+    std::cout << "MESSAGE: call \"CTestScylla::alterizeMaterializedView\"\n";
 }
 
 void CTestScylla::initializeKeyspaceProject()

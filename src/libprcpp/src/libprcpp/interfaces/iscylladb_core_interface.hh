@@ -37,10 +37,23 @@ public:
     virtual void initializeTable() = 0;
 
     /**
+     * @brief initialized indexe table implementation
+     * 
+     * @note considering index on table is just 1
+     */
+    virtual void initializeIndex() = 0;
+
+    /**
      * @brief alterize current table implementation
      * 
      */
     virtual void alterizeCurrentTable() = 0;
+
+    /**
+     * @brief alterize current table with materialized view implementation
+     * 
+     */
+    virtual void alterizeMaterializedView() = 0;
 
     /**
      * @brief static on auth scylladb structure

@@ -160,7 +160,7 @@ std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const i
     if (precision >= 16) { _precision = 16; }
     if (precision <= 2) { _precision = 2; }
 
-    Json::StreamWriterBuilder writter;
+    Json::StreamWriterBuilder writer;
     
     std::string _indentString = "";
     for (auto i = 0; i < _indent; i++)
@@ -168,10 +168,10 @@ std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const i
         _indentString += " ";
     }
 
-    writter.settings_["indentation"] = _indentString;
-    writter.settings_["precision"] = _precision;
+    writer.settings_["indentation"] = _indentString;
+    writer.settings_["precision"] = _precision;
 
-    return std::string(Json::writeString(writter, input));
+    return std::string(Json::writeString(writer, input));
 }
 
 Json::Value CSystemModule::SFileJSON::fromFile(const std::string &input)
@@ -213,8 +213,8 @@ Json::Value CSystemModule::SFileJSON::fromString(const std::string &input, const
     JSONCPP_STRING err;
     Json::CharReaderBuilder builder;
 
-    builder["indentation"] = _indentString;
-    builder["precision"] = _precision;
+    builder.settings_["indentation"] = _indentString;
+    builder.settings_["precision"] = _precision;
 
     const int inputLength = static_cast<int>(input.length());
 
@@ -305,17 +305,32 @@ Json::Value CSystemModule::SFileJSON::fromCSV(const std::string &input)
     return result;
 }
 
-bool CSystemModule::SFileJSON::save(const Json::Value & input, const std::string & output)
+bool CSystemModule::SFileJSON::save(const Json::Value & input, const std::string & output, const int &indent, const int &precision)
 {
     bool result = false;
 
+    int _indent = indent, _precision = precision;
+
+    if (indent >= 4) { _indent = 4; }
+    if (indent <= 3) { _indent = 0; }
+    if (precision >= 16) { _precision = 16; }
+    if (precision <= 2) { _precision = 2; }
+
+    std::string _indentString = "";
+    for (auto i = 0; i < _indent; i++)
+    {
+        _indentString += " ";
+    }
+
+    Json::StreamWriterBuilder writer;
+
+    writer.settings_["indentation"] = _indentString;
+    writer.settings_["precision"] = _precision;
+
     std::ofstream outFile(output);
+
     if (outFile.is_open())
     {
-        Json::StreamWriterBuilder writer;
-
-        writer["indentation"] = "    ";
-
         std::string jsonString = Json::writeString(writer, input);
 
         outFile << jsonString;

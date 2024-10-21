@@ -25,7 +25,7 @@ IScyllaDbCoreInterface::~IScyllaDbCoreInterface()
 
 void IScyllaDbCoreInterface::OnAuth::initialize(CassAuthenticator *pCassAuth, void *pVoidData)
 {
-    const TAuthbBasic *pCredential = (const TAuthbBasic*)new TAuthbBasic({
+    const TAuthBasic *pCredential = (const TAuthBasic*)new TAuthBasic({
         IScyllaDbCoreInterface::m_connectionData.username.c_str(),
         IScyllaDbCoreInterface::m_connectionData.password.c_str()
     });
@@ -96,7 +96,7 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
     if (m_pCassCluster == nullptr) { m_pCassCluster = cass_cluster_new(); }
     if (m_pCassSession == nullptr) { m_pCassSession = cass_session_new(); }
 
-    TAuthbBasic *pAuth = new TAuthbBasic({
+    TAuthBasic *pAuth = new TAuthBasic({
         IScyllaDbCoreInterface::m_connectionData.username.c_str(),
         IScyllaDbCoreInterface::m_connectionData.password.c_str()
     });
