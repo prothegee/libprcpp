@@ -2,6 +2,7 @@
 
 #include <libprcpp/modules/system_module.hh>
 #include <libprcpp/modules/utility_module.hh>
+#include <libprcpp/modules/date_and_time_module.hh>
 
 #include <thread>
 #include <memory>
@@ -48,8 +49,8 @@ public:
     {
         std::string query = "drop table if exists {KEYSPACE}.{TABLE_NAME};";
 
-        utilityFunctions::findAndReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
-        utilityFunctions::findAndReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
+        utilityFunctions::find::andReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
+        utilityFunctions::find::andReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
 
         if (IScyllaDb.executeQuery(IScyllaDb.getCassSessionPtr(), query.c_str()) != CASS_OK)
         {
@@ -61,8 +62,8 @@ public:
     {
         std::string query = "create keyspace if not exists {KEYSPACE} with replication = { 'class': '{TOPOLOGY_STRATEGY}' };";
 
-        utilityFunctions::findAndReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
-        utilityFunctions::findAndReplaceAll(query, "{TOPOLOGY_STRATEGY}", EScyllaDbTopologyStrat::toString(m_conn.strategy));
+        utilityFunctions::find::andReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
+        utilityFunctions::find::andReplaceAll(query, "{TOPOLOGY_STRATEGY}", EScyllaDbTopologyStrat::toString(m_conn.strategy));
 
         if (IScyllaDb.executeQuery(IScyllaDb.getCassSessionPtr(), query.c_str()) != CASS_OK)
         {
@@ -85,8 +86,8 @@ public:
 
     primary key (id)
 );)";
-        utilityFunctions::findAndReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
-        utilityFunctions::findAndReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
+        utilityFunctions::find::andReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
+        utilityFunctions::find::andReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
 
         if (IScyllaDb.executeQuery(IScyllaDb.getCassSessionPtr(), query.c_str()) != CASS_OK)
         {
@@ -110,15 +111,15 @@ public:
     {
         std::lock_guard<std::mutex> lock(printMutex);
 
-        CUtilityModule UTILITY;
+        CDateAndTime DT;
 
         std::string query = "insert into {KEYSPACE}.{TABLE_NAME} (id, time_text) values (uuid(), '{REPLACE_TIME_TEXT}') if not exists;";
 
-        utilityFunctions::findAndReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
-        utilityFunctions::findAndReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
+        utilityFunctions::find::andReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
+        utilityFunctions::find::andReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
 
-        std::string currentTz = UTILITY.DateAndTime.UTC.TimeZone.toStringTZ();
-        utilityFunctions::findAndReplaceAll(query, "{REPLACE_TIME_TEXT}", currentTz);
+        std::string currentTz = DT.UTC.TimeZone.toString();
+        utilityFunctions::find::andReplaceAll(query, "{REPLACE_TIME_TEXT}", currentTz);
 
         size_t parameterCounts = 0;
 

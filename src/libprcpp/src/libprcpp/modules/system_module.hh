@@ -3,6 +3,7 @@
 #include <libprcpp/base/config.hh>
 
 #include <libprcpp/enums/encdec_enums.hh>
+#include <libprcpp/enums/result_enums.hh>
 
 #include <iostream>
 #include <fstream>
@@ -69,14 +70,15 @@ namespace libprcpp
 
 namespace internal
 {
-
-// check if string index is number
-static bool isNumber(const std::string& s);
-
+    /**
+     * @brief cehck if string index is number
+     * 
+     * @param input 
+     * @return true 
+     * @return false 
+     */
+    bool isNumber(const std::string& input);
 } // namespace internal
-
-// file system namespace
-namespace fs = std::filesystem;
 
 /**
  * @brief system module class
@@ -103,9 +105,9 @@ public:
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return true if ok
+         * @return EResult::Enum
          */
-        bool createDir(const std::string &path);
+        EResult::Enum createDir(const std::string &path);
 
         /**
          * @brief delete driectory
@@ -113,9 +115,9 @@ public:
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return true if ok
+         * @return EResult::Enum
          */
-        bool deleteDir(const std::string &path);
+        EResult::Enum deleteDir(const std::string &path);
 
         /**
          * @brief get current directory
@@ -126,7 +128,10 @@ public:
          */
         std::string getCurrentDir();
     };
-    // directory object access
+    /**
+     * @brief directory access
+     * 
+     */
     SDirectory Directory = SDirectory();
 
     /**
@@ -139,157 +144,240 @@ public:
          * @brief delete filePath param
          * 
          * @param filePath 
-         * @return true if ok
+         * @return EResult::Enum
          */
-        bool deleteFile(const std::string &filePath);
+        EResult::Enum deleteFile(const std::string &filePath);
+
+    #if LIBPRCPP_PROJECT_USING_JSONCPP
+        /**
+         * @brief json structure
+         * 
+         */
+        struct SJson
+        {
+            struct SRead
+            {
+                /**
+                 * @brief read json input and convert to string
+                 * 
+                 * @param input 
+                 * @param indent 
+                 * @param precision 
+                 * @return std::string 
+                 */
+                std::string toString(const Json::Value &input, const int &indent = 4, const int &precision = 16);
+
+                /**
+                 * @brief read .json file from filepath & pass to jsonData
+                 * 
+                 * @param filePath location is relative from executeable, e.g. "../path/sub/filename.json"
+                 * @param jsonData data to pass
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum fromFileJSON(const std::string &filePath, Json::Value &jsonData);
+
+                /**
+                 * @brief read from .csv file to json & pass to jsonData
+                 * 
+                 * @param filePath 
+                 * @param jsonData 
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum fromFileCSV(const std::string &filePath, Json::Value &jsonData);
+
+                /**
+                 * @brief read inputString & pass to jsonData
+                 * 
+                 * @param inputString 
+                 * @param jsonData 
+                 * @param indent default 4
+                 * @param precision default 16
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum fromString(const std::string &inputString, Json::Value &jsonData, const int &indent = 4, const int &precision = 16);
+            };
+            SRead Read = SRead();
+
+            struct SWrite
+            {
+                /**
+                 * @brief save json data input to output
+                 * 
+                 * @param input 
+                 * @param output 
+                 * @param indent default 4
+                 * @param precision default 16
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum saveToJSON(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
+                
+                /**
+                 * @brief save to .csv from .json file
+                 * 
+                 * @param jsonFilePath 
+                 * @param output 
+                 * @param indent 
+                 * @param precision 
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum saveToCSV(const std::string &jsonFilePath, const std::string &output);
+            };
+            SWrite Write = SWrite();
+        };
+        /**
+         * @brief json file access
+         * 
+         */
+        SJson JSON = SJson();
+    #endif // LIBPRCPP_PROJECT_USING_JSONCPP
+
+    #if LIBPRCPP_PROJECT_USING_LIBHARU
+        /**
+         * @brief pdf file structure
+         * 
+         */
+        struct SPDF
+        {
+        #if PROJECT_BUILD_COMPILER_ID == 1
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wunused-parameter"
+        #elif PROJECT_BUILD_COMPILER_ID == 2
+        // RESERVED
+        #elif PROJECT_BUILD_COMPILER_ID == 3
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wunused-parameter"
+        #endif
+            static void filePDFerrorHandler(HPDF_STATUS error_no, HPDF_STATUS detail_no, void *user_data)
+            {
+                std::cerr << "ERROR FilePDF: error_no=" << error_no << ", detail_no=" << detail_no << "\n";
+            }
+        #if PROJECT_BUILD_COMPILER_ID == 1
+        #pragma GCC diagnostic pop
+        #elif PROJECT_BUILD_COMPILER_ID == 2
+        // RESERVED
+        #elif PROJECT_BUILD_COMPILER_ID == 3
+        // RESERVED
+        #pragma clang diagnostic pop
+        #endif
+
+            struct SWrite
+            {
+                /**
+                 * @brief write data from table pdf file
+                 * 
+                 * @note example: test_generate_pdf.cc in test subdir
+                 * 
+                 * @param tableData 
+                 * @param filePathName 
+                 * @param pdfConfig 
+                 * @return true if ok
+                 */
+                bool dataToTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig);
+            };
+            SWrite Write = SWrite();
+        };
+        /**
+         * @brief pdf file access
+         * 
+         */
+        SPDF PDF = SPDF();
+    #endif // LIBPRCPP_PROJECT_USING_LIBHARU
+
+    #if LIBPRCPP_PROJECT_USING_OPENSSL || LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+        /**
+         * @brief file encrypt decrypt structure
+         * 
+         */
+        struct SEncrypDecrypt
+        {
+            /**
+             * @brief encrypt file
+             * 
+             * @param encryptDecryptMode 
+             * @param input 
+             * @param output 
+             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::Enum
+             */
+            EResult::Enum fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+
+            /**
+             * @brief decrypt file
+             * 
+             * @param encryptDecryptMode 
+             * @param input 
+             * @param output 
+             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::Enum
+             */
+            EResult::Enum fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+        protected:
+            std::vector<unsigned char> readFile(const std::string& filePath);
+
+            bool writeFile(const std::string& filePath, const std::vector<unsigned char>& data);
+
+            std::vector<unsigned char> stringToUnsignedChar(const std::string& str, size_t requiredSize);
+
+        #if LIBPRCPP_PROJECT_USING_OPENSSL
+            std::vector<unsigned char> aesEncryptOpenSSL(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+            std::vector<unsigned char> aesDecryptOpenSSL(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+
+            void handleOpenSSLError();
+        #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+
+        #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+            std::vector<unsigned char> aesEncryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+            std::vector<unsigned char> aesDecryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+
+            std::vector<unsigned char> xChaCha20encryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+            std::vector<unsigned char> xChaCha20decryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+
+            std::vector<unsigned char> rc6encryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
+
+            std::vector<unsigned char> rc6decryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
+        #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+        };
+        /**
+         * @brief file encrypt decrypt access
+         * 
+         */
+        SEncrypDecrypt EncryptDecrypt = SEncrypDecrypt();
+    #endif // LIBPRCPP_PROJECT_USING_OPENSSL || LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
     };
+    /**
+     * @brief file access
+     * 
+     */
     SFile File = SFile();
 
-#if LIBPRCPP_PROJECT_USING_LIBHARU
     /**
-     * @brief file pdf structure
+     * @brief system environment structure
      * 
      */
-    struct SFilePDF
-    {
-    #if PROJECT_BUILD_COMPILER_ID == 1
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wunused-parameter"
-    #elif PROJECT_BUILD_COMPILER_ID == 2
-    // RESERVED
-    #elif PROJECT_BUILD_COMPILER_ID == 3
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Wunused-parameter"
-    #endif
-        static void filePDFerrorHandler(HPDF_STATUS error_no, HPDF_STATUS detail_no, void *user_data)
-        {
-            std::cerr << "ERROR FilePDF: error_no=" << error_no << ", detail_no=" << detail_no << "\n";
-        }
-    #if PROJECT_BUILD_COMPILER_ID == 1
-    #pragma GCC diagnostic pop
-    #elif PROJECT_BUILD_COMPILER_ID == 2
-    // RESERVED
-    #elif PROJECT_BUILD_COMPILER_ID == 3
-    // RESERVED
-    #pragma clang diagnostic pop
-    #endif
-
-        /**
-         * @brief generate table pdf file
-         * 
-         * @param tableData 
-         * @param filePathName 
-         * @param pdfConfig 
-         * @return true if ok
-         */
-        bool generateTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig);
-    };
-    // file pdf access
-    SFilePDF FilePDF = SFilePDF();
-#endif // LIBPRCPP_PROJECT_USING_LIBHARU
-
-#if LIBPRCPP_PROJECT_USING_JSONCPP
-    /**
-     * @brief file json structure
-     * 
-     */
-    struct SFileJSON
-    {
-        std::string toString(const Json::Value &input, const int &indent = 4, const int &precision = 16);
-
-        Json::Value fromFile(const std::string &input);
-
-        Json::Value fromString(const std::string &input, const int &indent = 4, const int &precision = 16);
-
-        Json::Value fromCSV(const std::string &input);
-
-        bool save(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
-
-        bool saveToCSV(const std::string &input, const std::string &output);
-    };
-    // file json access
-    SFileJSON FileJSON = SFileJSON();
-#endif // LIBPRCPP_PROJECT_USING_JSONCPP
-
-    /**
-     * @brief file encrypt decrypt structure
-     * 
-     */
-    struct SFileEncDec
+    struct SSYSENV
     {
         /**
-         * @brief encrypt file
-         * 
-         * @param encryptDecryptMode 
-         * @param input 
-         * @param output 
-         * @param iv min is 16 length ( 24 for xChaCha20 )
-         * @param ik min is 32 length
-         * @return true if ok
-         */
-        bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
-
-        /**
-         * @brief decrypt file
-         * 
-         * @param encryptDecryptMode 
-         * @param input 
-         * @param output 
-         * @param iv min is 16 length ( 24 for xChaCha20 )
-         * @param ik min is 32 length
-         * @return true if ok
-         */
-        bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
-
-    protected:
-        std::vector<unsigned char> readFile(const std::string& filePath);
-
-        bool writeFile(const std::string& filePath, const std::vector<unsigned char>& data);
-
-        std::vector<unsigned char> stringToUnsignedChar(const std::string& str, size_t requiredSize);
-
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
-        std::vector<unsigned char> aesEncryptOpenSSL(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
-
-        std::vector<unsigned char> aesDecryptOpenSSL(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
-
-        void handleOpenSSLError();
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
-
-    #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        std::vector<unsigned char> aesEncryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
-
-        std::vector<unsigned char> aesDecryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
-
-        std::vector<unsigned char> xChaCha20encryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
-
-        std::vector<unsigned char> xChaCha20decryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
-
-        std::vector<unsigned char> rc6encryptCryptoPP(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik);
-
-        std::vector<unsigned char> rc6decryptCryptoPP(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik);
-    #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    };
-    // file encrypt decrypt access
-    SFileEncDec FileEncDec = SFileEncDec();
-
-    struct SSystemEnvironment
-    {
-        /**
-         * @brief check if port is avaiable
+         * @brief check if port is available on current system
          * 
          * @param port 
          * @return true if available
          */
-        bool portIsAvailable(int port);
+        bool isPortAvailable(int port);
     };
-    // system environment access
-    SSystemEnvironment SystemEnvironment = SSystemEnvironment();
+    /**
+     * @brief system environment
+     * 
+     */
+    SSYSENV SYSENV = SSYSENV();
 };
 
-namespace utilityFunctions
+namespace systemFunctions
 {
-
     namespace directory
     {
         /**
@@ -298,9 +386,9 @@ namespace utilityFunctions
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return true if ok
+         * @return EResult::Enum
          */
-        bool createDir(const std::string &path);
+        EResult::Enum createDir(const std::string &path);
 
         /**
          * @brief delete driectory
@@ -308,9 +396,9 @@ namespace utilityFunctions
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return true if ok
+         * @return EResult::Enum
          */
-        bool deleteDir(const std::string &path);
+        EResult::Enum deleteDir(const std::string &path);
 
         /**
          * @brief get current directory
@@ -322,77 +410,144 @@ namespace utilityFunctions
         std::string getCurrentDir();
     } // namespace directory
 
-    #if LIBPRCPP_PROJECT_USING_LIBHARU
-    namespace filePdf
+    namespace file
     {
         /**
-         * @brief generate table pdf file
+         * @brief delete filePath param
          * 
-         * @param tableData 
-         * @param filePathName 
-         * @param pdfConfig 
-         * @return true if ok
+         * @param filePath 
+         * @return EResult::Enum
          */
-        bool generateTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig);
-    } // namespace filePdf
-    #endif // LIBPRCPP_PROJECT_USING_LIBHARU
+        EResult::Enum deleteFile(const std::string &filePath);
 
-    #if LIBPRCPP_PROJECT_USING_JSONCPP
-    namespace json
-    {
-        std::string toString(const Json::Value &input, const int &indent = 4, const int &precision = 16);
+        namespace json
+        {
+            namespace read
+            {
+                /**
+                 * @brief read json input and convert to string
+                 * 
+                 * @param input 
+                 * @param indent 
+                 * @param precision 
+                 * @return std::string 
+                 */
+                std::string toString(const Json::Value &input, const int &indent = 4, const int &precision = 16);
 
-        Json::Value fromFile(const std::string &input);
+                /**
+                 * @brief read .json file from filepath & pass to jsonData
+                 * 
+                 * @param filePath location is relative from executeable, e.g. "../path/sub/filename.json"
+                 * @param jsonData data to pass
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum fromFileJSON(const std::string &filePath, Json::Value &jsonData);
 
-        Json::Value fromString(const std::string &input, const int &indent = 4, const int &precision = 16);
+                /**
+                 * @brief read from .csv file to json & pass to jsonData
+                 * 
+                 * @param filePath 
+                 * @param jsonData 
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum fromFileCSV(const std::string &filePath, Json::Value &jsonData);
 
-        Json::Value fromCSV(const std::string &input);
+                /**
+                 * @brief read inputString & pass to jsonData
+                 * 
+                 * @param inputString 
+                 * @param jsonData 
+                 * @param indent default 4
+                 * @param precision default 16
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum fromString(const std::string &inputString, Json::Value &jsonData, const int &indent = 4, const int &precision = 16);
+            } // namespace read
 
-        bool save(const Json::Value &input, const std::string &output);
+            namespace write
+            {
+                /**
+                 * @brief save json data input to output
+                 * 
+                 * @param input 
+                 * @param output 
+                 * @param indent default 4
+                 * @param precision default 16
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum saveToJSON(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
 
-        bool saveToCSV(const std::string &input, const std::string &output);
-    } // namespace json
-    #endif // LIBPRCPP_PROJECT_USING_JSONCPP
+                /**
+                 * @brief save to .csv from .json file
+                 * 
+                 * @param jsonFilePath 
+                 * @param output 
+                 * @param indent 
+                 * @param precision 
+                 * @return EResult::Enum 
+                 */
+                EResult::Enum saveToCSV(const std::string &jsonFilePath, const std::string &output);
+            } // namespace read
+        } // namespace json
 
-    namespace fileEncDec
+        namespace pdf
+        {
+            namespace write
+            {
+                /**
+                 * @brief write data from table pdf file
+                 * 
+                 * @note example: test_generate_pdf.cc in test subdir
+                 * 
+                 * @param tableData 
+                 * @param filePathName 
+                 * @param pdfConfig 
+                 * @return true if ok
+                 */
+                bool dataToTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig);
+            } // namespace write
+        } // namespace pdf
+
+        namespace encryptDecrypt
+        {
+            /**
+             * @brief encrypt file
+             * 
+             * @param encryptDecryptMode 
+             * @param input 
+             * @param output 
+             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::Enum
+             */
+            EResult::Enum fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+
+            /**
+             * @brief decrypt file
+             * 
+             * @param encryptDecryptMode 
+             * @param input 
+             * @param output 
+             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::Enum
+             */
+            EResult::Enum fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+        } // namespace encryptDecrypt
+    } // namespace file
+
+    // system environment
+    namespace sysEnv
     {
         /**
-         * @brief encrypt file
-         * 
-         * @param encryptDecryptMode 
-         * @param input 
-         * @param output 
-         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
-         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
-         * @return true if ok
-         */
-        bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
-
-        /**
-         * @brief decrypt file
-         * 
-         * @param encryptDecryptMode 
-         * @param input 
-         * @param output 
-         * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
-         * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
-         * @return true if ok
-         */
-        bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
-    } // namespace fileEncDec
-
-    namespace systemEnvironment
-    {
-        /**
-         * @brief check if port is avaiable
+         * @brief check if port is available on current system
          * 
          * @param port 
          * @return true if available
          */
-        bool portIsAvailable(int port);
-    } // namespace systemEnvironment
-
-} // namespace utilityFunctions
+        bool isPortAvailable(int port);
+    } // namespace sysEnv
+} // namespace systemFunctions
 
 } // namespace libprcpp
 

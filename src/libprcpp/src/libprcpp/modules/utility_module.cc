@@ -26,7 +26,52 @@ CUtilityModule::~CUtilityModule()
 {
 }
 
-void CUtilityModule::findAndReplaceAll(std::string &source, const std::string &query, const std::string &replacement)
+std::string CUtilityModule::base64encode(const std::string &input)
+{
+    BIO *bio, *b64;
+    BUF_MEM *bufferPtr;
+
+    b64 = BIO_new(BIO_f_base64());
+    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+    bio = BIO_new(BIO_s_mem());
+    bio = BIO_push(b64, bio);
+
+    BIO_write(bio, input.c_str(), (int)input.length());
+    BIO_flush(bio);
+    BIO_get_mem_ptr(bio, &bufferPtr);
+
+    std::string result(bufferPtr->data, bufferPtr->length);
+
+    BIO_free_all(bio);
+    BIO_free_all(b64);
+
+    return result;
+}
+
+std::string CUtilityModule::base64decode(const std::string &input)
+{
+    BIO *bio, *b64;
+
+    bio = BIO_new_mem_buf(input.c_str(), -1);
+    b64 = BIO_new(BIO_f_base64());
+    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+    bio = BIO_push(b64, bio);
+
+    char* output = new char[input.size()];
+
+    int decodedLength = BIO_read(bio, output, (int)input.size());
+
+    BIO_free_all(bio);
+    BIO_free_all(b64);
+
+    std::string result(output, decodedLength);
+
+    delete[] output;
+
+    return result;
+}
+
+void CUtilityModule::SFind::andReplaceAll(std::string &source, const std::string &query, const std::string &replacement)
 {
     size_t position = 0;
 
@@ -37,7 +82,7 @@ void CUtilityModule::findAndReplaceAll(std::string &source, const std::string &q
     }
 }
 
-int CUtilityModule::findEachKeywords(const std::string &source, const std::vector<std::string> &keywords, std::vector<std::string> &foundKeywords)
+int CUtilityModule::SFind::eachKeywords(const std::string &source, const std::vector<std::string> &keywords, std::vector<std::string> &foundKeywords)
 {
     int result = 0;
 
@@ -53,7 +98,7 @@ int CUtilityModule::findEachKeywords(const std::string &source, const std::vecto
     return result;
 }
 
-bool CUtilityModule::findKeywordBefore(const std::string &source, const std::string &keywordBefore, std::string &extraction)
+bool CUtilityModule::SFind::keywordBefore(const std::string &source, const std::string &keywordBefore, std::string &extraction)
 {
     bool result = false;
 
@@ -73,7 +118,7 @@ bool CUtilityModule::findKeywordBefore(const std::string &source, const std::str
     return result;
 }
 
-bool CUtilityModule::findKeywordAfter(const std::string &source, const std::string &keywordAfter, std::string &extraction)
+bool CUtilityModule::SFind::keywordAfter(const std::string &source, const std::string &keywordAfter, std::string &extraction)
 {
     bool result = false;
 
@@ -88,7 +133,7 @@ bool CUtilityModule::findKeywordAfter(const std::string &source, const std::stri
     return result;
 }
 
-int CUtilityModule::generateRandomNumber(const int min, const int max)
+int CUtilityModule::SGenerate::randomNumber(const int min, const int max)
 {
     int result;
 
@@ -102,7 +147,7 @@ int CUtilityModule::generateRandomNumber(const int min, const int max)
     return result;
 }
 
-long CUtilityModule::generateRandomNumber(const long min, const long max)
+long CUtilityModule::SGenerate::randomNumber(const long min, const long max)
 {
     long result;
 
@@ -116,7 +161,7 @@ long CUtilityModule::generateRandomNumber(const long min, const long max)
     return result;
 }
 
-long long CUtilityModule::generateRandomNumber(const long long min, const long long max)
+long long CUtilityModule::SGenerate::randomNumber(const long long min, const long long max)
 {
     long long result;
 
@@ -130,7 +175,7 @@ long long CUtilityModule::generateRandomNumber(const long long min, const long l
     return result;
 }
 
-float CUtilityModule::generateRandomNumber(const float min, const float max)
+float CUtilityModule::SGenerate::randomNumber(const float min, const float max)
 {
     float result = 0.0f;
 
@@ -144,7 +189,7 @@ float CUtilityModule::generateRandomNumber(const float min, const float max)
     return result;
 }
 
-double CUtilityModule::generateRandomNumber(const double min, const double max)
+double CUtilityModule::SGenerate::randomNumber(const double min, const double max)
 {
     double result = 0.0;
 
@@ -158,122 +203,19 @@ double CUtilityModule::generateRandomNumber(const double min, const double max)
     return result;
 }
 
-std::array<uint8_t, 16> CUtilityModule::generateRandomBytes()
+std::array<uint8_t, 16> CUtilityModule::SGenerate::randomBytes()
 {
-    std::array<uint8_t, 16> bytes;
-    std::random_device rd;
-    std::mt19937 generator(rd());
-    std::uniform_int_distribution<int32_t> distribution(0, 255);
-
-    for (auto &byte : bytes)
-    {
-        byte = distribution(generator);
-    }
-
-    return bytes;
+    return std::array<uint8_t, 16>();
 }
 
-std::string CUtilityModule::generateRandomAlphanumeric(int length)
-{
-    std::string result;
-
-    if (length <= 0) { length = 1; }
-
-    result.reserve(length);
-
-    for (int i = 0; i < length; i++)
-    {
-        int j = generateRandomNumber(0, (int)m_alphanumeric.length() - 1);
-        result += m_alphanumeric[j];
-    }
-
-    return result;
-}
-
-std::string CUtilityModule::generateRandomAlphanumericWithSpecialCharacter(int length)
-{
-    std::string result;
-
-    if (length <= 0) { length = 1; }
-
-    result.reserve(length);
-
-    for (int i = 0; i < length; i++)
-    {
-        int j = generateRandomNumber(0, (int)m_alphanumericWithSpecialCharacter.length() - 1);
-        result += m_alphanumericWithSpecialCharacter[j];
-    }
-
-    return result;
-}
-
-std::string CUtilityModule::changeInputLetterCase(const std::string input, const int letterCase)
-{
-    std::string result;
-
-    result.reserve(input.length());
-
-    switch (letterCase)
-    {
-        case 0:
-        {
-            for (size_t i = 0; i < input.length(); i++)
-            {
-                result += tolower(input[i]);
-            }
-        }
-        break;
-
-        case 1:
-        {
-            for (size_t i = 0; i < input.length(); i++)
-            {
-                result += toupper(input[i]);
-            }
-        }
-        break;
-
-        case 2:
-        {
-            for (size_t i = 0; i < input.length(); i++)
-            {
-                //  0 is lower, 1 is upper
-                int mixedcase = generateRandomNumber(0, 1);
-
-                if (mixedcase == 0 && isalpha(input[i]))
-                {
-                    result += tolower(input[i]);
-                }
-                else if (mixedcase == 1 && isalpha(input[i]))
-                {
-                    result += toupper(input[i]);
-                }
-                else
-                {
-                    result += input[i];
-                }
-            }
-        }
-        break;
-
-        default:
-        {
-            result = input;
-        }
-        break;
-    }
-
-    return result;
-}
-
-std::string CUtilityModule::generateUuidV1()
+std::string CUtilityModule::SGenerate::uuidV1()
 {
     auto now = std::chrono::high_resolution_clock::now();
     auto duration = now.time_since_epoch();
     auto timestamp = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
 
     // byte sequence
-    std::array<uint8_t, 16> uuid_bytes = generateRandomBytes();
+    std::array<uint8_t, 16> uuid_bytes = randomBytes();
     
     // timestamp
     uuid_bytes[0] = (timestamp >> 40) & 0xFF;
@@ -304,9 +246,9 @@ std::string CUtilityModule::generateUuidV1()
     return oss.str();
 }
 
-std::string CUtilityModule::generateUuidV4()
+std::string CUtilityModule::SGenerate::uuidV4()
 {
-    auto random_bytes = generateRandomBytes();
+    auto random_bytes = randomBytes();
 
     // version 4
     random_bytes[6] = (random_bytes[6] & 0x0F) | 0x40;
@@ -329,89 +271,86 @@ std::string CUtilityModule::generateUuidV4()
     return oss.str();
 }
 
-bool CUtilityModule::checkInputIsAlphabetic(const std::string input) const
+std::string CUtilityModule::SGenerate::randomAlphanumeric(int length)
 {
-    auto itter = std::find_if(input.begin(), input.end(), [](char const& c)
-    {
-        return !isalpha(c);
-    });
+    std::string result;
 
-    return itter == input.end();
+    if (length <= 0) { length = 1; }
+
+    result.reserve(length);
+
+    for (int i = 0; i < length; i++)
+    {
+        int j = randomNumber(0, (int)STRINGS_INTERNAL::alphanumeric.length() - 1);
+        result += STRINGS_INTERNAL::alphanumeric[j];
+    }
+
+    return result;
 }
 
-bool CUtilityModule::checkInputIsAlphaNumeric(const std::string input) const
+std::string CUtilityModule::SGenerate::randomAlphanumericWithSpecialCharacter(int length)
 {
-    auto itter = std::find_if(input.begin(), input.end(), [](char const& c)
-    {
-        return !isalnum(c);
-    });
+    std::string result;
 
-    return itter == input.end();
+    if (length <= 0) { length = 1; }
+
+    result.reserve(length);
+
+    for (int i = 0; i < length; i++)
+    {
+        int j = randomNumber(0, (int)STRINGS_INTERNAL::alphanumeric_with_special_character.length() - 1);
+        result += STRINGS_INTERNAL::alphanumeric_with_special_character[j];
+    }
+
+    return result;
 }
 
-bool CUtilityModule::checkInputPasswordMeetRequirement(const std::string &input, const ERequirementPasswordInput::Enum &requirement) const
+std::string CUtilityModule::SChange::inputLetterCase(const std::string input, const int letterCase)
 {
-    bool result = false;
+    std::string result;
 
-    switch (requirement)
+    result.reserve(input.length());
+
+    switch (letterCase)
     {
-        case ERequirementPasswordInput::Enum::REQUIREMENT_PASSWORD_INPUT_MIN_LENGTH_6:
+        case 0:
         {
-            if (input.length() >= 6) { result = true; }
+            for (size_t i = 0; i < input.length(); i++)
+            {
+                result += tolower(input[i]);
+            }
         }
         break;
 
-        case ERequirementPasswordInput::Enum::REQUIREMENT_PASSWORD_INPUT_MIN_LENGTH_6_WITH_1_NUMERIC_AND_1_SPECIAL_CHARACTER:
+        case 1:
         {
-            bool alphabetFound = false;
-            bool numericFound = false;
-            bool specialcharFound = false;
-
-            if (input.length() >= 6)
+            for (size_t i = 0; i < input.length(); i++)
             {
-                for (size_t i = 0; i < m_alphabet.length(); i++)
-                {
-                    for (size_t j = 0; j < input.length(); j++)
-                    {
-                        if (m_alphabet[i] == input[j])
-                        {
-                            alphabetFound = true;
-                            break;
-                        }
-                    }
-                }
+                result += toupper(input[i]);
+            }
+        }
+        break;
 
-                for (size_t i = 0; i < m_numeric.length(); i++)
-                {
-                    for (size_t j = 0; j < input.length(); j++)
-                    {
-                        if (m_numeric[i] == input[j])
-                        {
-                            numericFound = true;
-                            break;
-                        }
-                    }
-                }
+        case 2:
+        {
+            SGenerate gen = SGenerate();
 
-                for (size_t i = 0; i < m_specialCharacter.length(); i++)
-                {
-                    for (size_t j = 0; j < input.length(); j++)
-                    {
-                        if (m_specialCharacter[i] == input[j])
-                        {
-                            specialcharFound = true;
-                            break;
-                        }
-                    }
-                }
+            for (size_t i = 0; i < input.length(); i++)
+            {
+                //  0 is lower, 1 is upper
+                int mixedcase = gen.randomNumber(0, 1);
 
-                if (alphabetFound && numericFound && specialcharFound)
+                if (mixedcase == 0 && isalpha(input[i]))
                 {
-                    result = true;
+                    result += tolower(input[i]);
+                }
+                else if (mixedcase == 1 && isalpha(input[i]))
+                {
+                    result += toupper(input[i]);
                 }
                 else
                 {
-                    result = false;
+                    result += input[i];
                 }
             }
         }
@@ -419,7 +358,7 @@ bool CUtilityModule::checkInputPasswordMeetRequirement(const std::string &input,
 
         default:
         {
-            result = false;
+            result = input;
         }
         break;
     }
@@ -427,1247 +366,224 @@ bool CUtilityModule::checkInputPasswordMeetRequirement(const std::string &input,
     return result;
 }
 
-bool CUtilityModule::checkInputUsernameMeetRequirement(const std::string &input, const ERequirementUsernameInput::Enum &requirement) const
+Json::Value CUtilityModule::SJson::fromFile(const std::string &filePath)
 {
-    bool result = false;
+    Json::Value result;
 
-    switch (requirement)
+    std::ifstream f(filePath);
+
+    if (f.is_open())
     {
-        case ERequirementUsernameInput::Enum::REQUIREMENT_USERNAME_INPUT_ALPHANUMERIC_UNDERSCORE:
+        f >> result;
+        f.close();
+    }
+    else
+    {
+        std::cerr << "ERROR FileJSON: can't find json file from \"" << filePath << "\" in \"CUtilityModule::SJson::fromFile\"\n";
+    }
+
+    return result;
+}
+
+Json::Value CUtilityModule::SJson::fromString(const std::string &jsonStringInput, const int &indent, const int &precision)
+{
+    Json::Value result;
+
+    try
+    {
+        int _indent = indent, _precision = precision;
+
+        if (indent >= 4) { _indent = 4; }
+        if (indent <= 3) { _indent = 0; }
+        if (precision >= 16) { _precision = 16; }
+        if (precision <= 2) { _precision = 2; }
+
+        std::string _indentString = "";
+        for (auto i = 0; i < _indent; i++)
         {
-            std::regex invalidRegex(R"([^a-zA-Z0-9_])");
-
-            result = !std::regex_search(input, invalidRegex);
+            _indentString += " ";
         }
-        break;
 
-        default:
-        {
-            std::cerr << "ERROR: requirement param is undefined in \"CUtilityModule::checkInputUsernameMeetRequirement\"\n";            
-        }
-        break;
+        JSONCPP_STRING err;
+        Json::CharReaderBuilder builder;
+
+        builder.settings_["indentation"] = _indentString;
+        builder.settings_["precision"] = _precision;
+
+        const int inputLength = static_cast<int>(jsonStringInput.length());
+
+        const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
+        reader->parse(jsonStringInput.c_str(), jsonStringInput.c_str() + inputLength, &result, &err);
     }
-
-    return result;
-}
-
-#if LIBPRCPP_PROJECT_USING_OPENSSL
-std::string CUtilityModule::base64encode(const std::string &input)
-{
-    BIO *bio, *b64;
-    BUF_MEM *bufferPtr;
-
-    b64 = BIO_new(BIO_f_base64());
-    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-    bio = BIO_new(BIO_s_mem());
-    bio = BIO_push(b64, bio);
-
-    BIO_write(bio, input.c_str(), (int)input.length());
-    BIO_flush(bio);
-    BIO_get_mem_ptr(bio, &bufferPtr);
-
-    std::string result(bufferPtr->data, bufferPtr->length);
-
-    BIO_free_all(bio);
-
-    return result;
-}
-
-std::string CUtilityModule::base64decode(const std::string &input)
-{
-    BIO *bio, *b64;
-
-    bio = BIO_new_mem_buf(input.c_str(), -1);
-    b64 = BIO_new(BIO_f_base64());
-    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-    bio = BIO_push(b64, bio);
-
-    char* output = new char[input.size()];
-
-    int decodedLength = BIO_read(bio, output, (int)input.size());
-
-    BIO_free_all(bio);
-
-    std::string result(output, decodedLength);
-
-    delete[] output;
-
-    return result;
-}
-#endif // LIBPRCPP_PROJECT_USING_OPENSSL
-
-std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toStringTZ()
-{
-    std::string result;
-    std::stringstream ss;
-
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-
-    ss << std::put_time(std::gmtime(&now_time), "%Y-%m-%dT%H:%M:%S+00:00");
-    result = ss.str();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::STimeZone::toStringTZ(const int &timeOffset, const bool &ISO8601)
-{
-    std::string result;
-    std::string utcNegativeOrPositive, utcFormat;
-    std::stringstream ss;
-
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    if (timezoneOffset <= -1) { utcNegativeOrPositive = ""; }
-    if (timezoneOffset >= 0) { utcNegativeOrPositive = "+"; }
-
-    if (timezoneOffset >= 0 && timezoneOffset <= 9)
+    catch(const std::exception& e)
     {
-        utcFormat = "0" + std::to_string(timezoneOffset);
+        std::cerr << "EXCEPTION utilityFunctions::json::fromString: " << e.what() << '\n';
     }
-    else if (timezoneOffset <= -1 && timezoneOffset >= -9)
-    {
-        utcFormat = std::to_string(timezoneOffset);
-        utcFormat.insert(1, "0");
-    }
-    else
-    {
-        utcFormat = std::to_string(timezoneOffset);
-    }
-
-    utcFormat += ":00";
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    if (ISO8601)
-    {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%dT%H:%M:%S");
-    }
-    else
-    {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%d %H:%M:%S");
-    }
-
-    result = ss.str();
-
-    if (ISO8601)
-    {
-        result += utcNegativeOrPositive;
-        result += utcFormat;
-    }
-    else
-    {
-        result += " ";
-        result += utcNegativeOrPositive;
-        result += utcFormat;
-    }
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCYear::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y");
-
-    result = ss.str();
-
-    return std::stoi(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYear::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y");
-
-    result = ss.str();
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCMonth::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%m");
-
-    result = ss.str();
-
-    if (result.rfind("0", 0) == 0)
-    {
-        result.replace(0, 1, "");
-    }
-
-    return std::stoi(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCMonth::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%m");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCDay::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%d");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return std::stoi(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCDay::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%d");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCHour::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%H");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return std::stoi(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCHour::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%H");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCMinute::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%M");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return std::stoi(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCMinute::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%M");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCSecond::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%S");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return std::stoi(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCSecond::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%S");
-
-    result = ss.str();
-
-    if (result.at(0) == '0')
-    {
-        result.replace(0, 1, "");
-    }
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDay::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d");
-
-    result = ss.str();
-
-    return std::stoi(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDay::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d");
-
-    result = ss.str();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDay::toStringISO8601(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%d");
-
-    result = ss.str();
-
-    return result;
-}
-
-int CUtilityModule::SDateAndTime::SUTC::SUTCHourMinuteSecond::toInt(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%H%M%S");
-
-    result = ss.str();
-
-    return std::stol(result);
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCHourMinuteSecond::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%H%M%S");
-
-    result = ss.str();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCHourMinuteSecond::toStringHuman(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%H:%M:%S");
-
-    result = ss.str();
-
-    return result;
-}
-
-TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toInt64(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d%H%M%S");
-
-    result = ss.str();
-
-    return std::stol(result);
-}
-
-TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toMillis(const std::string &YYYYMMDDhhmmss)
-{
-    TInt64 result;
-
-    std::tm time = {};
-    std::istringstream ss(YYYYMMDDhhmmss);
-
-    if (YYYYMMDDhhmmss.find("T") != std::string::npos)
-    {
-        ss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
-    }
-    else
-    {
-        ss >> std::get_time(&time, "%Y-%m-%d %H:%M:%S");
-    }
-
-    if (ss.fail())
-    {
-        throw std::runtime_error("ERROR YYYYMMDDhhmmss: Failed to parse time string");
-    }
-
-    time_t time_since_epoch = mktime(&time);
-
-    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
-
-    return result;
-}
-
-TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toMillisNow(const int &timeOffset)
-{
-    TInt64 result;
-
-    std::string tmpStr;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%dT%H:%M:%S");
-
-    tmpStr = ss.str();
-
-    std::tm time = {};
-    std::stringstream sss(tmpStr);
-
-    sss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
-
-    time_t time_since_epoch = mktime(&time);
-
-    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d%H%M%S");
-
-    result = ss.str();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toStringHuman(const int &timeOffset, const bool &useTimeSign)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    if (useTimeSign)
-    {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%dT%H:%M:%S");
-    }
-    else
-    {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%d %H:%M:%S");
-    }
-
-    result = ss.str();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecond::toStringSecondsOffset(const int &secondsOffset)
-{
-    std::string result;
-    std::stringstream ss;
-
-    auto now = std::chrono::system_clock::now();
-
-    auto seconds = std::chrono::seconds(secondsOffset);
-
-    auto future_time = now + seconds;
-
-    std::time_t future_time_t = std::chrono::system_clock::to_time_t(future_time);
-
-    std::tm future_tm = *std::gmtime(&future_time_t);
-
-    ss << std::put_time(&future_tm, "%Y%m%d%H%M%S");
-
-    result = ss.str();
-
-    return result;
-}
-
-TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toMillis(const std::string &YYYYMMDDhhmmss_mls)
-{
-    TInt64 result;
-
-    std::tm time = {};
-    std::istringstream ss(YYYYMMDDhhmmss_mls);
-
-    if (YYYYMMDDhhmmss_mls.find("T") != std::string::npos)
-    {
-        ss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
-    }
-    else
-    {
-        ss >> std::get_time(&time, "%Y-%m-%d %H:%M:%S");
-    }
-
-    if (ss.fail())
-    {
-        throw std::runtime_error("ERROR YYYYMMDDhhmmss_mls: Failed to parse time string");
-    }
-
-    time_t time_since_epoch = mktime(&time);
-
-    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
-
-    return result;
-}
-
-TInt64 CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toMillisNow(const int &timeOffset)
-{
-    TInt64 result;
-
-    std::string tmpStr;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%dT%H%M%S") << '.' << std::setw(3) << std::setfill('0') << milliseconds.count();
-
-    tmpStr = ss.str();
-
-    std::tm time = {};
-    std::stringstream sss(tmpStr);
-
-    sss >> std::get_time(&time, "%Y-%m-%dT%H:%M:%S");
-
-    int millis = 0;
-    if (sss.peek() == '.')
-    {
-        sss.ignore();
-        sss >> millis;
-    }
-
-    time_t time_since_epoch = mktime(&time);
-
-    result = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::from_time_t(time_since_epoch).time_since_epoch()).count();
-    result += millis;
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toString(const int &timeOffset)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
-
-    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d%H%M%S") << std::setw(3) << std::setfill('0') << milliseconds.count();
-
-    result = ss.str();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toStringHuman(const int &timeOffset, const bool &useTimeSign)
-{
-    std::string result;
-    std::stringstream ss;
-    int timezoneOffset = timeOffset;
-
-    if (timezoneOffset <= -11) { timezoneOffset = -11; }
-    if (timezoneOffset >= 14) { timezoneOffset = 14; }
-
-    auto adjustTimeOffset = timezoneOffset * 3600;
-    auto now = std::chrono::system_clock::now();
-
-    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-    std::time_t now_time_utc = now_time + adjustTimeOffset;
-
-    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
-
-    if (useTimeSign)
-    {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%dT%H:%M:%S") << '.' << std::setw(3) << std::setfill('0') << milliseconds.count();
-    }
-    else
-    {
-        ss << std::put_time(std::gmtime(&now_time_utc), "%Y-%m-%d %H%:M:%S") << '.' << std::setw(3) << std::setfill('0') << milliseconds.count();
-    }
-
-    result = ss.str();
-
-    return result;
-}
-
-std::string CUtilityModule::SDateAndTime::SUTC::SUTCYearMonthDayHourMinuteSecondMillisecond::toStringSecondOffset(const int &secondsOffset)
-{
-    std::string result;
-    std::stringstream ss;
-
-    auto now = std::chrono::system_clock::now();
-
-    auto seconds = std::chrono::seconds(secondsOffset);
-
-    auto future_time = now + seconds;
-
-    std::time_t future_time_t = std::chrono::system_clock::to_time_t(future_time);
-
-    std::tm future_tm = *std::gmtime(&future_time_t);
-
-    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
-
-    ss << std::put_time(&future_tm, "%Y%m%d%H%M%S") << std::setw(3) << std::setfill('0') << milliseconds.count();
-
-    result = ss.str();
 
     return result;
 }
 
 namespace utilityFunctions
 {
+    std::string base64encode(const std::string &input)
+    {
+        BIO *bio, *b64;
+        BUF_MEM *bufferPtr;
 
-void findAndReplaceAll(std::string &source, const std::string &query, const std::string &replacement)
-{
-    CUtilityModule Utility;
-    Utility.findAndReplaceAll(source, query, replacement);
-}
+        b64 = BIO_new(BIO_f_base64());
+        BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+        bio = BIO_new(BIO_s_mem());
+        bio = BIO_push(b64, bio);
 
-int findEachKeywords(const std::string &source, const std::vector<std::string> &keywords, std::vector<std::string> &foundKeywords)
-{
-    CUtilityModule Utility;
-    return Utility.findEachKeywords(source, keywords, foundKeywords);
-}
+        BIO_write(bio, input.c_str(), (int)input.length());
+        BIO_flush(bio);
+        BIO_get_mem_ptr(bio, &bufferPtr);
 
-bool findKeywordBefore(const std::string &source, const std::string &keywordBefore, std::string &extraction)
-{
-    CUtilityModule Utility;
-    return Utility.findKeywordBefore(source, keywordBefore, extraction);
-}
+        std::string result(bufferPtr->data, bufferPtr->length);
 
-bool findKeywordAfter(const std::string &source, const std::string &keywordAfter, std::string &extraction)
-{
-    CUtilityModule Utility;
-    return Utility.findKeywordAfter(source, keywordAfter, extraction);
-}
+        BIO_free_all(bio);
+        BIO_free_all(b64);
 
-int generateRandomNumber(const int min, const int max)
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomNumber(min, max);
-}
+        return result;
+    }
 
-long generateRandomNumber(const long min, const long max)
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomNumber(min, max);
-}
+    std::string base64decode(const std::string &input)
+    {
+        BIO *bio, *b64;
 
-long long generateRandomNumber(const long long min, const long long max)
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomNumber(min, max);
-}
+        bio = BIO_new_mem_buf(input.c_str(), -1);
+        b64 = BIO_new(BIO_f_base64());
+        BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+        bio = BIO_push(b64, bio);
 
-float generateRandomNumber(const float min, const float max)
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomNumber(min, max);
-}
+        char* output = new char[input.size()];
 
-double generateRandomNumber(const double min, const double max)
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomNumber(min, max);
-}
+        int decodedLength = BIO_read(bio, output, (int)input.size());
 
-std::array<uint8_t, 16> generateRandomBytes()
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomBytes();
-}
+        BIO_free_all(bio);
+        BIO_free_all(b64);
 
-std::string generateRandomAlphanumeric(int length)
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomAlphanumeric(length);
-}
+        std::string result(output, decodedLength);
 
-std::string generateRandomAlphanumericWithSpecialCharacter(int length)
-{
-    CUtilityModule Utility;
-    return Utility.generateRandomAlphanumericWithSpecialCharacter(length);
-}
+        delete[] output;
 
-std::string changeInputLetterCase(const std::string input, const int letterCase)
-{
-    CUtilityModule Utility;
-    return Utility.changeInputLetterCase(input, letterCase);
-}
+        return result;
+    }
 
-std::string generateUuidV1()
-{
-    CUtilityModule Utility;
-    return Utility.generateUuidV1();
-}
+    namespace find
+    {
+        void andReplaceAll(std::string &source, const std::string &query, const std::string &replacement)
+        {
+            CUtilityModule UTILITY;
+            UTILITY.Find.andReplaceAll(source, query, replacement);
+        }
 
-std::string generateUuidV4()
-{
-    CUtilityModule Utility;
-    return Utility.generateUuidV4();
-}
+        int eachKeywords(const std::string &source, const std::vector<std::string> &keywords, std::vector<std::string> &foundKeywords)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Find.eachKeywords(source, keywords, foundKeywords);
+        }
 
-bool checkInputIsAlphabetic(const std::string input)
-{
-    CUtilityModule Utility;
-    return Utility.checkInputIsAlphabetic(input);
-}
+        bool keywordBefore(const std::string &source, const std::string &keywordBefore, std::string &extraction)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Find.keywordBefore(source, keywordBefore, extraction);
+        }
 
-bool checkInputIsAlphaNumeric(const std::string input)
-{
-    CUtilityModule Utility;
-    return Utility.checkInputIsAlphaNumeric(input);
-}
+        bool keywordAfter(const std::string &source, const std::string &keywordAfter, std::string &extraction)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Find.keywordAfter(source, keywordAfter, extraction);
+        }
+    } // namespace find
 
-bool checkInputPasswordMeetRequirement(const std::string &input, const ERequirementPasswordInput::Enum &requirement)
-{
-    CUtilityModule Utility;
-    return Utility.checkInputPasswordMeetRequirement(input, requirement);
-}
+    namespace generate
+    {
+        int randomNumber(const int min, const int max)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomNumber(min, max);
+        }
 
-bool checkInputUsernameMeetRequirement(const std::string &input, const ERequirementUsernameInput::Enum &requirement)
-{
-    CUtilityModule Utility;
-    return Utility.checkInputUsernameMeetRequirement(input, requirement);
-}
+        long randomNumber(const long min, const long max)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomNumber(min, max);
+        }
 
-#if LIBPRCPP_PROJECT_USING_OPENSSL
-std::string base64encode(const std::string &input)
-{
-    CUtilityModule Utility;
-    return Utility.base64encode(input);
-}
+        long long randomNumber(const long long min, const long long max)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomNumber(min, max);
+        }
 
-std::string base64decode(const std::string &input)
-{
-    CUtilityModule Utility;
-    return Utility.base64decode(input);
-}
-#endif // LIBPRCPP_PROJECT_USING_OPENSSL
+        float randomNumber(const float min, const float max)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomNumber(min, max);
+        }
 
+        double randomNumber(const double min, const double max)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomNumber(min, max);
+        }
+
+        std::array<uint8_t, 16> randomBytes()
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomBytes();
+        }
+
+        std::string uuidV1()
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.uuidV1();
+        }
+
+        std::string uuidV4()
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.uuidV4();
+        }
+
+        std::string randomAlphanumeric(int length)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomAlphanumeric(length);
+        }
+
+        std::string randomAlphanumericWithSpecialCharacter(int length)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Generate.randomAlphanumericWithSpecialCharacter(length);
+        }
+    } // namespace generate
+
+    namespace change
+    {
+        std::string inputLetterCase(const std::string input, const int letterCase)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.Change.inputLetterCase(input, letterCase);
+        }
+    } // namespace change
+
+    namespace json
+    {
+        Json::Value fromFile(const std::string &filePath)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.JSON.fromFile(filePath);
+        }
+
+        Json::Value fromString(const std::string &jsonStringInput, const int &indent, const int &precision)
+        {
+            CUtilityModule UTILITY;
+            return UTILITY.JSON.fromString(jsonStringInput, indent, precision);
+        }
+    } // namespace json
 } // namespace utilityFunctions
-
-namespace dateAndTime
-{
-
-namespace UTC
-{
-
-    namespace timeZone
-    {
-        std::string toString()
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.TimeZone.toStringTZ();
-        }
-
-        std::string toString(const int &timeOffset, const bool &ISO8601 = true)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.TimeZone.toStringTZ(timeOffset, ISO8601);
-        }
-    } // namespace timeZone
-
-    namespace year
-    {
-        int toInt(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Year.toInt(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Year.toString(timeOffset);
-        }
-    } // namespace year
-
-    namespace month
-    {
-        int toInt(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Month.toInt(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Month.toString(timeOffset);
-        }
-    } // namespace month
-
-    namespace day
-    {
-        int toInt(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Day.toInt(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Day.toString(timeOffset);
-        }
-    } // namespace day
-
-    namespace hour
-    {
-        int toInt(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Hour.toInt(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Hour.toString(timeOffset);
-        }
-    } // namespace hour
-
-    namespace second
-    {
-        int toInt(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Second.toInt(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.Second.toString(timeOffset);
-        }
-    } // namespace second
-
-    namespace YYYYMMDD
-    {
-        int toInt(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDD.toInt(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDD.toString(timeOffset);
-        }
-
-        std::string toStringISO8601(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDD.toStringISO8601(timeOffset);
-        }
-    } // namespace YYYYMMDD
-
-    namespace hhmmss
-    {
-        int toInt(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.hhmmss.toInt(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.hhmmss.toString(timeOffset);
-        }
-    } // namespace hhmmss
-
-    namespace YYYYMMDDhhmmss
-    {
-        TInt64 toInt64(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toInt64(timeOffset);
-        }
-
-        TInt64 toMillis(const std::string &YYYYMMDDhhmmss)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toMillis(YYYYMMDDhhmmss);
-        }
-
-        TInt64 toMillisNow(const int &timeOffset)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toMillisNow(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toString(timeOffset);
-        }
-
-        std::string toStringHuman(const int &timeOffset, const bool &useTimeSign)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toStringHuman(timeOffset, useTimeSign);
-        }
-
-        std::string toStringSecondsOffset(const int &secondsOffset = 0)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss.toStringSecondsOffset(secondsOffset);
-        }
-    } // namespace YYYYMMDDhhmmss
-
-    namespace YYYYMMDDhhmmss_mls
-    {
-        TInt64 toMillis(const std::string &YYYYMMDDhhmmss_mls)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toMillis(YYYYMMDDhhmmss_mls);
-        }
-
-        TInt64 toMillisNow(const int &timeOffset)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toMillisNow(timeOffset);
-        }
-
-        std::string toString(const int &timeOffset)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toString(timeOffset);
-        }
-
-        std::string toStringHuman(const int &timeOffset, const bool &useTimeSign)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toStringHuman(timeOffset, useTimeSign);
-        }
-
-        std::string toStringSecondOffset(const int &secondsOffset)
-        {
-            CUtilityModule Utility;
-            return Utility.DateAndTime.UTC.YYYYMMDDhhmmss_mls.toStringSecondOffset(secondsOffset);
-        }
-    } // namespace YYYYMMDDhhmmss_mls
-
-} // namespace UTC
-
-} // namespace dateAndTime
 
 } // namespace libprcpp
 

@@ -5,32 +5,32 @@ namespace libprcpp
 
 namespace internal
 {
-bool isNumber(const std::string& s)
-{
-    if (s.empty()) return false;
-
-    std::string::const_iterator it = s.begin();
-
-    if (*it == '-' || *it == '+') ++it;
-
-    bool hasDigits = false;
-
-    while (it != s.end() && std::isdigit(*it))
+    bool isNumber(const std::string& input)
     {
-        hasDigits = true;
-        ++it;
-    }
+        if (input.empty()) return false;
 
-    if (it == s.end()) return hasDigits;
-    
-    if (*it == '.' && ++it != s.end())
-    {
-        while (it != s.end() && std::isdigit(*it)) ++it;
-        return it == s.end() && hasDigits;
-    }
+        std::string::const_iterator it = input.begin();
 
-    return false;
-} // isNumber
+        if (*it == '-' || *it == '+') ++it;
+
+        bool hasDigits = false;
+
+        while (it != input.end() && std::isdigit(*it))
+        {
+            hasDigits = true;
+            ++it;
+        }
+
+        if (it == input.end()) return hasDigits;
+        
+        if (*it == '.' && ++it != input.end())
+        {
+            while (it != input.end() && std::isdigit(*it)) ++it;
+            return it == input.end() && hasDigits;
+        }
+
+        return false;
+    }
 } // namespace internal
 
 CSystemModule::CSystemModule()
@@ -41,37 +41,39 @@ CSystemModule::~CSystemModule()
 {
 }
 
-bool CSystemModule::SDirectory::createDir(const std::string &path)
+EResult::Enum CSystemModule::SDirectory::createDir(const std::string &path)
 {
-    bool result = false;
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
     std::filesystem::path directory = path;
 
     try
     {
-        result = fs::create_directory(directory);
+        std::filesystem::create_directory(directory) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SDirectory::createDir: " << e.what() << '\n';
+        result = EResult::Enum::RESULT_ERROR;
     }
 
     return result;
 }
 
-bool CSystemModule::SDirectory::deleteDir(const std::string &path)
+EResult::Enum CSystemModule::SDirectory::deleteDir(const std::string &path)
 {
-    bool result = false;
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
     std::filesystem::path directory = path;
 
     try
     {
-        result = fs::remove(directory);
+        std::filesystem::remove(directory) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SDirectory::deleteDir: " << e.what() << '\n';
+        result = EResult::Enum::RESULT_ERROR;
     }
 
     return result;
@@ -84,74 +86,27 @@ std::string CSystemModule::SDirectory::getCurrentDir()
     return currentDir.string();
 }
 
-bool CSystemModule::SFile::deleteFile(const std::string &filePath)
+EResult::Enum CSystemModule::SFile::deleteFile(const std::string &filePath)
 {
-    bool result = false;
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
     std::filesystem::path file = filePath;
 
     try
     {
-        result = fs::remove(file);
+        std::filesystem::remove(file) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SFile::deleteFile: " << e.what() << '\n';
+        result = EResult::Enum::RESULT_ERROR;
     }
 
     return result;
 }
-
-#if LIBPRCPP_PROJECT_USING_LIBHARU
-bool CSystemModule::SFilePDF::generateTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig)
-{
-    bool result = false;
-
-    HPDF_Doc pdf = HPDF_New(filePDFerrorHandler, NULL);
-    if (!pdf)
-    {
-        std::cerr << "ERROR FilePDF: cannot create PDF object on \"CSystemModule::SFilePDF::generateTable\"\n";
-        return result;
-    }
-
-    HPDF_Page page = HPDF_AddPage(pdf);
-    HPDF_Page_SetSize(page, pdfConfig.page_size, pdfConfig.page_direction);
-
-    HPDF_Font font = HPDF_GetFont(pdf, pdfConfig.font.c_str(), NULL);
-    HPDF_Page_SetFontAndSize(page, font, 12);
-
-    for (size_t i = 0; i < tableData.size(); ++i)
-    {
-        for (size_t j = 0; j < tableData[i].size(); ++j)
-        {
-            float posX = pdfConfig.table_left_x + j * pdfConfig.cell_width;
-            float posY = pdfConfig.table_top_y - i * pdfConfig.cell_height;
-
-            HPDF_Page_Rectangle(page, posX, posY - pdfConfig.cell_height, pdfConfig.cell_width, pdfConfig.cell_height);
-            HPDF_Page_Stroke(page);
-
-            HPDF_Page_BeginText(page);
-            HPDF_Page_TextOut(page, posX + 2, posY - pdfConfig.cell_height + 2, tableData[i][j].c_str());
-            HPDF_Page_EndText(page);
-        }
-    }
-
-    HPDF_SaveToFile(pdf, filePathName.c_str());
-
-    HPDF_Free(pdf);
-
-    result = true;
-
-    #if PROJECT_BUILD_STATUS == 1
-    std::cout << "DEBUG FilePDF: generated successfully!\n";
-    #endif // PROJECT_BUILD_STATUS
-
-    return result;
-}
-#endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
 #if LIBPRCPP_PROJECT_USING_JSONCPP
-std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const int &indent, const int &precision)
+std::string CSystemModule::SFile::SJson::SRead::toString(const Json::Value &input, const int &indent, const int &precision)
 {
     int _indent = indent, _precision = precision;
 
@@ -174,61 +129,40 @@ std::string CSystemModule::SFileJSON::toString(const Json::Value &input, const i
     return std::string(Json::writeString(writer, input));
 }
 
-Json::Value CSystemModule::SFileJSON::fromFile(const std::string &input)
+EResult::Enum CSystemModule::SFile::SJson::SRead::fromFileJSON(const std::string &filePath, Json::Value &jsonData)
 {
-    Json::Value result;
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
-    std::ifstream f(input);
-
-    if (f.is_open())
+    try
     {
-        f >> result;
+        std::ifstream f(filePath);
+
+        if (f.is_open())
+        {
+            f >> jsonData;
+
+            result = EResult::Enum::RESULT_OK;
+        }
+        else
+        {
+            result = EResult::Enum::RESULT_EXISTS_NOT;
+        }
         f.close();
     }
-    else
+    catch(const std::exception& e)
     {
-        std::cerr << "ERROR FileJSON: can't find json file from \"" << input << "\" in \"CSystemModule::SFileJSON::fromFile\"\n";
+        std::cerr << "ERROR CSystemModule::SFile::SJson::SRead::fromFile: " << e.what() << '\n';
+        result = EResult::Enum::RESULT_ERROR;
     }
 
     return result;
 }
 
-Json::Value CSystemModule::SFileJSON::fromString(const std::string &input, const int &indent, const int &precision)
+EResult::Enum CSystemModule::SFile::SJson::SRead::fromFileCSV(const std::string &filePath, Json::Value &jsonData)
 {
-    Json::Value result;
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
-    int _indent = indent, _precision = precision;
-
-    if (indent >= 4) { _indent = 4; }
-    if (indent <= 3) { _indent = 0; }
-    if (precision >= 16) { _precision = 16; }
-    if (precision <= 2) { _precision = 2; }
-
-    std::string _indentString = "";
-    for (auto i = 0; i < _indent; i++)
-    {
-        _indentString += " ";
-    }
-
-    JSONCPP_STRING err;
-    Json::CharReaderBuilder builder;
-
-    builder.settings_["indentation"] = _indentString;
-    builder.settings_["precision"] = _precision;
-
-    const int inputLength = static_cast<int>(input.length());
-
-    const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
-    reader->parse(input.c_str(), input.c_str() + inputLength, &result, &err);
-
-    return result;
-}
-
-Json::Value CSystemModule::SFileJSON::fromCSV(const std::string &input)
-{
-    Json::Value result;
-
-    std::ifstream file(input);
+    std::ifstream file(filePath);
     std::string line;
     std::vector<std::string> headers;
 
@@ -247,6 +181,7 @@ Json::Value CSystemModule::SFileJSON::fromCSV(const std::string &input)
         }
 
         Json::Value jsonArray(Json::arrayValue);
+
         while (std::getline(file, line))
         {
             line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
@@ -293,21 +228,65 @@ Json::Value CSystemModule::SFileJSON::fromCSV(const std::string &input)
             jsonArray.append(jsonObject);
         }
 
-        result = jsonArray;
+        jsonData = jsonArray;
 
         file.close();
+
+        result = EResult::Enum::RESULT_OK;
     }
     else
     {
-        std::cerr << "ERROR FileJSON: can't open \"" << input << "\"in \"CSystemModule::SFileJSON::fromCSV\"\n";
+        std::cerr << "ERROR: can't open \"" << filePath << "\"in \"CSystemModule::SFile::SJson::SRead::fromFileCSV\"\n";
+        result = EResult::Enum::RESULT_ERROR;
     }
 
     return result;
 }
 
-bool CSystemModule::SFileJSON::save(const Json::Value & input, const std::string & output, const int &indent, const int &precision)
+EResult::Enum CSystemModule::SFile::SJson::SRead::fromString(const std::string &inputString, Json::Value &jsonData, const int &indent, const int &precision)
 {
-    bool result = false;
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+
+    try
+    {
+        std::string indentString = "";
+
+        int _indent = 0, _precision = 0;
+
+        if (indent >= 4) { _indent = 4; }
+        if (indent <= 3) { _indent = 0; }
+        if (precision >= 16) { _precision = 16; }
+        if (precision <= 2) { _precision = 2; }
+
+        for (auto i = 0; i < _indent; i++)
+        {
+            indentString += " ";
+        }
+
+        JSONCPP_STRING err;
+        Json::CharReaderBuilder builder;
+
+        builder.settings_["indentation"] = indentString;
+        builder.settings_["precision"] = _precision;
+
+        const int inputLength = static_cast<int>(inputString.length());
+
+        const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
+        
+        (reader->parse(inputString.c_str(), inputString.c_str() + inputLength, &jsonData, &err)) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "ERROR CSystemModule::SFile::SJson::SRead::fromString: " << e.what() << '\n';
+        result = EResult::Enum::RESULT_ERROR;
+    }
+
+    return result;
+}
+
+EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToJSON(const Json::Value &input, const std::string &output, const int &indent, const int &precision)
+{
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
     int _indent = indent, _precision = precision;
 
@@ -336,23 +315,26 @@ bool CSystemModule::SFileJSON::save(const Json::Value & input, const std::string
         outFile << jsonString;
         outFile.close();
 
-        result = true;
+        result = EResult::Enum::RESULT_OK;
     }
     else
     {
-        std::cerr << "ERROR FileJSON: can't save file to \"" << output << "\" in \"CSystemModule::SFileJSON::save\"\n";
+        std::cerr << "ERROR: can't save file to \"" << output << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToJSON\"\n";
+        result = EResult::Enum::RESULT_ERROR;
     }
 
     return result;
 }
-bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::string &output)
-{
-    bool result = false;
 
-    std::ifstream jsonFile(input);
+EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToCSV(const std::string &jsonFilePath, const std::string &output)
+{
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+
+    std::ifstream jsonFile(jsonFilePath);
     if (!jsonFile.is_open())
     {
-        std::cerr << "ERROR FileJSON: can't open JSON file \"" << input << "\" in \"CSystemModule::SFileJSON::saveToCSV\"\n";
+        std::cerr << "ERROR: can't open JSON file \"" << jsonFilePath << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
+        result = EResult::Enum::RESULT_ERROR;
         return result;
     }
 
@@ -362,22 +344,24 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
 
     if (!Json::parseFromStream(readerBuilder, jsonFile, &jsonData, &errs))
     {
-        std::cerr << "ERROR FileJSON: failed to parse json: \"" << errs << "\" in \"CSystemModule::SFileJSON::saveToCSV(\"\n";
+        std::cerr << "ERROR: failed to parse json: \"" << errs << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
+        result = EResult::Enum::RESULT_ERROR;
         return result;
     }
     jsonFile.close();
 
-    // Open CSV file for writing
+    // open CSV file for writing
     std::ofstream csvFile(output);
     if (!csvFile.is_open())
     {
-        std::cerr << "ERROR FileJSON: can't open CSV file " << output << "\" in \"CSystemModule::SFileJSON::saveToCSV\"\n";
+        std::cerr << "ERROR: can't open CSV file " << output << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
+        result = EResult::Enum::RESULT_ERROR;
         return result;
     }
 
     if (jsonData.isArray() && !jsonData.empty())
     {
-        // Write CSV header
+        // write CSV header
         const Json::Value& firstObject = jsonData[0];
         for (auto it = firstObject.begin(); it != firstObject.end(); ++it)
         {
@@ -389,7 +373,7 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
         }
         csvFile << "\n";
 
-        // Write CSV rows
+        // write CSV rows
         for (const auto& obj : jsonData)
         {
             for (auto it = firstObject.begin(); it != firstObject.end(); ++it)
@@ -403,11 +387,12 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
             csvFile << "\n";
         }
 
-        result = true;
+        result = EResult::Enum::RESULT_OK;
     }
     else
     {
-        std::cerr << "ERROR FileJSON: json data is not an array or is empty" << " in \"CSystemModule::SFileJSON::saveToCSV\"\n";
+        std::cerr << "ERROR: json data is not an array or is empty" << " in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
+        result = EResult::Enum::RESULT_ERROR;
     }
     csvFile.close();
 
@@ -415,15 +400,64 @@ bool CSystemModule::SFileJSON::saveToCSV(const std::string &input, const std::st
 }
 #endif // LIBPRCPP_PROJECT_USING_JSONCPP
 
-bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+#if LIBPRCPP_PROJECT_USING_LIBHARU
+bool CSystemModule::SFile::SPDF::SWrite::dataToTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig)
 {
     bool result = false;
+
+    HPDF_Doc pdf = HPDF_New(SPDF::filePDFerrorHandler, NULL);
+    if (!pdf)
+    {
+        std::cerr << "ERROR: cannot create PDF object on \"CSystemModule::SFile::SPDF::SWrite::dataToTablegenerateTable\"\n";
+        return result;
+    }
+
+    HPDF_Page page = HPDF_AddPage(pdf);
+    HPDF_Page_SetSize(page, pdfConfig.page_size, pdfConfig.page_direction);
+
+    HPDF_Font font = HPDF_GetFont(pdf, pdfConfig.font.c_str(), NULL);
+    HPDF_Page_SetFontAndSize(page, font, 12);
+
+    for (size_t i = 0; i < tableData.size(); ++i)
+    {
+        for (size_t j = 0; j < tableData[i].size(); ++j)
+        {
+            float posX = pdfConfig.table_left_x + j * pdfConfig.cell_width;
+            float posY = pdfConfig.table_top_y - i * pdfConfig.cell_height;
+
+            HPDF_Page_Rectangle(page, posX, posY - pdfConfig.cell_height, pdfConfig.cell_width, pdfConfig.cell_height);
+            HPDF_Page_Stroke(page);
+
+            HPDF_Page_BeginText(page);
+            HPDF_Page_TextOut(page, posX + 2, posY - pdfConfig.cell_height + 2, tableData[i][j].c_str());
+            HPDF_Page_EndText(page);
+        }
+    }
+
+    HPDF_SaveToFile(pdf, filePathName.c_str());
+
+    HPDF_Free(pdf);
+
+    result = true;
+
+    #if PROJECT_BUILD_STATUS == 1
+    std::cout << "CSystemModule::SFile::SPDF::SWrite::dataToTable: generated successfully!\n";
+    #endif // PROJECT_BUILD_STATUS
+
+    return result;
+}
+#endif // LIBPRCPP_PROJECT_USING_LIBHARU
+
+#if LIBPRCPP_PROJECT_USING_OPENSSL || LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+{
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
     auto plaintext = readFile(input);
 
     if (plaintext.empty())
     {
-        std::cerr << "ERROR FileEncDec fileEncrypt: input is empty\n";
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::fileEncrypt: input is empty\n";
         return result;
     }
 
@@ -440,7 +474,7 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 
             auto ciphertext = aesEncryptOpenSSL(plaintext, _iv.data(), _ik.data());
 
-            result = writeFile(output, ciphertext);
+            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
 
             EVP_cleanup();
             ERR_free_strings();
@@ -456,7 +490,7 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 
             auto ciphertext = aesEncryptCryptoPP(plaintext, _iv.data(), _ik.data());
 
-            result = writeFile(output, ciphertext);
+            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
         }
         break;
 
@@ -467,7 +501,7 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 
             auto ciphertext = xChaCha20encryptCryptoPP(plaintext, _iv.data(), _ik.data());
 
-            result = writeFile(output, ciphertext);
+            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
         }
         break;
 
@@ -478,15 +512,15 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
 
             auto ciphertext = rc6encryptCryptoPP(plaintext, _iv.data(), _ik.data());
 
-            result = writeFile(output, ciphertext);
+            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
         }
         break;
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
         default:
         {
-            std::cerr << "ERROR FileEncDec fileEncrypt: encryptDecryptMode is not supported\n";
-            abort();
+            std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::fileEncrypt: encryptDecryptMode is not supported\n";
+            result = EResult::Enum::RESULT_ERROR;
         }
         break;
     }
@@ -494,15 +528,15 @@ bool CSystemModule::SFileEncDec::fileEncrypt(const EEncDecMode::Enum &encryptDec
     return result;
 }
 
-bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileDecrypt(const EEncDecMode::Enum & encryptDecryptMode, const std::string & input, const std::string & output, const std::string & iv, const std::string & ik)
 {
-    bool result = false;
+    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
 
     auto ciphertext = readFile(input);
 
     if (ciphertext.empty())
     {
-        std::cerr << "ERROR FileEncDec fileEncrypt: input is empty\n";
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::fileDecrypt: input is empty\n";
         return result;
     }
 
@@ -519,7 +553,7 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
 
             auto plaintext = aesDecryptOpenSSL(ciphertext, _iv.data(), _ik.data());
 
-            result = writeFile(output, plaintext);
+            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
 
             EVP_cleanup();
             ERR_free_strings();
@@ -535,7 +569,7 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
 
             auto plaintext = aesDecryptCryptoPP(ciphertext, _iv.data(), _ik.data());
 
-            result = writeFile(output, plaintext);
+            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
         }
         break;
 
@@ -546,7 +580,7 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
 
             auto plaintext = xChaCha20decryptCryptoPP(ciphertext, _iv.data(), _ik.data());
 
-            result = writeFile(output, plaintext);
+            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
         }
         break;
 
@@ -557,14 +591,14 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
 
             auto plaintext = rc6decryptCryptoPP(ciphertext, _iv.data(), _ik.data());
 
-            result = writeFile(output, plaintext);
+            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
         }
         break;
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
         default:
         {
-            std::cerr << "ERROR FileEncDec fileDecrypt: encryptDecryptMode is not supported\n";
+            std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::fileDecrypt: encryptDecryptMode is not supported\n";
             abort();
         }
         break;
@@ -573,13 +607,13 @@ bool CSystemModule::SFileEncDec::fileDecrypt(const EEncDecMode::Enum &encryptDec
     return result;
 }
 
-std::vector<unsigned char> CSystemModule::SFileEncDec::readFile(const std::string& filePath)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::readFile(const std::string &filePath)
 {
     std::ifstream file(filePath, std::ios::binary | std::ios::ate);
 
     if (!file)
     {
-        std::cerr << "ERROR FileEncDec readFile: opening file for writing\n";
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::readFile: opening file for writing\n";
         return {};
     }
 
@@ -589,33 +623,32 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::readFile(const std::strin
 
     if (!file.read(reinterpret_cast<char*>(buffer.data()), size))
     {
-        std::cerr << "ERROR FileEncDec readFile: writing to file\n";
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::readFile: writing to file\n";
         return {};
     }
 
     return buffer;
 }
-
-bool CSystemModule::SFileEncDec::writeFile(const std::string& filePath, const std::vector<unsigned char>& data)
+bool CSystemModule::SFile::SEncrypDecrypt::writeFile(const std::string &filePath, const std::vector<unsigned char> &data)
 {
     std::ofstream file(filePath, std::ios::binary);
 
     if (!file)
     {
-        std::cerr << "ERROR FileEncDec writeFile: opening file for writing\n";
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::writeFile: opening file for writing\n";
         return false;
     }
 
     if (!file.write(reinterpret_cast<const char*>(data.data()), data.size()))
     {
-        std::cerr << "ERROR FileEncDec writeFile: writing to file\n";
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::writeFile: writing to file\n";
         return false;
     }
 
     return true;
 }
 
-std::vector<unsigned char> CSystemModule::SFileEncDec::stringToUnsignedChar(const std::string& str, size_t requiredSize)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::stringToUnsignedChar(const std::string &str, size_t requiredSize)
 {
     std::vector<unsigned char> result(str.begin(), str.end());
 
@@ -632,7 +665,7 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::stringToUnsignedChar(cons
 }
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-std::vector<unsigned char> CSystemModule::SFileEncDec::aesEncryptOpenSSL(const std::vector<unsigned char>& plaintext, const unsigned char* iv, const unsigned char* ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::aesEncryptOpenSSL(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
 {
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
@@ -677,7 +710,7 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::aesEncryptOpenSSL(const s
     return ciphertext;
 }
 
-std::vector<unsigned char> CSystemModule::SFileEncDec::aesDecryptOpenSSL(const std::vector<unsigned char>& ciphertext, const unsigned char* iv, const unsigned char* ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::aesDecryptOpenSSL(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
 {
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
@@ -722,15 +755,14 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::aesDecryptOpenSSL(const s
     return plaintext;
 }
 
-void CSystemModule::SFileEncDec::handleOpenSSLError()
+void CSystemModule::SFile::SEncrypDecrypt::handleOpenSSLError()
 {
     ERR_print_errors_fp(stderr);
-    abort();
 }
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-std::vector<unsigned char> CSystemModule::SFileEncDec::aesEncryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::aesEncryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
 {
     std::vector<unsigned char> ciphertext;
 
@@ -747,14 +779,12 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::aesEncryptCryptoPP(const 
     }
     catch (const CryptoPP::Exception& e)
     {
-        std::cerr << "ERROR FileEncDec aesEncryptCryptoPP: " << e.what() << std::endl;
-        abort();
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::aesEncryptCryptoPP: " << e.what() << std::endl;
     }
 
     return ciphertext;
 }
-
-std::vector<unsigned char> CSystemModule::SFileEncDec::aesDecryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::aesDecryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
 {
     std::vector<unsigned char> plaintext;
 
@@ -771,14 +801,12 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::aesDecryptCryptoPP(const 
     }
     catch (const CryptoPP::Exception& e)
     {
-        std::cerr << "ERROR FileEncDec aesDecryptCryptoPP: " << e.what() << std::endl;
-        abort();
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::aesDecryptCryptoPP: " << e.what() << std::endl;
     }
 
     return plaintext;
 }
-
-std::vector<unsigned char> CSystemModule::SFileEncDec::xChaCha20encryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::xChaCha20encryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
 {
     std::vector<unsigned char> ciphertext;
 
@@ -795,14 +823,12 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::xChaCha20encryptCryptoPP(
     }
     catch (const CryptoPP::Exception& e)
     {
-        std::cerr << "ERROR FileEncDec xChaCha20encryptCryptoPP: " << e.what() << std::endl;
-        abort();
+        std::cerr << "ERROR CSystemModule::SFile::xChaCha20encryptCryptoPP: " << e.what() << std::endl;
     }
 
     return ciphertext;
 }
-
-std::vector<unsigned char> CSystemModule::SFileEncDec::xChaCha20decryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::xChaCha20decryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
 {
     std::vector<unsigned char> plaintext;
 
@@ -819,14 +845,12 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::xChaCha20decryptCryptoPP(
     }
     catch (const CryptoPP::Exception& e)
     {
-        std::cerr << "ERROR FileEncDec xChaCha20decryptCryptoPP: " << e.what() << std::endl;
-        abort();
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::xChaCha20decryptCryptoPP: " << e.what() << std::endl;
     }
 
     return plaintext;
 }
-
-std::vector<unsigned char> CSystemModule::SFileEncDec::rc6encryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::rc6encryptCryptoPP(const std::vector<unsigned char> &plaintext, const unsigned char *iv, const unsigned char *ik)
 {
     std::vector<unsigned char> ciphertext;
 
@@ -843,14 +867,13 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::rc6encryptCryptoPP(const 
     }
     catch (const CryptoPP::Exception& e)
     {
-        std::cerr << "ERROR FileEncDec rc6encryptCryptoPP: " << e.what() << std::endl;
-        abort();
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::rc6encryptCryptoPP: " << e.what() << std::endl;
     }
 
     return ciphertext;
 }
 
-std::vector<unsigned char> CSystemModule::SFileEncDec::rc6decryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
+std::vector<unsigned char> CSystemModule::SFile::SEncrypDecrypt::rc6decryptCryptoPP(const std::vector<unsigned char> &ciphertext, const unsigned char *iv, const unsigned char *ik)
 {
     std::vector<unsigned char> plaintext;
 
@@ -867,19 +890,16 @@ std::vector<unsigned char> CSystemModule::SFileEncDec::rc6decryptCryptoPP(const 
     }
     catch (const CryptoPP::Exception& e)
     {
-        std::cerr << "ERROR FileEncDec rc6decryptCryptoPP: " << e.what() << std::endl;
+        std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::rc6decryptCryptoPP: " << e.what() << std::endl;
         abort();
     }
 
     return plaintext;
 }
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
+#endif // LIBPRCPP_PROJECT_USING_OPENSSL || LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
-#if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-// RESERVED
-#endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-
-bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
+bool CSystemModule::SSYSENV::isPortAvailable(int port)
 {
     bool result = false;
 
@@ -888,7 +908,7 @@ bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
 
     if (sockfd < 0)
     {
-        std::cerr << "ERROR portIsAvailable: Socket creation failed\n";
+        std::cerr << "ERROR CSystemModule::SSYSENV::isPortAvailable: Socket creation failed\n";
         return false;
     }
 
@@ -908,7 +928,7 @@ bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
-        std::cerr << "ERROR portIsAvailable: WSAStartup failed\n";
+        std::cerr << "ERROR CSystemModule::SSYSENV::isPortAvailable: WSAStartup failed\n";
         return false;
     }
 
@@ -916,7 +936,7 @@ bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
 
     if (sock == INVALID_SOCKET)
     {
-        std::cerr << "ERROR portIsAvailable: Socket creation failed\n";
+        std::cerr << "ERROR CSystemModule::SSYSENV::isPortAvailable: Socket creation failed\n";
         WSACleanup();
         return false;
     }
@@ -945,7 +965,7 @@ bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
 
     if (sockfd < 0)
     {
-        std::cerr << "ERROR portIsAvailable: Socket creation failed\n";
+        std::cerr << "ERROR CSystemModule::SSYSENV::isPortAvailable: Socket creation failed\n";
         return false;
     }
 
@@ -962,24 +982,23 @@ bool CSystemModule::SSystemEnvironment::portIsAvailable(int port)
 
     result = bindResult == 0;
 #else
-    std::cerr << "ERROR portIsAvailable: build target is unknown\n";
+    std::cerr << "ERROR CSystemModule::SSYSENV::isPortAvailable: build target is unknown\n";
 #endif // #if PROJECT_BUILD_TARGET == 1
 
     return result;
 }
 
-namespace utilityFunctions
+namespace systemFunctions
 {
-
     namespace directory
     {
-        bool createDir(const std::string &path)
+        EResult::Enum createDir(const std::string &path)
         {
             CSystemModule SYSTEM;
             return SYSTEM.Directory.createDir(path);
         }
 
-        bool deleteDir(const std::string &path)
+        EResult::Enum deleteDir(const std::string &path)
         {
             CSystemModule SYSTEM;
             return SYSTEM.Directory.deleteDir(path);
@@ -992,82 +1011,96 @@ namespace utilityFunctions
         }
     } // namespace directory
 
-    #if LIBPRCPP_PROJECT_USING_LIBHARU
-    namespace filePdf
+    namespace file
     {
-        bool generateTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig)
+        EResult::Enum deleteFile(const std::string &filePath)
         {
             CSystemModule SYSTEM;
-            return SYSTEM.FilePDF.generateTable(tableData, filePathName, pdfConfig);
+            return SYSTEM.File.deleteFile(filePath);
         }
-    } // namespace filePdf
-    #endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
-    #if LIBPRCPP_PROJECT_USING_JSONCPP
-    namespace json
+        namespace json
+        {
+            namespace read
+            {
+                std::string toString(const Json::Value &input, const int &indent, const int &precision)
+                {
+                    CSystemModule SYSTEM;
+                    return SYSTEM.File.JSON.Read.toString(input, indent, precision);
+                }
+
+                EResult::Enum fromFileJSON(const std::string &filePath, Json::Value &jsonData)
+                {
+                    CSystemModule SYSTEM;
+                    return SYSTEM.File.JSON.Read.fromFileJSON(filePath, jsonData);
+                }
+
+                EResult::Enum fromFileCSV(const std::string &filePath, Json::Value &jsonData)
+                {
+                    CSystemModule SYSTEM;
+                    return SYSTEM.File.JSON.Read.fromFileCSV(filePath, jsonData);
+                }
+
+                EResult::Enum fromString(const std::string &inputString, Json::Value &jsonData, const int &indent, const int &precision)
+                {
+                    CSystemModule SYSTEM;
+                    return SYSTEM.File.JSON.Read.fromString(inputString, jsonData, indent, precision);
+                }
+            } // namespace read
+
+            namespace write
+            {
+                EResult::Enum saveToJSON(const Json::Value &input, const std::string &output, const int &indent, const int &precision)
+                {
+                    CSystemModule SYSTEM;
+                    return SYSTEM.File.JSON.Write.saveToJSON(input, output, indent, precision);
+                }
+
+                EResult::Enum saveToCSV(const std::string &jsonFilePath, const std::string &output)
+                {
+                    CSystemModule SYSTEM;
+                    return SYSTEM.File.JSON.Write.saveToCSV(jsonFilePath, output);
+                }
+            } // namespace read
+        } // namespace json
+
+        namespace pdf
+        {
+            namespace write
+            {
+                bool dataToTable(const std::vector<std::vector<std::string>> &tableData, const std::string &filePathName, const TPdfConfig &pdfConfig)
+                {
+                    CSystemModule SYSTEM;
+                    return SYSTEM.File.PDF.Write.dataToTable(tableData, filePathName, pdfConfig);
+                }
+            } // namespace write
+        } // namespace pdf
+
+        namespace encryptDecrypt
+        {
+            EResult::Enum fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+            {
+                CSystemModule SYSTEM;
+                return SYSTEM.File.EncryptDecrypt.fileEncrypt(encryptDecryptMode, input, output, iv, ik);
+            }
+
+            EResult::Enum fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+            {
+                CSystemModule SYSTEM;
+                return SYSTEM.File.EncryptDecrypt.fileDecrypt(encryptDecryptMode, input, output, iv, ik);
+            }
+        } // namespace encryptDecrypt
+    } // namespace file
+
+    // system environment
+    namespace sysEnv
     {
-        std::string toString(const Json::Value &input, const int &indent, const int &precision)
+        bool isPortAvailable(int port)
         {
             CSystemModule SYSTEM;
-            return SYSTEM.FileJSON.toString(input, indent, precision);
+            return SYSTEM.SYSENV.isPortAvailable(port);
         }
-
-        Json::Value fromFile(const std::string &input)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.FileJSON.fromFile(input);
-        }
-
-        Json::Value fromString(const std::string &input, const int &indent, const int &precision)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.FileJSON.fromString(input, indent, precision);
-        }
-
-        Json::Value fromCSV(const std::string &input)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.FileJSON.fromCSV(input);
-        }
-
-        bool save(const Json::Value &input, const std::string &output)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.FileJSON.save(input, output);
-        }
-
-        bool saveToCSV(const std::string &input, const std::string &output)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.FileJSON.saveToCSV(input, output);
-        }
-    } // namespace json
-
-    namespace fileEncDec
-    {
-        bool fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.FileEncDec.fileEncrypt(encryptDecryptMode, input, output, iv, ik);
-        }
-
-        bool fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.FileEncDec.fileDecrypt(encryptDecryptMode, input, output, iv, ik);
-        }
-    } // namespace fileEncDec
-#endif // LIBPRCPP_PROJECT_USING_JSONCPP
-
-    namespace systemEnvironment
-    {
-        bool portIsAvailable(int port)
-        {
-            CSystemModule SYSTEM;
-            return SYSTEM.SystemEnvironment.portIsAvailable(port);
-        }
-    } // namespace systemEnvironment
-
-} // namespace utilityFunctions
+    } // namespace sysEnv
+} // namespace systemFunctions
 
 } // namespace libprcpp
