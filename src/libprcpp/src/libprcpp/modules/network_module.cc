@@ -34,11 +34,11 @@ EResult::Enum CNetworkModule::SCurlCmd::smtpsSendByTemplate(const std::string &t
     std::string RECIPIENT_ADDRESS, RECIPIENT_SUBJECT, RECIPIENT_CONTENT, RECIPIENT_CONTENT_HTML, RECIPIENT_PASSCODE, CMD;
 
     CMD = R"(curl --ssl-reqd --url "smtps://{SMTP_SERVER}:{SMTP_PORT}" \
-    --silent \
-    --user "{SMTP_USER}:{SMTP_PASSWD}" \
-    --mail-from "{SMTP_USER}" \
-    --mail-rcpt "{RECIPIENT_ADDRESS}" \
-    --upload-file - << EOF
+--silent \
+--user "{SMTP_USER}:{SMTP_PASSWD}" \
+--mail-from "{SMTP_USER}" \
+--mail-rcpt "{RECIPIENT_ADDRESS}" \
+--upload-file - << EOF
 From: {SMTP_SENDER} <{SMTP_USER}>
 To: {RECIPIENT_ADDRESS}
 Subject: {RECIPIENT_SUBJECT}
@@ -54,21 +54,21 @@ Content-Type: text/html; charset="UTF-8"
 
         for (auto &data : templateLookAndReplace)
         {
-            utilityFunctions::findAndReplaceAll(RECIPIENT_CONTENT_HTML, data.to_look, data.to_replace);
+            utilityFunctions::find::andReplaceAll(RECIPIENT_CONTENT_HTML, data.to_look, data.to_replace);
         }
 
         RECIPIENT_ADDRESS = templateRecipient;
         RECIPIENT_SUBJECT = templateTitle;
         RECIPIENT_CONTENT = RECIPIENT_CONTENT_HTML;
 
-        utilityFunctions::findAndReplaceAll(CMD, "{SMTP_SERVER}", smtpServer);
-        utilityFunctions::findAndReplaceAll(CMD, "{SMTP_PORT}", smtpServerPort);
-        utilityFunctions::findAndReplaceAll(CMD, "{SMTP_USER}", smtpSenderAddress);
-        utilityFunctions::findAndReplaceAll(CMD, "{SMTP_PASSWD}", smtpSenderPassword);
-        utilityFunctions::findAndReplaceAll(CMD, "{SMTP_SENDER}", smtpSenderName);
-        utilityFunctions::findAndReplaceAll(CMD, "{RECIPIENT_ADDRESS}", RECIPIENT_ADDRESS);
-        utilityFunctions::findAndReplaceAll(CMD, "{RECIPIENT_SUBJECT}", RECIPIENT_SUBJECT);
-        utilityFunctions::findAndReplaceAll(CMD, "{RECIPIENT_CONTENT}", RECIPIENT_CONTENT);
+        utilityFunctions::find::andReplaceAll(CMD, "{SMTP_SERVER}", smtpServer);
+        utilityFunctions::find::andReplaceAll(CMD, "{SMTP_PORT}", smtpServerPort);
+        utilityFunctions::find::andReplaceAll(CMD, "{SMTP_USER}", smtpSenderAddress);
+        utilityFunctions::find::andReplaceAll(CMD, "{SMTP_PASSWD}", smtpSenderPassword);
+        utilityFunctions::find::andReplaceAll(CMD, "{SMTP_SENDER}", smtpSenderName);
+        utilityFunctions::find::andReplaceAll(CMD, "{RECIPIENT_ADDRESS}", RECIPIENT_ADDRESS);
+        utilityFunctions::find::andReplaceAll(CMD, "{RECIPIENT_SUBJECT}", RECIPIENT_SUBJECT);
+        utilityFunctions::find::andReplaceAll(CMD, "{RECIPIENT_CONTENT}", RECIPIENT_CONTENT);
 
         if (std::thread::hardware_concurrency() >= 2)
         {
@@ -149,7 +149,7 @@ EResult::Enum CNetworkModule::SSparkpostDrogon::sendMailByTemplate(const std::st
 
     for (auto &data : templateLookAndReplace)
     {
-        Utility.findAndReplaceAll(RECIPIENT_CONTENT_HTML, data.to_look, data.to_replace);
+        utilityFunctions::find::andReplaceAll(RECIPIENT_CONTENT_HTML, data.to_look, data.to_replace);
     }
 
     content["from"] = sparkpostSenderName;

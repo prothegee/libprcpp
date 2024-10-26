@@ -1,3 +1,4 @@
+#include <libprcpp/modules/utility_module.hh>
 #include <libprcpp/modules/system_module.hh>
 #include <libprcpp/modules/network_module.hh>
 

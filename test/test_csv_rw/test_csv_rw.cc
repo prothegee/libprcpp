@@ -8,8 +8,10 @@ int main(int argc, char *argv[])
 
     const std::string fileCsv = "../../../test/test_csv_rw/file_in.csv";
 
-    auto json1 = System.FileJSON.fromCSV(fileCsv);
+    Json::Value jsonData;
 
-    System.FileJSON.save(json1, "../../../test/test_csv_rw/file_out.json");
-    System.FileJSON.saveToCSV("../../../test/test_csv_rw/file_out.json", "../../../test/test_csv_rw/file_out.csv");
+    System.File.JSON.Read.fromFileCSV(fileCsv, jsonData);
+
+    System.File.JSON.Write.saveToJSON(jsonData, "../../../test/test_csv_rw/file_out.json");
+    System.File.JSON.Write.saveToCSV("../../../test/test_csv_rw/file_out.json", "../../../test/test_csv_rw/file_out.csv");
 }
