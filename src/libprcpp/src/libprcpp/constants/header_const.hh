@@ -22,6 +22,7 @@ struct HEADER
         inline static const std::string STRICT_TRANSPORT_SECURITY = "Strict-Transport-Security";
         inline static const std::string CROSS_ORIGIN_OPENER_POLICY = "Cross-Origin-Opener-Policy";
         inline static const std::string CROSS_ORIGIN_EMBEDDER_POLICY = "Cross-Origin-Embedder-Policy";
+        inline static const std::string USER_AGENT = "User-Agent";
         inline static const std::string X_FRAME_OPTIONS = "X-Frame-Options";
         inline static const std::string X_REAL_IP = "X-Real-Ip";
     };
