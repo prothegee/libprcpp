@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <%c++
     auto USE_LANGUAGE = (@@.get<std::string>("{LANGUAGE}").length() > 0) ? true : false;
+    auto USE_USERID = (@@.get<std::string>("{USERID}").length() > 0) ? true : false;
+    auto USE_USERNAME = (@@.get<std::string>("{USERNAME}").length() > 0) ? true : false;
+    auto USE_USEREMAIL = (@@.get<std::string>("{USEREMAIL}").length() > 0) ? true : false;
+    auto USE_USERBIZIDS = (@@.get<std::string>("{USERBIZIDS}").length() > 0) ? true : false;
+    auto USE_USERBIZBRANCHS = (@@.get<std::string>("{USERBIZBRANCHS}").length() > 0) ? true : false;
     auto USE_BUNDLE_CSS = (@@.get<std::string>("{BUNDLE_CSS}").length() > 0) ? true : false;
     auto USE_BUNDLE_JS = (@@.get<std::string>("{BUNDLE_JS}").length() > 0) ? true : false;
     auto USE_TITLE = (@@.get<std::string>("{TITLE}").length() > 0) ? true : false;
@@ -22,11 +27,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        const BACKEND_HEAD = Object.freeze({
-            LANGUAGE: "[[{LANGUAGE}]]",
-            _: "don't use me"
-        });
+        const BACKEND_LANGUAGE = "[[{LANGUAGE}]]";
     </script>
+    <%c++ if(USE_USERID) { %>
+    <script>
+        const BACKEND_USERID = Object.freeze("[[{USERID}]]");
+    </script>
+    <%c++}%>
+    <%c++ if(USE_USERNAME) { %>
+    <script>
+        const BACKEND_USERNAME = Object.freeze("[[{USERNAME}]]");
+    </script>
+    <%c++}%>
+    <%c++ if(USE_USEREMAIL) { %>
+    <script>
+        const BACKEND_USEREMAIL = Object.freeze("[[{USEREMAIL}]]");
+    </script>
+    <%c++}%>
+    <%c++ if(USE_USERBIZIDS) { %>
+    <script>
+        const BACKEND_USERBIZIDS = Object.freeze("[[{USERBIZIDS}]]");
+    </script>
+    <%c++}%>
+    <%c++ if(USE_USERBIZBRANCHS) { %>
+    <script>
+        const BACKEND_USERBIZBRANCHS = Object.freeze("[[{USERBIZBRANCHS}]]");
+    </script>
+    <%c++}%>
     <%c++ if(USE_BUNDLE_CSS) { %>
         [[{BUNDLE_CSS}]]
     <%c++}%>

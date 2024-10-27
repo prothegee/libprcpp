@@ -154,6 +154,9 @@ public:
         
         // video meta
         void video(const std::string &input, HttpViewData &viewData);
+
+        // custom parameter
+        void customParameter(const std::string &param, const std::string &input, HttpViewData &viewData);
     };
     // invoke interface access for frontend
     // mostly use when you working with drogon .csp
