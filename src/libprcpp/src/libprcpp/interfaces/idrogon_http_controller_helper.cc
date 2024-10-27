@@ -237,6 +237,11 @@ void IDrogonHttpControllerHelper::SIStartInvokeMeta::video(const std::string &in
     viewData.insert("{VIDEO}", input);
 }
 
+void IDrogonHttpControllerHelper::SIStartInvokeMeta::customParameter(const std::string &param, const std::string &input, HttpViewData &viewData)
+{
+    viewData.insert(param, input);
+}
+
 #endif // LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK
 
 } // namespace libprcpp
