@@ -759,6 +759,28 @@ std::string CDateAndTime::SUTC::SYYYYMMDDhhmmss::toStringSecondsOffset(const int
     return result;
 }
 
+int64_t CDateAndTime::SUTC::SYYYYMMDDhhmmssms::toInt64(const int &timeOffset)
+{
+    std::stringstream ss;
+    int timezoneOffset = timeOffset;
+
+    if (timezoneOffset <= -11) { timezoneOffset = -11; }
+    if (timezoneOffset >= 14) { timezoneOffset = 14; }
+
+    auto adjustTimeOffset = timezoneOffset * 3600;
+    auto now = std::chrono::system_clock::now();
+
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::time_t now_time_utc = now_time + adjustTimeOffset;
+
+    auto now_ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
+    auto milliseconds = now_ms.time_since_epoch() % std::chrono::seconds(1);
+
+    ss << std::put_time(std::gmtime(&now_time_utc), "%Y%m%d%H%M%S") << std::setw(3) << std::setfill('0') << milliseconds.count();
+
+    return std::stoll(ss.str());
+}
+
 int64_t CDateAndTime::SUTC::SYYYYMMDDhhmmssms::toMillis(const std::string &YYYYMMDDhhmmssms)
 {
     int64_t result;
@@ -1111,6 +1133,12 @@ namespace dateAndTimeFunctions
 
         namespace YYYYMMDDhhmmssms
         {
+            int64_t toInt64(const int &timeOffset)
+            {
+                CDateAndTime DT;
+                return DT.UTC.YYYYMMDDhhmmssms.toInt64(timeOffset);
+            }
+
             int64_t toMillis(const std::string &YYYYMMDDhhmmssms)
             {
                 CDateAndTime DT;

@@ -16,6 +16,10 @@
 namespace libprcpp
 {
 
+/**
+ * @brief libprcpp scylladb interface class
+ * 
+ */
 class IScyllaDbCoreInterface
 {
 private:

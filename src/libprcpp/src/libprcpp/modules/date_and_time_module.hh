@@ -373,6 +373,14 @@ public:
         struct SYYYYMMDDhhmmssms
         {
             /**
+             * @brief get YYYYMMDDhhmmssms as int64
+             * 
+             * @param timeOffset 
+             * @return int64_t 
+             */
+            int64_t toInt64(const int &timeOffset = 0);
+
+            /**
              * @brief convert YYYYMMDDhhmmssms to millis
              * 
              * @param YYYYMMDDhhmmssms 
@@ -639,7 +647,7 @@ namespace dateAndTimeFunctions
             /**
              * @brief convert YYYYMMDDhhmmss to millis
              * 
-             * @param YYYYMMDDhhmmss 
+             * @param YYYYMMDDhhmmss e.g. 2020-10-05T23:59:59
              * @return int64_t 
              */
             int64_t toMillis(const std::string &YYYYMMDDhhmmss);
@@ -681,9 +689,17 @@ namespace dateAndTimeFunctions
         namespace YYYYMMDDhhmmssms
         {
             /**
+             * @brief get YYYYMMDDhhmmssms as int64
+             * 
+             * @param timeOffset 
+             * @return int64_t 
+             */
+            int64_t toInt64(const int &timeOffset = 0);
+
+            /**
              * @brief convert YYYYMMDDhhmmssms to millis
              * 
-             * @param YYYYMMDDhhmmssms 
+             * @param YYYYMMDDhhmmssms e.g. 2020-10-05T23:59:59
              * @return int64_t 
              */
             int64_t toMillis(const std::string &YYYYMMDDhhmmssms);
