@@ -37,6 +37,8 @@ public:
 
     /**
      * @brief initialized indexe table implementation
+     * 
+     * @note considering index on table is just 1
      */
     virtual void initializeIndex() = 0;
 
@@ -45,6 +47,12 @@ public:
      * 
      */
     virtual void alterizeCurrentTable() = 0;
+
+    /**
+     * @brief alterize current table with materialized view implementation
+     * 
+     */
+    virtual void alterizeMaterializedView() = 0;
 
     /**
      * @brief postgresql interface structure
