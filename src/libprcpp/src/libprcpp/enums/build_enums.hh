@@ -20,7 +20,7 @@ struct EBuildTarget
         BUILD_TARGET_UNDEFINED = 0,
         BUILD_TARGET_LINUX,
         BUILD_TARGET_WINDOWS,
-        BUILD_TARGET_OSX,
+        BUILD_TARGET_MACOS,
         BUILD_TARGET_ANDROID,
         BUILD_TARGET_IOS,
         BUILD_TARGET_WEB,
@@ -38,7 +38,7 @@ struct EBuildTarget
         inline static const std::string BUILD_TARGET_UNDEFINED = "Undefined";
         inline static const std::string BUILD_TARGET_LINUX = "Linux";
         inline static const std::string BUILD_TARGET_WINDOWS = "Windows";
-        inline static const std::string BUILD_TARGET_OSX = "OSX";
+        inline static const std::string BUILD_TARGET_MACOS = "MacOS";
         inline static const std::string BUILD_TARGET_ANDROID = "Android";
         inline static const std::string BUILD_TARGET_IOS = "IOS";
         inline static const std::string BUILD_TARGET_WEB = "Web";
@@ -61,7 +61,7 @@ struct EBuildTarget
         {
             case Enum::BUILD_TARGET_LINUX: { result = Code::BUILD_TARGET_LINUX; } break;
             case Enum::BUILD_TARGET_WINDOWS: { result = Code::BUILD_TARGET_WINDOWS; } break;
-            case Enum::BUILD_TARGET_OSX: { result = Code::BUILD_TARGET_OSX; } break;
+            case Enum::BUILD_TARGET_MACOS: { result = Code::BUILD_TARGET_MACOS; } break;
             case Enum::BUILD_TARGET_ANDROID: { result = Code::BUILD_TARGET_ANDROID; } break;
             case Enum::BUILD_TARGET_IOS: { result = Code::BUILD_TARGET_IOS; } break;
             case Enum::BUILD_TARGET_WEB: { result = Code::BUILD_TARGET_WEB; } break;
@@ -92,9 +92,9 @@ struct EBuildTarget
         {
             result = Enum::BUILD_TARGET_WINDOWS;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_OSX)
+        else if (buildTargetString == Code::BUILD_TARGET_MACOS)
         {
-            result = Enum::BUILD_TARGET_OSX;
+            result = Enum::BUILD_TARGET_MACOS;
         }
         else if (buildTargetString == Code::BUILD_TARGET_ANDROID)
         {
