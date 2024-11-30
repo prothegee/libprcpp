@@ -139,7 +139,7 @@ struct EOSType
         OS_TYPE_UNDEFINED = 0,
         OS_TYPE_LINUX,
         OS_TYPE_WINDOWS,
-        OS_TYPE_OSX,
+        OS_TYPE_MACOS,
         OS_TYPE_ANDROID,
         OS_TYPE_IOS,
     };
@@ -153,7 +153,7 @@ struct EOSType
         inline static const std::string OS_TYPE_UNDEFINED = "Undefined";
         inline static const std::string OS_TYPE_LINUX = "Linux";
         inline static const std::string OS_TYPE_WINDOWS = "Windows";
-        inline static const std::string OS_TYPE_OSX = "OSX";
+        inline static const std::string OS_TYPE_MACOS = "MacOS";
         inline static const std::string OS_TYPE_ANDROID = "Android";
         inline static const std::string OS_TYPE_IOS = "IOS";
     };
@@ -172,7 +172,7 @@ struct EOSType
         {
             case Enum::OS_TYPE_LINUX: { result = Code::OS_TYPE_LINUX; } break;
             case Enum::OS_TYPE_WINDOWS: { result = Code::OS_TYPE_WINDOWS; } break;
-            case Enum::OS_TYPE_OSX: { result = Code::OS_TYPE_OSX; } break;
+            case Enum::OS_TYPE_MACOS: { result = Code::OS_TYPE_MACOS; } break;
             case Enum::OS_TYPE_ANDROID: { result = Code::OS_TYPE_ANDROID; } break;
             case Enum::OS_TYPE_IOS: { result = Code::OS_TYPE_IOS; } break;
             default: { result = Code::OS_TYPE_UNDEFINED; } break;
@@ -199,9 +199,9 @@ struct EOSType
         {
             result = Enum::OS_TYPE_WINDOWS;
         }
-        else if (osTypeString == Code::OS_TYPE_OSX)
+        else if (osTypeString == Code::OS_TYPE_MACOS)
         {
-            result = Enum::OS_TYPE_OSX;
+            result = Enum::OS_TYPE_MACOS;
         }
         else if (osTypeString == Code::OS_TYPE_ANDROID)
         {
@@ -232,7 +232,7 @@ struct EOSType
         {
             case 1: { result = Code::OS_TYPE_LINUX; } break;
             case 2: { result = Code::OS_TYPE_WINDOWS; } break;
-            case 3: { result = Code::OS_TYPE_OSX; } break;
+            case 3: { result = Code::OS_TYPE_MACOS; } break;
             case 4: { result = Code::OS_TYPE_ANDROID; } break;
             case 5: { result = Code::OS_TYPE_IOS; } break;
             default: { result = Code::OS_TYPE_UNDEFINED; } break;
@@ -254,7 +254,7 @@ struct EOSType
         {
             case 1: { result = Enum::OS_TYPE_LINUX; } break;
             case 2: { result = Enum::OS_TYPE_WINDOWS; } break;
-            case 3: { result = Enum::OS_TYPE_OSX; } break;
+            case 3: { result = Enum::OS_TYPE_MACOS; } break;
             case 4: { result = Enum::OS_TYPE_ANDROID; } break;
             case 5: { result = Enum::OS_TYPE_IOS; } break;
             default: { result = Enum::OS_TYPE_UNDEFINED; } break;

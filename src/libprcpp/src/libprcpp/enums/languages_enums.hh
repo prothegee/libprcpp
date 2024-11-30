@@ -21,6 +21,7 @@ struct ELanguage
     {
         LANGUAGE_UNDEFINED = 0,
         LANGUAGE_ENGLISH,
+        LANGUAGE_BAHASA,
     };
 
     /**
@@ -31,6 +32,7 @@ struct ELanguage
     {
         inline static const char *LANGUAGE_UNDEFINED = "undefined";
         inline static const char *LANGUAGE_ENGLISH = "en";
+        inline static const char *LANGUAGE_BAHASA = "id";
     };
 
     /**
@@ -46,6 +48,7 @@ struct ELanguage
         switch (languageEnum)
         {
             case Enum::LANGUAGE_ENGLISH: { result = Code::LANGUAGE_ENGLISH; } break;
+            case Enum::LANGUAGE_BAHASA: { result = Code::LANGUAGE_BAHASA; } break;
             default: { result = Code::LANGUAGE_ENGLISH; } break;
         }
 
@@ -65,6 +68,10 @@ struct ELanguage
         if (languageString == Code::LANGUAGE_ENGLISH)
         {
             result = Enum::LANGUAGE_ENGLISH;
+        }
+        else if (languageString == Code::LANGUAGE_BAHASA)
+        {
+            result = Enum::LANGUAGE_BAHASA;
         }
         else
         {
