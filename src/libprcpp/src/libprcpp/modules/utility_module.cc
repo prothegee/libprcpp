@@ -205,7 +205,19 @@ double CUtilityModule::SGenerate::randomNumber(const double min, const double ma
 
 std::array<uint8_t, 16> CUtilityModule::SGenerate::randomBytes()
 {
-    return std::array<uint8_t, 16>();
+    std::array<uint8_t, 16> bytes;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<int> dis(0, 255);
+
+    for (auto& byte : bytes)
+    {
+        byte = static_cast<uint8_t>(dis(gen));
+    }
+
+    return bytes;
 }
 
 std::string CUtilityModule::SGenerate::uuidV1()
