@@ -474,4 +474,12 @@ namespace utilityFunctions
 
 } // namespace libprcpp
 
+#if PROJECT_BUILD_COMPILER_ID == 1
+// RESERVED
+#elif PROJECT_BUILD_COMPILER_ID == 2
+#pragma warning (pop)
+#elif PROJECT_BUILD_COMPILER_ID == 3
+// RESERVED
+#endif
+
 #endif // LIBPRCPP_UTILITY_MODULE_HH
