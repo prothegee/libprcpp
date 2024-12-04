@@ -29,10 +29,10 @@ struct EScyllaDbAuthMode
      */
     struct Code
     {
-        inline static const std::string SCYLLADB_AUTH_MODE_UNDEFINED = "Undefined";
-        inline static const std::string SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR = "AllowAllAuthenticator";
-        inline static const std::string SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR = "PasswordAuthenticator";
-        inline static const std::string SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR = "com.scylladb.auth.TransitionalAuthenticator";
+        inline static const char *SCYLLADB_AUTH_MODE_UNDEFINED = "Undefined";
+        inline static const char *SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR = "AllowAllAuthenticator";
+        inline static const char *SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR = "PasswordAuthenticator";
+        inline static const char *SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR = "com.scylladb.auth.TransitionalAuthenticator";
     };
 
     /**
@@ -78,7 +78,7 @@ struct EScyllaDbAuthMode
      * @param authModeString 
      * @return Enum 
      */
-    static Enum toEnum(const std::string &authModeString)
+    static Enum toEnum(const char *&authModeString)
     {
         Enum result = Enum::SCYLLADB_AUTH_MODE_UNDEFINED;
 
@@ -128,11 +128,11 @@ struct EScyllaDbTopologyStrat
      */
     struct Code
     {
-        inline static const std::string SCYLLADB_TOPOLOGY_STRAT_UNDEFINED = "Undefined";
-        inline static const std::string SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY = "SimpleStrategy";
-        inline static const std::string SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY = "NetworkTopologyStrategy";
-        inline static const std::string SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY = "LocalStrategy";
-        inline static const std::string SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY = "EverywhereStrategy";
+        inline static const char *SCYLLADB_TOPOLOGY_STRAT_UNDEFINED = "Undefined";
+        inline static const char *SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY = "SimpleStrategy";
+        inline static const char *SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY = "NetworkTopologyStrategy";
+        inline static const char *SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY = "LocalStrategy";
+        inline static const char *SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY = "EverywhereStrategy";
     };
 
     /**
@@ -183,7 +183,7 @@ struct EScyllaDbTopologyStrat
      * @param topologyStratString 
      * @return Enum 
      */
-    static Enum toEnum(const std::string &topologyStratString)
+    static Enum toEnum(const char *&topologyStratString)
     {
         Enum result = Enum::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
 
