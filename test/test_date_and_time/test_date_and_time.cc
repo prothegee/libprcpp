@@ -21,7 +21,7 @@ int main()
 
     auto utcMonthInt = dateAndTimeFunctions::UTC::month::toInt(SELECTED_TIMEZONE);
     auto utcMonthString = dateAndTimeFunctions::UTC::month::toString(SELECTED_TIMEZONE);
-    auto utcMonthStringHuman = dateAndTimeFunctions::UTC::month::toStringHuman(ELanguage::Enum::LANGUAGE_ENGLISH, SELECTED_TIMEZONE);
+    auto utcMonthStringHuman = dateAndTimeFunctions::UTC::month::toStringHuman(ELanguage::ENUM::LANGUAGE_ENGLISH, SELECTED_TIMEZONE);
     std::cout << "utcMonthInt:\n    " << utcMonthInt << "\n";
     std::cout << "utcMonthString:\n    " << utcMonthString << "\n";
     std::cout << "utcMonthStringHuman:\n    " << utcMonthStringHuman << "\n";

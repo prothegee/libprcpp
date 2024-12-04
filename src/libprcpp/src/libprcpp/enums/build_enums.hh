@@ -15,7 +15,7 @@ struct EBuildTarget
      * @brief enum object for EBuildTarget
      * 
      */
-    enum Enum
+    enum ENUM
     {
         BUILD_TARGET_UNDEFINED = 0,
         BUILD_TARGET_LINUX,
@@ -33,7 +33,7 @@ struct EBuildTarget
      * @brief code object for EBuildTarget
      * 
      */
-    struct Code
+    struct CODE
     {
         inline static const char *BUILD_TARGET_UNDEFINED = "Undefined";
         inline static const char *BUILD_TARGET_LINUX = "Linux";
@@ -50,25 +50,25 @@ struct EBuildTarget
     /**
      * @brief convert EBuildTarget enum to string
      * 
-     * @param buildTargetEnum 
+     * @param buildTargetENUM 
      * @return std::string 
      */
-    static std::string toString(const Enum &buildTargetEnum)
+    static std::string toString(const ENUM &buildTargetENUM)
     {
-        std::string result = Code::BUILD_TARGET_UNDEFINED;
+        std::string result = CODE::BUILD_TARGET_UNDEFINED;
 
-        switch (buildTargetEnum)
+        switch (buildTargetENUM)
         {
-            case Enum::BUILD_TARGET_LINUX: { result = Code::BUILD_TARGET_LINUX; } break;
-            case Enum::BUILD_TARGET_WINDOWS: { result = Code::BUILD_TARGET_WINDOWS; } break;
-            case Enum::BUILD_TARGET_MACOS: { result = Code::BUILD_TARGET_MACOS; } break;
-            case Enum::BUILD_TARGET_ANDROID: { result = Code::BUILD_TARGET_ANDROID; } break;
-            case Enum::BUILD_TARGET_IOS: { result = Code::BUILD_TARGET_IOS; } break;
-            case Enum::BUILD_TARGET_WEB: { result = Code::BUILD_TARGET_WEB; } break;
-            case Enum::BUILD_TARGET_PS: { result = Code::BUILD_TARGET_PS; } break;
-            case Enum::BUILD_TARGET_XBOX: { result = Code::BUILD_TARGET_XBOX; } break;
-            case Enum::BUILD_TARGET_NINTENDO: { result = Code::BUILD_TARGET_NINTENDO; } break;
-            default: { result = Code::BUILD_TARGET_UNDEFINED; } break;
+            case ENUM::BUILD_TARGET_LINUX: { result = CODE::BUILD_TARGET_LINUX; } break;
+            case ENUM::BUILD_TARGET_WINDOWS: { result = CODE::BUILD_TARGET_WINDOWS; } break;
+            case ENUM::BUILD_TARGET_MACOS: { result = CODE::BUILD_TARGET_MACOS; } break;
+            case ENUM::BUILD_TARGET_ANDROID: { result = CODE::BUILD_TARGET_ANDROID; } break;
+            case ENUM::BUILD_TARGET_IOS: { result = CODE::BUILD_TARGET_IOS; } break;
+            case ENUM::BUILD_TARGET_WEB: { result = CODE::BUILD_TARGET_WEB; } break;
+            case ENUM::BUILD_TARGET_PS: { result = CODE::BUILD_TARGET_PS; } break;
+            case ENUM::BUILD_TARGET_XBOX: { result = CODE::BUILD_TARGET_XBOX; } break;
+            case ENUM::BUILD_TARGET_NINTENDO: { result = CODE::BUILD_TARGET_NINTENDO; } break;
+            default: { result = CODE::BUILD_TARGET_UNDEFINED; } break;
         }
 
         return result;
@@ -78,51 +78,51 @@ struct EBuildTarget
      * @brief convert EBuildTarget string to enum
      * 
      * @param buildTargetString 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum toEnum(const char *&buildTargetString)
+    static ENUM toENUM(const char *&buildTargetString)
     {
-        Enum result = Enum::BUILD_TARGET_UNDEFINED;
+        ENUM result = ENUM::BUILD_TARGET_UNDEFINED;
 
-        if (buildTargetString == Code::BUILD_TARGET_LINUX)
+        if (buildTargetString == CODE::BUILD_TARGET_LINUX)
         {
-            result = Enum::BUILD_TARGET_LINUX;
+            result = ENUM::BUILD_TARGET_LINUX;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_WINDOWS)
+        else if (buildTargetString == CODE::BUILD_TARGET_WINDOWS)
         {
-            result = Enum::BUILD_TARGET_WINDOWS;
+            result = ENUM::BUILD_TARGET_WINDOWS;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_MACOS)
+        else if (buildTargetString == CODE::BUILD_TARGET_MACOS)
         {
-            result = Enum::BUILD_TARGET_MACOS;
+            result = ENUM::BUILD_TARGET_MACOS;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_ANDROID)
+        else if (buildTargetString == CODE::BUILD_TARGET_ANDROID)
         {
-            result = Enum::BUILD_TARGET_ANDROID;
+            result = ENUM::BUILD_TARGET_ANDROID;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_IOS)
+        else if (buildTargetString == CODE::BUILD_TARGET_IOS)
         {
-            result = Enum::BUILD_TARGET_IOS;
+            result = ENUM::BUILD_TARGET_IOS;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_WEB)
+        else if (buildTargetString == CODE::BUILD_TARGET_WEB)
         {
-            result = Enum::BUILD_TARGET_WEB;
+            result = ENUM::BUILD_TARGET_WEB;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_PS)
+        else if (buildTargetString == CODE::BUILD_TARGET_PS)
         {
-            result = Enum::BUILD_TARGET_PS;
+            result = ENUM::BUILD_TARGET_PS;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_XBOX)
+        else if (buildTargetString == CODE::BUILD_TARGET_XBOX)
         {
-            result = Enum::BUILD_TARGET_XBOX;
+            result = ENUM::BUILD_TARGET_XBOX;
         }
-        else if (buildTargetString == Code::BUILD_TARGET_NINTENDO)
+        else if (buildTargetString == CODE::BUILD_TARGET_NINTENDO)
         {
-            result = Enum::BUILD_TARGET_NINTENDO;
+            result = ENUM::BUILD_TARGET_NINTENDO;
         }
         else
         {
-            result = Enum::BUILD_TARGET_UNDEFINED;
+            result = ENUM::BUILD_TARGET_UNDEFINED;
         }
 
         return result;

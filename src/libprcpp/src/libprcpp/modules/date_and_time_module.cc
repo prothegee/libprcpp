@@ -185,7 +185,7 @@ std::string CDateAndTime::SUTC::SMonth::toString(const int &timeOffset)
     return result;
 }
 
-std::string CDateAndTime::SUTC::SMonth::toStringHuman(const ELanguage::Enum &languageEnum, const int &timeOffset)
+std::string CDateAndTime::SUTC::SMonth::toStringHuman(const ELanguage::ENUM &languageENUM, const int &timeOffset)
 {
     std::string result, tmpStr1;
             
@@ -215,9 +215,9 @@ std::string CDateAndTime::SUTC::SMonth::toStringHuman(const ELanguage::Enum &lan
     result = "";
 
     // IMPORTANT: CHECK MULTIPLE LANGUAGES
-    switch (languageEnum)
+    switch (languageENUM)
     {
-        case ELanguage::Enum::LANGUAGE_ENGLISH:
+        case ELanguage::ENUM::LANGUAGE_ENGLISH:
         {
             if (MONTH ==  1) { result = "Jan"; } 
             if (MONTH ==  2) { result = "Feb"; } 
@@ -983,10 +983,10 @@ namespace dateAndTimeFunctions
                 return DT.UTC.Month.toString(timeOffset);
             }
 
-            std::string toStringHuman(const ELanguage::Enum &languageEnum, const int &timeOffset)
+            std::string toStringHuman(const ELanguage::ENUM &languageENUM, const int &timeOffset)
             {
                 CDateAndTime DT;
-                return DT.UTC.Month.toStringHuman(languageEnum, timeOffset);
+                return DT.UTC.Month.toStringHuman(languageENUM, timeOffset);
             }
         } // namespace month
 

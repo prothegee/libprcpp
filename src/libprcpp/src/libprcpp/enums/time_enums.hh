@@ -15,7 +15,7 @@ struct ETimeZoneUTC
      * @brief enum for ETimeZoneUTC
      * 
      */
-    enum Enum : TInt32
+    enum ENUM : TInt32
     {
         TIME_ZONE_UTC_MINUS_11 = -11,
         TIME_ZONE_UTC_MINUS_10 = -10,

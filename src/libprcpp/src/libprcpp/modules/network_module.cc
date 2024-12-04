@@ -21,12 +21,12 @@ CNetworkModule::SCurlCmd::~SCurlCmd()
 {
 }
 
-EResult::Enum CNetworkModule::SCurlCmd::smtpsSendByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &smtpServer, const std::string &smtpServerPort, const std::string &smtpSenderAddress, const std::string &smtpSenderName, const std::string &smtpSenderPassword)
+EResult::ENUM CNetworkModule::SCurlCmd::smtpsSendByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &smtpServer, const std::string &smtpServerPort, const std::string &smtpSenderAddress, const std::string &smtpSenderName, const std::string &smtpSenderPassword)
 {
-    EResult::Enum result = EResult::Enum::RESULT_ERROR;
+    EResult::ENUM result = EResult::ENUM::RESULT_ERROR;
 
-    std::promise<EResult::Enum> responsePromise;
-    std::future<EResult::Enum> responseFuture = responsePromise.get_future();
+    std::promise<EResult::ENUM> responsePromise;
+    std::future<EResult::ENUM> responseFuture = responsePromise.get_future();
 
     std::ifstream f(templateHtml);
     std::stringstream ss;
@@ -80,7 +80,7 @@ Content-Type: text/html; charset="UTF-8"
 
             if (status.get() == 0)
             {
-                result = EResult::Enum::RESULT_OK;
+                result = EResult::ENUM::RESULT_OK;
                 responsePromise.set_value(result);
             }
         }
@@ -94,7 +94,7 @@ Content-Type: text/html; charset="UTF-8"
 
             if (status == 0)
             {
-                result = EResult::Enum::RESULT_OK;
+                result = EResult::ENUM::RESULT_OK;
                 responsePromise.set_value(result);
             }
         }
@@ -109,7 +109,7 @@ Content-Type: text/html; charset="UTF-8"
     auto statusAndResult = responseFuture.get();
 
 #if PROJECT_BUILD_STATUS == 1
-    if (statusAndResult == EResult::Enum::RESULT_OK)
+    if (statusAndResult == EResult::ENUM::RESULT_OK)
     {
         std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: result ok\n";
     }
@@ -129,10 +129,10 @@ CNetworkModule::SSparkpostDrogon::SSparkpostDrogon()
 CNetworkModule::SSparkpostDrogon::~SSparkpostDrogon()
 {
 }
-EResult::Enum CNetworkModule::SSparkpostDrogon::sendMailByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &sparkpostApiKey, const std::string &sparkpostSenderName, const std::string &sparkpostUrl, const std::string &sparkpostEndpoint, const std::string &senderUserAgent, const bool &enableTracking)
+EResult::ENUM CNetworkModule::SSparkpostDrogon::sendMailByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &sparkpostApiKey, const std::string &sparkpostSenderName, const std::string &sparkpostUrl, const std::string &sparkpostEndpoint, const std::string &senderUserAgent, const bool &enableTracking)
 {
-    std::promise<EResult::Enum> responsePromise;
-    std::future<EResult::Enum> responseFuture = responsePromise.get_future();
+    std::promise<EResult::ENUM> responsePromise;
+    std::future<EResult::ENUM> responseFuture = responsePromise.get_future();
 
     CUtilityModule Utility;
 
@@ -176,14 +176,14 @@ EResult::Enum CNetworkModule::SSparkpostDrogon::sendMailByTemplate(const std::st
 
     pClient->sendRequest(pRequest, [&responsePromise](ReqResult result, const HttpResponsePtr &pResp)
     {
-        EResult::Enum tmpVal1 = EResult::Enum::RESULT_ERROR;
+        EResult::ENUM tmpVal1 = EResult::ENUM::RESULT_ERROR;
 
         if (result == ReqResult::Ok && pResp->getStatusCode() == k200OK)
         {
         #if PROJECT_BUILD_STATUS == 1
             std::cout << "DEBUG CNetworkModule::SSparkpostDrogon::sendMailByTemplate: sparkpost reponse ok\n";
         #endif
-            tmpVal1 = EResult::Enum::RESULT_OK;
+            tmpVal1 = EResult::ENUM::RESULT_OK;
 
             responsePromise.set_value(tmpVal1);
         }

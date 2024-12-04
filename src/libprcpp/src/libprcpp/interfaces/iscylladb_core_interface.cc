@@ -112,7 +112,7 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
 
     switch (IScyllaDbCoreInterface::m_connectionData.auth_mode)
     {
-        case EScyllaDbAuthMode::Enum::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR:
+        case EScyllaDbAuthMode::ENUM::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR:
         {
             cass_cluster_set_contact_points(m_pCassCluster, IScyllaDbCoreInterface::m_connectionData.host.c_str());
 
@@ -120,7 +120,7 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
         }
         break;
 
-        case EScyllaDbAuthMode::Enum::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR:
+        case EScyllaDbAuthMode::ENUM::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR:
         {
             cass_cluster_set_contact_points(m_pCassCluster, IScyllaDbCoreInterface::m_connectionData.host.c_str());
 

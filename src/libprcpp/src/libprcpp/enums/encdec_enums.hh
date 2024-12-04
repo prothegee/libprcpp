@@ -16,7 +16,7 @@ struct EEncDecMode
      * @brief enum object for EEncDecMode
      * 
      */
-    enum Enum : TInt32
+    enum ENUM : TInt32
     {
         ENC_DEC_MODE_UNDEFINED = 0,
     #if LIBPRCPP_PROJECT_USING_OPENSSL

@@ -17,7 +17,7 @@ struct ELanguage
      * @brief enum object for ELanguage
      * 
      */
-    enum Enum : int32_t
+    enum ENUM : int32_t
     {
         LANGUAGE_UNDEFINED = 0,
         LANGUAGE_ENGLISH,
@@ -28,7 +28,7 @@ struct ELanguage
      * @brief code object for ELanguage
      * 
      */
-    struct Code
+    struct CODE
     {
         inline static const char *LANGUAGE_UNDEFINED = "undefined";
         inline static const char *LANGUAGE_ENGLISH = "en";
@@ -38,18 +38,18 @@ struct ELanguage
     /**
      * @brief convert ELanguage enum to string
      * 
-     * @param languageEnum 
+     * @param languageENUM 
      * @return const char* 
      */
-    static const char *toString(const Enum &languageEnum)
+    static const char *toString(const ENUM &languageENUM)
     {
-        const char *result = Code::LANGUAGE_UNDEFINED;
+        const char *result = CODE::LANGUAGE_UNDEFINED;
 
-        switch (languageEnum)
+        switch (languageENUM)
         {
-            case Enum::LANGUAGE_ENGLISH: { result = Code::LANGUAGE_ENGLISH; } break;
-            case Enum::LANGUAGE_BAHASA: { result = Code::LANGUAGE_BAHASA; } break;
-            default: { result = Code::LANGUAGE_ENGLISH; } break;
+            case ENUM::LANGUAGE_ENGLISH: { result = CODE::LANGUAGE_ENGLISH; } break;
+            case ENUM::LANGUAGE_BAHASA: { result = CODE::LANGUAGE_BAHASA; } break;
+            default: { result = CODE::LANGUAGE_ENGLISH; } break;
         }
 
         return result;
@@ -59,23 +59,23 @@ struct ELanguage
      * @brief convert ELanguage string to enum
      * 
      * @param languageString 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum toEnum(const char *languageString)
+    static ENUM toENUM(const char *languageString)
     {
-        Enum result = Enum::LANGUAGE_UNDEFINED;
+        ENUM result = ENUM::LANGUAGE_UNDEFINED;
 
-        if (languageString == Code::LANGUAGE_ENGLISH)
+        if (languageString == CODE::LANGUAGE_ENGLISH)
         {
-            result = Enum::LANGUAGE_ENGLISH;
+            result = ENUM::LANGUAGE_ENGLISH;
         }
-        else if (languageString == Code::LANGUAGE_BAHASA)
+        else if (languageString == CODE::LANGUAGE_BAHASA)
         {
-            result = Enum::LANGUAGE_BAHASA;
+            result = ENUM::LANGUAGE_BAHASA;
         }
         else
         {
-            result = Enum::LANGUAGE_ENGLISH;
+            result = ENUM::LANGUAGE_ENGLISH;
         }
 
         return result;

@@ -28,13 +28,13 @@ public:
 
         TScyllaDbConnection conn;
 
-        conn.auth_mode = (EScyllaDbAuthMode::Enum)CONFIG["connection"]["auth"].asInt();
+        conn.auth_mode = (EScyllaDbAuthMode::ENUM)CONFIG["connection"]["auth"].asInt();
         conn.host = CONFIG["connection"]["hosts"].asString();
         conn.username = CONFIG["connection"]["username"].asString();
         conn.password = CONFIG["connection"]["password"].asString();
 
         conn.keyspace = CONFIG["keyspace"].asString();
-        conn.strategy = (EScyllaDbTopologyStrat::Enum)CONFIG["strategy"].asInt();
+        conn.strategy = (EScyllaDbTopologyStrat::ENUM)CONFIG["strategy"].asInt();
         conn.replication_factor = CONFIG["replication_factor"].asInt();
 
         IScyllaDb.initializeConstructor(conn);

@@ -11,7 +11,7 @@ namespace libprcpp
  */
 struct EResult
 {
-    enum Enum : TInt32
+    enum ENUM : TInt32
     {
         RESULT_EXISTS_NOT = -2,
         RESULT_ERROR = -1,
