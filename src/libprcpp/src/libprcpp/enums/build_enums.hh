@@ -35,16 +35,16 @@ struct EBuildTarget
      */
     struct Code
     {
-        inline static const std::string BUILD_TARGET_UNDEFINED = "Undefined";
-        inline static const std::string BUILD_TARGET_LINUX = "Linux";
-        inline static const std::string BUILD_TARGET_WINDOWS = "Windows";
-        inline static const std::string BUILD_TARGET_MACOS = "MacOS";
-        inline static const std::string BUILD_TARGET_ANDROID = "Android";
-        inline static const std::string BUILD_TARGET_IOS = "IOS";
-        inline static const std::string BUILD_TARGET_WEB = "Web";
-        inline static const std::string BUILD_TARGET_PS = "PS";
-        inline static const std::string BUILD_TARGET_XBOX = "XBOX";
-        inline static const std::string BUILD_TARGET_NINTENDO = "Nintendo";
+        inline static const char *BUILD_TARGET_UNDEFINED = "Undefined";
+        inline static const char *BUILD_TARGET_LINUX = "Linux";
+        inline static const char *BUILD_TARGET_WINDOWS = "Windows";
+        inline static const char *BUILD_TARGET_MACOS = "MacOS";
+        inline static const char *BUILD_TARGET_ANDROID = "Android";
+        inline static const char *BUILD_TARGET_IOS = "IOS";
+        inline static const char *BUILD_TARGET_WEB = "Web";
+        inline static const char *BUILD_TARGET_PS = "PS";
+        inline static const char *BUILD_TARGET_XBOX = "XBOX";
+        inline static const char *BUILD_TARGET_NINTENDO = "Nintendo";
     };
 
     /**
@@ -80,7 +80,7 @@ struct EBuildTarget
      * @param buildTargetString 
      * @return Enum 
      */
-    static Enum toEnum(const std::string &buildTargetString)
+    static Enum toEnum(const char *&buildTargetString)
     {
         Enum result = Enum::BUILD_TARGET_UNDEFINED;
 

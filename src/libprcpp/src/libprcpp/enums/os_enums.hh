@@ -28,9 +28,9 @@ struct EOSEnvironment
      */
     struct Code
     {
-        inline static const std::string OS_ENVIRONMENT_UNDEFINED = "Undefined";
-        inline static const std::string OS_ENVIRONMENT_DESKTOP = "Desktop";
-        inline static const std::string OS_ENVIRONMENT_MOBILE = "Mobile";
+        inline static const char *OS_ENVIRONMENT_UNDEFINED = "Undefined";
+        inline static const char *OS_ENVIRONMENT_DESKTOP = "Desktop";
+        inline static const char *OS_ENVIRONMENT_MOBILE = "Mobile";
     };
 
     /**
@@ -59,7 +59,7 @@ struct EOSEnvironment
      * @param osEnvironmentString 
      * @return Enum 
      */
-    static Enum toEnum(const std::string &osEnvironmentString)
+    static Enum toEnum(const char *&osEnvironmentString)
     {
         Enum result = Enum::OS_ENVIRONMENT_UNDEFINED;
 
@@ -150,12 +150,12 @@ struct EOSType
      */
     struct Code
     {
-        inline static const std::string OS_TYPE_UNDEFINED = "Undefined";
-        inline static const std::string OS_TYPE_LINUX = "Linux";
-        inline static const std::string OS_TYPE_WINDOWS = "Windows";
-        inline static const std::string OS_TYPE_MACOS = "MacOS";
-        inline static const std::string OS_TYPE_ANDROID = "Android";
-        inline static const std::string OS_TYPE_IOS = "IOS";
+        inline static const char *OS_TYPE_UNDEFINED = "Undefined";
+        inline static const char *OS_TYPE_LINUX = "Linux";
+        inline static const char *OS_TYPE_WINDOWS = "Windows";
+        inline static const char *OS_TYPE_MACOS = "MacOS";
+        inline static const char *OS_TYPE_ANDROID = "Android";
+        inline static const char *OS_TYPE_IOS = "IOS";
     };
 
     /**
@@ -187,7 +187,7 @@ struct EOSType
      * @param osTypeString 
      * @return Enum 
      */
-    static Enum toEnum(const std::string &osTypeString)
+    static Enum toEnum(const char *&osTypeString)
     {
         Enum result = Enum::OS_TYPE_UNDEFINED;
 
