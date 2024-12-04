@@ -36,35 +36,35 @@ int main(int argc, char *argv[])
 
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-    auto encryptOk1 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, fileInRaw, fileOutEnc1, iv, ik);
-    auto decryptOk1 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, fileOutEnc1, fileOutDec1, iv, ik);
+    auto encryptOk1 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL, fileInRaw, fileOutEnc1, iv, ik);
+    auto decryptOk1 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL, fileOutEnc1, fileOutDec1, iv, ik);
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    auto encryptOk2 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP, fileInRaw, fileOutEnc2, iv, ik);
-    auto decryptOk2 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP, fileOutEnc2, fileOutDec2, iv, ik);
-    auto encryptOk3 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, fileInRaw, fileOutEnc3, iv2, ik);
-    auto decryptOk3 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, fileOutEnc3, fileOutDec3, iv2, ik);
-    auto encryptOk4 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP, fileInRaw, fileOutEnc4, iv, ik);
-    auto decryptOk4 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP, fileOutEnc4, fileOutDec4, iv, ik);
+    auto encryptOk2 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP, fileInRaw, fileOutEnc2, iv, ik);
+    auto decryptOk2 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP, fileOutEnc2, fileOutDec2, iv, ik);
+    auto encryptOk3 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, fileInRaw, fileOutEnc3, iv2, ik);
+    auto decryptOk3 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, fileOutEnc3, fileOutDec3, iv2, ik);
+    auto encryptOk4 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_RC6_CRYPTOPP, fileInRaw, fileOutEnc4, iv, ik);
+    auto decryptOk4 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_RC6_CRYPTOPP, fileOutEnc4, fileOutDec4, iv, ik);
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-    auto imgEncryptOk1 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, imgInRaw, imgOutEnc1, iv, ik);
-    auto imgDecryptOk1 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL, imgOutEnc1, imgOutDec1, iv, ik);
+    auto imgEncryptOk1 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL, imgInRaw, imgOutEnc1, iv, ik);
+    auto imgDecryptOk1 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL, imgOutEnc1, imgOutDec1, iv, ik);
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    auto imgEncryptOk2 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP, imgInRaw, imgOutEnc2, iv, ik);
-    auto imgDecryptOk2 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP, imgOutEnc2, imgOutDec2, iv, ik);
-    auto imgEncryptOk3 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, imgInRaw, imgOutEnc3, iv2, ik);
-    auto imgDecryptOk3 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, imgOutEnc3, imgOutDec3, iv2, ik);
-    auto imgEncryptOk4 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP, imgInRaw, imgOutEnc4, iv, ik);
-    auto imgDecryptOk4 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP, imgOutEnc4, imgOutDec4, iv, ik);
+    auto imgEncryptOk2 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP, imgInRaw, imgOutEnc2, iv, ik);
+    auto imgDecryptOk2 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP, imgOutEnc2, imgOutDec2, iv, ik);
+    auto imgEncryptOk3 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, imgInRaw, imgOutEnc3, iv2, ik);
+    auto imgDecryptOk3 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, imgOutEnc3, imgOutDec3, iv2, ik);
+    auto imgEncryptOk4 = SYSTEM.File.EncryptDecrypt.fileEncrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP, imgInRaw, imgOutEnc4, iv, ik);
+    auto imgDecryptOk4 = SYSTEM.File.EncryptDecrypt.fileDecrypt(EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP, imgOutEnc4, imgOutDec4, iv, ik);
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-    if (encryptOk1 == EResult::Enum::RESULT_OK)
+    if (encryptOk1 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: encryptOk1 file ok\n";
     }
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: encryptOk1 file fail\n";
     }
 
-    if (decryptOk1 == EResult::Enum::RESULT_OK)
+    if (decryptOk1 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: decryptOk1 file ok\n";
     }
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    if (encryptOk2 == EResult::Enum::RESULT_OK)
+    if (encryptOk2 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: encryptOk2 file ok\n";
     }
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: encryptOk2 file fail\n";
     }
 
-    if (decryptOk2 == EResult::Enum::RESULT_OK)
+    if (decryptOk2 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: decryptOk2 file ok\n";
     }
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: decryptOk2 file fail\n";
     }
 
-    if (encryptOk3 == EResult::Enum::RESULT_OK)
+    if (encryptOk3 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: encryptOk3 file ok\n";
     }
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: encryptOk3 file fail\n";
     }
 
-    if (decryptOk3 == EResult::Enum::RESULT_OK)
+    if (decryptOk3 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: decryptOk3 file ok\n";
     }
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: decryptOk3 file fail\n";
     }
 
-    if (encryptOk4 == EResult::Enum::RESULT_OK)
+    if (encryptOk4 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: encryptOk4 file ok\n";
     }
@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: encryptOk4 file fail\n";
     }
 
-    if (decryptOk4 == EResult::Enum::RESULT_OK)
+    if (decryptOk4 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: decryptOk4 file ok\n";
     }
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
 #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL
-    if (imgEncryptOk1 == EResult::Enum::RESULT_OK)
+    if (imgEncryptOk1 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgEncryptOk1 img file ok\n";
     }
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: imgEncryptOk1 img file fail\n";
     }
 
-    if (imgDecryptOk1 == EResult::Enum::RESULT_OK)
+    if (imgDecryptOk1 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgDecryptOk1 img file ok\n";
     }
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
 #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-    if (imgEncryptOk2 == EResult::Enum::RESULT_OK)
+    if (imgEncryptOk2 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgEncryptOk2 img file ok\n";
     }
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: imgEncryptOk2 img file fail\n";
     }
 
-    if (imgDecryptOk2 == EResult::Enum::RESULT_OK)
+    if (imgDecryptOk2 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgDecryptOk2 img file ok\n";
     }
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: imgDecryptOk2 img file fail\n";
     }
 
-    if (imgEncryptOk3 == EResult::Enum::RESULT_OK)
+    if (imgEncryptOk3 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgEncryptOk3 img file ok\n";
     }
@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: imgEncryptOk3 img file fail\n";
     }
 
-    if (imgDecryptOk3 == EResult::Enum::RESULT_OK)
+    if (imgDecryptOk3 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgDecryptOk3 img file ok\n";
     }
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: imgDecryptOk3 img file fail\n";
     }
 
-    if (imgEncryptOk4 == EResult::Enum::RESULT_OK)
+    if (imgEncryptOk4 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgEncryptOk4 img file ok\n";
     }
@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
         std::cout << "MESSAGE: imgEncryptOk4 img file fail\n";
     }
 
-    if (imgDecryptOk4 == EResult::Enum::RESULT_OK)
+    if (imgDecryptOk4 == EResult::ENUM::RESULT_OK)
     {
         std::cout << "MESSAGE: imgDecryptOk4 img file ok\n";
     }

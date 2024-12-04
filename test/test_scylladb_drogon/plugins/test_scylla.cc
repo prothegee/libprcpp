@@ -12,11 +12,11 @@ CTestScylla::CTestScylla()
     conn.host = app().getCustomConfig()["integration"]["db"]["scylladb"]["connection"]["hosts"].asString();
     conn.username = app().getCustomConfig()["integration"]["db"]["scylladb"]["connection"]["username"].asString();
     conn.password = app().getCustomConfig()["integration"]["db"]["scylladb"]["connection"]["password"].asString();
-    conn.auth_mode = (EScyllaDbAuthMode::Enum)app().getCustomConfig()["integration"]["db"]["scylladb"]["connection"]["auth"].asInt();
+    conn.auth_mode = (EScyllaDbAuthMode::ENUM)app().getCustomConfig()["integration"]["db"]["scylladb"]["connection"]["auth"].asInt();
 
     conn.keyspace = app().getCustomConfig()["integration"]["db"]["scylladb"]["keyspace"].asString();
     conn.replication_factor = app().getCustomConfig()["integration"]["db"]["scylladb"]["replication_factor"].asInt();
-    conn.strategy = (EScyllaDbTopologyStrat::Enum)app().getCustomConfig()["integration"]["db"]["scylladb"]["strategy"].asInt();
+    conn.strategy = (EScyllaDbTopologyStrat::ENUM)app().getCustomConfig()["integration"]["db"]["scylladb"]["strategy"].asInt();
 
     std::cout << "scylladb connection info:\n";
     std::cout << "host: " << conn.host << "\n";

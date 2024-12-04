@@ -15,7 +15,7 @@ struct EOSEnvironment
      * @brief enum object for EOSEnvironment
      * 
      */
-    enum Enum : TInt32
+    enum ENUM : TInt32
     {
         OS_ENVIRONMENT_UNDEFINED = 0,
         OS_ENVIRONMENT_DESKTOP,
@@ -26,7 +26,7 @@ struct EOSEnvironment
      * @brief code object for EOSEnvironment
      * 
      */
-    struct Code
+    struct CODE
     {
         inline static const char *OS_ENVIRONMENT_UNDEFINED = "Undefined";
         inline static const char *OS_ENVIRONMENT_DESKTOP = "Desktop";
@@ -36,18 +36,18 @@ struct EOSEnvironment
     /**
      * @brief convert EOSEnvironment enum to string
      * 
-     * @param osTypeEnum 
+     * @param osTypeENUM 
      * @return std::string 
      */
-    static std::string toString(const Enum &osEnvironmentEnum)
+    static std::string toString(const ENUM &osEnvironmentENUM)
     {
-        std::string result = Code::OS_ENVIRONMENT_UNDEFINED;
+        std::string result = CODE::OS_ENVIRONMENT_UNDEFINED;
 
-        switch (osEnvironmentEnum)
+        switch (osEnvironmentENUM)
         {
-            case Enum::OS_ENVIRONMENT_DESKTOP: { result = Code::OS_ENVIRONMENT_DESKTOP; } break;
-            case Enum::OS_ENVIRONMENT_MOBILE: { result = Code::OS_ENVIRONMENT_MOBILE; } break;
-            default: { result = Code::OS_ENVIRONMENT_UNDEFINED; } break;
+            case ENUM::OS_ENVIRONMENT_DESKTOP: { result = CODE::OS_ENVIRONMENT_DESKTOP; } break;
+            case ENUM::OS_ENVIRONMENT_MOBILE: { result = CODE::OS_ENVIRONMENT_MOBILE; } break;
+            default: { result = CODE::OS_ENVIRONMENT_UNDEFINED; } break;
         }
 
         return result;
@@ -57,23 +57,23 @@ struct EOSEnvironment
      * @brief convert EOSEnvironment string to enum
      * 
      * @param osEnvironmentString 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum toEnum(const char *&osEnvironmentString)
+    static ENUM toENUM(const char *&osEnvironmentString)
     {
-        Enum result = Enum::OS_ENVIRONMENT_UNDEFINED;
+        ENUM result = ENUM::OS_ENVIRONMENT_UNDEFINED;
 
-        if (osEnvironmentString == Code::OS_ENVIRONMENT_DESKTOP)
+        if (osEnvironmentString == CODE::OS_ENVIRONMENT_DESKTOP)
         {
-            result = Enum::OS_ENVIRONMENT_DESKTOP;
+            result = ENUM::OS_ENVIRONMENT_DESKTOP;
         }
-        else if (osEnvironmentString == Code::OS_ENVIRONMENT_MOBILE)
+        else if (osEnvironmentString == CODE::OS_ENVIRONMENT_MOBILE)
         {
-            result = Enum::OS_ENVIRONMENT_MOBILE;
+            result = ENUM::OS_ENVIRONMENT_MOBILE;
         }
         else
         {
-            result = Enum::OS_ENVIRONMENT_UNDEFINED;
+            result = ENUM::OS_ENVIRONMENT_UNDEFINED;
         }
 
         return result;
@@ -86,16 +86,16 @@ struct EOSEnvironment
      */
     static std::string getCurrentOSEnvironmentToString()
     {
-        std::string result = Code::OS_ENVIRONMENT_UNDEFINED;
+        std::string result = CODE::OS_ENVIRONMENT_UNDEFINED;
 
         switch (PROJECT_BUILD_TARGET)
         {
-            case 1: { result = Code::OS_ENVIRONMENT_DESKTOP; } break;
-            case 2: { result = Code::OS_ENVIRONMENT_DESKTOP; } break;
-            case 3: { result = Code::OS_ENVIRONMENT_DESKTOP; } break;
-            case 4: { result = Code::OS_ENVIRONMENT_MOBILE; } break;
-            case 5: { result = Code::OS_ENVIRONMENT_MOBILE; } break;
-            default: { result = Code::OS_ENVIRONMENT_UNDEFINED; } break;
+            case 1: { result = CODE::OS_ENVIRONMENT_DESKTOP; } break;
+            case 2: { result = CODE::OS_ENVIRONMENT_DESKTOP; } break;
+            case 3: { result = CODE::OS_ENVIRONMENT_DESKTOP; } break;
+            case 4: { result = CODE::OS_ENVIRONMENT_MOBILE; } break;
+            case 5: { result = CODE::OS_ENVIRONMENT_MOBILE; } break;
+            default: { result = CODE::OS_ENVIRONMENT_UNDEFINED; } break;
         }
 
         return result;
@@ -104,20 +104,20 @@ struct EOSEnvironment
     /**
      * @brief get OS environment enum
      * 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum getCurrentOSEnvironmentToEnum()
+    static ENUM getCurrentOSEnvironmentToENUM()
     {
-        Enum result = Enum::OS_ENVIRONMENT_UNDEFINED;
+        ENUM result = ENUM::OS_ENVIRONMENT_UNDEFINED;
 
         switch (PROJECT_BUILD_TARGET)
         {
-            case 1: { result = Enum::OS_ENVIRONMENT_DESKTOP; } break;
-            case 2: { result = Enum::OS_ENVIRONMENT_DESKTOP; } break;
-            case 3: { result = Enum::OS_ENVIRONMENT_DESKTOP; } break;
-            case 4: { result = Enum::OS_ENVIRONMENT_MOBILE; } break;
-            case 5: { result = Enum::OS_ENVIRONMENT_MOBILE; } break;
-            default: { result = Enum::OS_ENVIRONMENT_UNDEFINED; } break;
+            case 1: { result = ENUM::OS_ENVIRONMENT_DESKTOP; } break;
+            case 2: { result = ENUM::OS_ENVIRONMENT_DESKTOP; } break;
+            case 3: { result = ENUM::OS_ENVIRONMENT_DESKTOP; } break;
+            case 4: { result = ENUM::OS_ENVIRONMENT_MOBILE; } break;
+            case 5: { result = ENUM::OS_ENVIRONMENT_MOBILE; } break;
+            default: { result = ENUM::OS_ENVIRONMENT_UNDEFINED; } break;
         }
 
         return result;
@@ -134,7 +134,7 @@ struct EOSType
      * @brief enum object for EOSType
      * 
      */
-    enum Enum : TInt32
+    enum ENUM : TInt32
     {
         OS_TYPE_UNDEFINED = 0,
         OS_TYPE_LINUX,
@@ -148,7 +148,7 @@ struct EOSType
      * @brief code object for EOSType
      * 
      */
-    struct Code
+    struct CODE
     {
         inline static const char *OS_TYPE_UNDEFINED = "Undefined";
         inline static const char *OS_TYPE_LINUX = "Linux";
@@ -161,21 +161,21 @@ struct EOSType
     /**
      * @brief convert EOSType enum to string
      * 
-     * @param osTypeEnum 
+     * @param osTypeENUM 
      * @return std::string 
      */
-    static std::string toString(const Enum &osTypeEnum)
+    static std::string toString(const ENUM &osTypeENUM)
     {
-        std::string result = Code::OS_TYPE_UNDEFINED;
+        std::string result = CODE::OS_TYPE_UNDEFINED;
 
-        switch (osTypeEnum)
+        switch (osTypeENUM)
         {
-            case Enum::OS_TYPE_LINUX: { result = Code::OS_TYPE_LINUX; } break;
-            case Enum::OS_TYPE_WINDOWS: { result = Code::OS_TYPE_WINDOWS; } break;
-            case Enum::OS_TYPE_MACOS: { result = Code::OS_TYPE_MACOS; } break;
-            case Enum::OS_TYPE_ANDROID: { result = Code::OS_TYPE_ANDROID; } break;
-            case Enum::OS_TYPE_IOS: { result = Code::OS_TYPE_IOS; } break;
-            default: { result = Code::OS_TYPE_UNDEFINED; } break;
+            case ENUM::OS_TYPE_LINUX: { result = CODE::OS_TYPE_LINUX; } break;
+            case ENUM::OS_TYPE_WINDOWS: { result = CODE::OS_TYPE_WINDOWS; } break;
+            case ENUM::OS_TYPE_MACOS: { result = CODE::OS_TYPE_MACOS; } break;
+            case ENUM::OS_TYPE_ANDROID: { result = CODE::OS_TYPE_ANDROID; } break;
+            case ENUM::OS_TYPE_IOS: { result = CODE::OS_TYPE_IOS; } break;
+            default: { result = CODE::OS_TYPE_UNDEFINED; } break;
         }
 
         return result;
@@ -185,35 +185,35 @@ struct EOSType
      * @brief convert EOSType string to enum
      * 
      * @param osTypeString 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum toEnum(const char *&osTypeString)
+    static ENUM toENUM(const char *&osTypeString)
     {
-        Enum result = Enum::OS_TYPE_UNDEFINED;
+        ENUM result = ENUM::OS_TYPE_UNDEFINED;
 
-        if (osTypeString == Code::OS_TYPE_LINUX)
+        if (osTypeString == CODE::OS_TYPE_LINUX)
         {
-            result = Enum::OS_TYPE_LINUX;
+            result = ENUM::OS_TYPE_LINUX;
         }
-        else if (osTypeString == Code::OS_TYPE_WINDOWS)
+        else if (osTypeString == CODE::OS_TYPE_WINDOWS)
         {
-            result = Enum::OS_TYPE_WINDOWS;
+            result = ENUM::OS_TYPE_WINDOWS;
         }
-        else if (osTypeString == Code::OS_TYPE_MACOS)
+        else if (osTypeString == CODE::OS_TYPE_MACOS)
         {
-            result = Enum::OS_TYPE_MACOS;
+            result = ENUM::OS_TYPE_MACOS;
         }
-        else if (osTypeString == Code::OS_TYPE_ANDROID)
+        else if (osTypeString == CODE::OS_TYPE_ANDROID)
         {
-            result = Enum::OS_TYPE_ANDROID;
+            result = ENUM::OS_TYPE_ANDROID;
         }
-        else if (osTypeString == Code::OS_TYPE_IOS)
+        else if (osTypeString == CODE::OS_TYPE_IOS)
         {
-            result = Enum::OS_TYPE_IOS;
+            result = ENUM::OS_TYPE_IOS;
         }
         else
         {
-            result = Enum::OS_TYPE_UNDEFINED;
+            result = ENUM::OS_TYPE_UNDEFINED;
         }
 
         return result;
@@ -226,16 +226,16 @@ struct EOSType
      */
     static std::string getCurrentOSNameToString()
     {
-        std::string result = Code::OS_TYPE_UNDEFINED;
+        std::string result = CODE::OS_TYPE_UNDEFINED;
 
         switch (PROJECT_BUILD_TARGET)
         {
-            case 1: { result = Code::OS_TYPE_LINUX; } break;
-            case 2: { result = Code::OS_TYPE_WINDOWS; } break;
-            case 3: { result = Code::OS_TYPE_MACOS; } break;
-            case 4: { result = Code::OS_TYPE_ANDROID; } break;
-            case 5: { result = Code::OS_TYPE_IOS; } break;
-            default: { result = Code::OS_TYPE_UNDEFINED; } break;
+            case 1: { result = CODE::OS_TYPE_LINUX; } break;
+            case 2: { result = CODE::OS_TYPE_WINDOWS; } break;
+            case 3: { result = CODE::OS_TYPE_MACOS; } break;
+            case 4: { result = CODE::OS_TYPE_ANDROID; } break;
+            case 5: { result = CODE::OS_TYPE_IOS; } break;
+            default: { result = CODE::OS_TYPE_UNDEFINED; } break;
         }
 
         return result;
@@ -244,20 +244,20 @@ struct EOSType
     /**
      * @brief get OS name enum
      * 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum getCurrentOSNameToEnum()
+    static ENUM getCurrentOSNameToENUM()
     {
-        Enum result = Enum::OS_TYPE_UNDEFINED;
+        ENUM result = ENUM::OS_TYPE_UNDEFINED;
 
         switch (PROJECT_BUILD_TARGET)
         {
-            case 1: { result = Enum::OS_TYPE_LINUX; } break;
-            case 2: { result = Enum::OS_TYPE_WINDOWS; } break;
-            case 3: { result = Enum::OS_TYPE_MACOS; } break;
-            case 4: { result = Enum::OS_TYPE_ANDROID; } break;
-            case 5: { result = Enum::OS_TYPE_IOS; } break;
-            default: { result = Enum::OS_TYPE_UNDEFINED; } break;
+            case 1: { result = ENUM::OS_TYPE_LINUX; } break;
+            case 2: { result = ENUM::OS_TYPE_WINDOWS; } break;
+            case 3: { result = ENUM::OS_TYPE_MACOS; } break;
+            case 4: { result = ENUM::OS_TYPE_ANDROID; } break;
+            case 5: { result = ENUM::OS_TYPE_IOS; } break;
+            default: { result = ENUM::OS_TYPE_UNDEFINED; } break;
         }
 
         return result;

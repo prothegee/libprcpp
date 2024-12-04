@@ -15,8 +15,8 @@ struct TScyllaDbConnection
     std::string username = "";
     std::string password = "";
     std::string keyspace = "";
-    EScyllaDbAuthMode::Enum auth_mode = EScyllaDbAuthMode::Enum::SCYLLADB_AUTH_MODE_UNDEFINED;
-    EScyllaDbTopologyStrat::Enum strategy = EScyllaDbTopologyStrat::Enum::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
+    EScyllaDbAuthMode::ENUM auth_mode = EScyllaDbAuthMode::ENUM::SCYLLADB_AUTH_MODE_UNDEFINED;
+    EScyllaDbTopologyStrat::ENUM strategy = EScyllaDbTopologyStrat::ENUM::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
     int replication_factor = 3;
 };
 

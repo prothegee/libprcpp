@@ -115,18 +115,18 @@ public:
          * 
          * @note 0:undefined 1:SimpleStrategy 2:NetworkTopologyStrategy 3:LocalStrategy 4:EverywhereStrategy
          * 
-         * @return EScyllaDbTopologyStrat::Enum 
+         * @return EScyllaDbTopologyStrat::ENUM 
          */
-        EScyllaDbTopologyStrat::Enum getStrategy() { return IScyllaDbCoreInterface::m_connectionData.strategy; };
+        EScyllaDbTopologyStrat::ENUM getStrategy() { return IScyllaDbCoreInterface::m_connectionData.strategy; };
 
         /**
          * @brief get this project auth mode
          * 
          * @note 0:undefined 1:AllowAllAuthenticator 2:PasswordAuthenticator 3:com.scylladb.auth.TransitionalAuthenticator
          * 
-         * @return EScyllaDbAuthMode::Enum 
+         * @return EScyllaDbAuthMode::ENUM 
          */
-        EScyllaDbAuthMode::Enum getAuthMode() { return IScyllaDbCoreInterface::m_connectionData.auth_mode; }
+        EScyllaDbAuthMode::ENUM getAuthMode() { return IScyllaDbCoreInterface::m_connectionData.auth_mode; }
 
         /**
          * @brief execute cqlsh command

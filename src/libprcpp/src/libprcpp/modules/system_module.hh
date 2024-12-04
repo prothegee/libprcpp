@@ -105,9 +105,9 @@ public:
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return EResult::Enum
+         * @return EResult::ENUM
          */
-        EResult::Enum createDir(const std::string &path);
+        EResult::ENUM createDir(const std::string &path);
 
         /**
          * @brief delete driectory
@@ -115,9 +115,9 @@ public:
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return EResult::Enum
+         * @return EResult::ENUM
          */
-        EResult::Enum deleteDir(const std::string &path);
+        EResult::ENUM deleteDir(const std::string &path);
 
         /**
          * @brief get current directory
@@ -144,9 +144,9 @@ public:
          * @brief delete filePath param
          * 
          * @param filePath 
-         * @return EResult::Enum
+         * @return EResult::ENUM
          */
-        EResult::Enum deleteFile(const std::string &filePath);
+        EResult::ENUM deleteFile(const std::string &filePath);
 
     #if LIBPRCPP_PROJECT_USING_JSONCPP
         /**
@@ -172,18 +172,18 @@ public:
                  * 
                  * @param filePath location is relative from executeable, e.g. "../path/sub/filename.json"
                  * @param jsonData data to pass
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum fromFileJSON(const std::string &filePath, Json::Value &jsonData);
+                EResult::ENUM fromFileJSON(const std::string &filePath, Json::Value &jsonData);
 
                 /**
                  * @brief read from .csv file to json & pass to jsonData
                  * 
                  * @param filePath 
                  * @param jsonData 
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum fromFileCSV(const std::string &filePath, Json::Value &jsonData);
+                EResult::ENUM fromFileCSV(const std::string &filePath, Json::Value &jsonData);
 
                 /**
                  * @brief read inputString & pass to jsonData
@@ -192,9 +192,9 @@ public:
                  * @param jsonData 
                  * @param indent default 4
                  * @param precision default 16
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum fromString(const std::string &inputString, Json::Value &jsonData, const int &indent = 4, const int &precision = 16);
+                EResult::ENUM fromString(const std::string &inputString, Json::Value &jsonData, const int &indent = 4, const int &precision = 16);
             };
             SRead Read = SRead();
 
@@ -207,9 +207,9 @@ public:
                  * @param output 
                  * @param indent default 4
                  * @param precision default 16
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum saveToJSON(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
+                EResult::ENUM saveToJSON(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
                 
                 /**
                  * @brief save to .csv from .json file
@@ -218,9 +218,9 @@ public:
                  * @param output 
                  * @param indent 
                  * @param precision 
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum saveToCSV(const std::string &jsonFilePath, const std::string &output);
+                EResult::ENUM saveToCSV(const std::string &jsonFilePath, const std::string &output);
             };
             SWrite Write = SWrite();
         };
@@ -296,11 +296,11 @@ public:
              * @param encryptDecryptMode 
              * @param input 
              * @param output 
-             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
-             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
-             * @return EResult::Enum
+             * @param iv recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::ENUM
              */
-            EResult::Enum fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+            EResult::ENUM fileEncrypt(const EEncDecMode::ENUM &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
 
             /**
              * @brief decrypt file
@@ -308,11 +308,11 @@ public:
              * @param encryptDecryptMode 
              * @param input 
              * @param output 
-             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
-             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
-             * @return EResult::Enum
+             * @param iv recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::ENUM
              */
-            EResult::Enum fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+            EResult::ENUM fileDecrypt(const EEncDecMode::ENUM &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
         protected:
             std::vector<unsigned char> readFile(const std::string& filePath);
 
@@ -386,9 +386,9 @@ namespace systemFunctions
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return EResult::Enum
+         * @return EResult::ENUM
          */
-        EResult::Enum createDir(const std::string &path);
+        EResult::ENUM createDir(const std::string &path);
 
         /**
          * @brief delete driectory
@@ -396,9 +396,9 @@ namespace systemFunctions
          * @note relative from execute-able file
          * 
          * @param path 
-         * @return EResult::Enum
+         * @return EResult::ENUM
          */
-        EResult::Enum deleteDir(const std::string &path);
+        EResult::ENUM deleteDir(const std::string &path);
 
         /**
          * @brief get current directory
@@ -416,9 +416,9 @@ namespace systemFunctions
          * @brief delete filePath param
          * 
          * @param filePath 
-         * @return EResult::Enum
+         * @return EResult::ENUM
          */
-        EResult::Enum deleteFile(const std::string &filePath);
+        EResult::ENUM deleteFile(const std::string &filePath);
 
         namespace json
         {
@@ -439,18 +439,18 @@ namespace systemFunctions
                  * 
                  * @param filePath location is relative from executeable, e.g. "../path/sub/filename.json"
                  * @param jsonData data to pass
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum fromFileJSON(const std::string &filePath, Json::Value &jsonData);
+                EResult::ENUM fromFileJSON(const std::string &filePath, Json::Value &jsonData);
 
                 /**
                  * @brief read from .csv file to json & pass to jsonData
                  * 
                  * @param filePath 
                  * @param jsonData 
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum fromFileCSV(const std::string &filePath, Json::Value &jsonData);
+                EResult::ENUM fromFileCSV(const std::string &filePath, Json::Value &jsonData);
 
                 /**
                  * @brief read inputString & pass to jsonData
@@ -459,9 +459,9 @@ namespace systemFunctions
                  * @param jsonData 
                  * @param indent default 4
                  * @param precision default 16
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum fromString(const std::string &inputString, Json::Value &jsonData, const int &indent = 4, const int &precision = 16);
+                EResult::ENUM fromString(const std::string &inputString, Json::Value &jsonData, const int &indent = 4, const int &precision = 16);
             } // namespace read
 
             namespace write
@@ -473,9 +473,9 @@ namespace systemFunctions
                  * @param output 
                  * @param indent default 4
                  * @param precision default 16
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum saveToJSON(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
+                EResult::ENUM saveToJSON(const Json::Value &input, const std::string &output, const int &indent = 4, const int &precision = 16);
 
                 /**
                  * @brief save to .csv from .json file
@@ -484,9 +484,9 @@ namespace systemFunctions
                  * @param output 
                  * @param indent 
                  * @param precision 
-                 * @return EResult::Enum 
+                 * @return EResult::ENUM 
                  */
-                EResult::Enum saveToCSV(const std::string &jsonFilePath, const std::string &output);
+                EResult::ENUM saveToCSV(const std::string &jsonFilePath, const std::string &output);
             } // namespace read
         } // namespace json
 
@@ -516,11 +516,11 @@ namespace systemFunctions
              * @param encryptDecryptMode 
              * @param input 
              * @param output 
-             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
-             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
-             * @return EResult::Enum
+             * @param iv recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::ENUM
              */
-            EResult::Enum fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+            EResult::ENUM fileEncrypt(const EEncDecMode::ENUM &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
 
             /**
              * @brief decrypt file
@@ -528,11 +528,11 @@ namespace systemFunctions
              * @param encryptDecryptMode 
              * @param input 
              * @param output 
-             * @param iv recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 16 length
-             * @param ik recomended length: EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL is 32 length
-             * @return EResult::Enum
+             * @param iv recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 16 length
+             * @param ik recomended length: EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL is 32 length
+             * @return EResult::ENUM
              */
-            EResult::Enum fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
+            EResult::ENUM fileDecrypt(const EEncDecMode::ENUM &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik);
         } // namespace encryptDecrypt
     } // namespace file
 

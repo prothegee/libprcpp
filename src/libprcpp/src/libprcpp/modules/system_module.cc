@@ -41,39 +41,39 @@ CSystemModule::~CSystemModule()
 {
 }
 
-EResult::Enum CSystemModule::SDirectory::createDir(const std::string &path)
+EResult::ENUM CSystemModule::SDirectory::createDir(const std::string &path)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     std::filesystem::path directory = path;
 
     try
     {
-        std::filesystem::create_directory(directory) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+        std::filesystem::create_directory(directory) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SDirectory::createDir: " << e.what() << '\n';
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
 
     return result;
 }
 
-EResult::Enum CSystemModule::SDirectory::deleteDir(const std::string &path)
+EResult::ENUM CSystemModule::SDirectory::deleteDir(const std::string &path)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     std::filesystem::path directory = path;
 
     try
     {
-        std::filesystem::remove(directory) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+        std::filesystem::remove(directory) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SDirectory::deleteDir: " << e.what() << '\n';
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
 
     return result;
@@ -86,20 +86,20 @@ std::string CSystemModule::SDirectory::getCurrentDir()
     return currentDir.string();
 }
 
-EResult::Enum CSystemModule::SFile::deleteFile(const std::string &filePath)
+EResult::ENUM CSystemModule::SFile::deleteFile(const std::string &filePath)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     std::filesystem::path file = filePath;
 
     try
     {
-        std::filesystem::remove(file) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+        std::filesystem::remove(file) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SFile::deleteFile: " << e.what() << '\n';
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
 
     return result;
@@ -129,9 +129,9 @@ std::string CSystemModule::SFile::SJson::SRead::toString(const Json::Value &inpu
     return std::string(Json::writeString(writer, input));
 }
 
-EResult::Enum CSystemModule::SFile::SJson::SRead::fromFileJSON(const std::string &filePath, Json::Value &jsonData)
+EResult::ENUM CSystemModule::SFile::SJson::SRead::fromFileJSON(const std::string &filePath, Json::Value &jsonData)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     try
     {
@@ -141,26 +141,26 @@ EResult::Enum CSystemModule::SFile::SJson::SRead::fromFileJSON(const std::string
         {
             f >> jsonData;
 
-            result = EResult::Enum::RESULT_OK;
+            result = EResult::ENUM::RESULT_OK;
         }
         else
         {
-            result = EResult::Enum::RESULT_EXISTS_NOT;
+            result = EResult::ENUM::RESULT_EXISTS_NOT;
         }
         f.close();
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SFile::SJson::SRead::fromFile: " << e.what() << '\n';
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
 
     return result;
 }
 
-EResult::Enum CSystemModule::SFile::SJson::SRead::fromFileCSV(const std::string &filePath, Json::Value &jsonData)
+EResult::ENUM CSystemModule::SFile::SJson::SRead::fromFileCSV(const std::string &filePath, Json::Value &jsonData)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     std::ifstream file(filePath);
     std::string line;
@@ -232,20 +232,20 @@ EResult::Enum CSystemModule::SFile::SJson::SRead::fromFileCSV(const std::string 
 
         file.close();
 
-        result = EResult::Enum::RESULT_OK;
+        result = EResult::ENUM::RESULT_OK;
     }
     else
     {
         std::cerr << "ERROR: can't open \"" << filePath << "\"in \"CSystemModule::SFile::SJson::SRead::fromFileCSV\"\n";
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
 
     return result;
 }
 
-EResult::Enum CSystemModule::SFile::SJson::SRead::fromString(const std::string &inputString, Json::Value &jsonData, const int &indent, const int &precision)
+EResult::ENUM CSystemModule::SFile::SJson::SRead::fromString(const std::string &inputString, Json::Value &jsonData, const int &indent, const int &precision)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     try
     {
@@ -273,20 +273,20 @@ EResult::Enum CSystemModule::SFile::SJson::SRead::fromString(const std::string &
 
         const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
         
-        (reader->parse(inputString.c_str(), inputString.c_str() + inputLength, &jsonData, &err)) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+        (reader->parse(inputString.c_str(), inputString.c_str() + inputLength, &jsonData, &err)) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
     }
     catch(const std::exception& e)
     {
         std::cerr << "ERROR CSystemModule::SFile::SJson::SRead::fromString: " << e.what() << '\n';
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
 
     return result;
 }
 
-EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToJSON(const Json::Value &input, const std::string &output, const int &indent, const int &precision)
+EResult::ENUM CSystemModule::SFile::SJson::SWrite::saveToJSON(const Json::Value &input, const std::string &output, const int &indent, const int &precision)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     int _indent = indent, _precision = precision;
 
@@ -315,26 +315,26 @@ EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToJSON(const Json::Value 
         outFile << jsonString;
         outFile.close();
 
-        result = EResult::Enum::RESULT_OK;
+        result = EResult::ENUM::RESULT_OK;
     }
     else
     {
         std::cerr << "ERROR: can't save file to \"" << output << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToJSON\"\n";
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
 
     return result;
 }
 
-EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToCSV(const std::string &jsonFilePath, const std::string &output)
+EResult::ENUM CSystemModule::SFile::SJson::SWrite::saveToCSV(const std::string &jsonFilePath, const std::string &output)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     std::ifstream jsonFile(jsonFilePath);
     if (!jsonFile.is_open())
     {
         std::cerr << "ERROR: can't open JSON file \"" << jsonFilePath << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
         return result;
     }
 
@@ -345,7 +345,7 @@ EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToCSV(const std::string &
     if (!Json::parseFromStream(readerBuilder, jsonFile, &jsonData, &errs))
     {
         std::cerr << "ERROR: failed to parse json: \"" << errs << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
         return result;
     }
     jsonFile.close();
@@ -355,7 +355,7 @@ EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToCSV(const std::string &
     if (!csvFile.is_open())
     {
         std::cerr << "ERROR: can't open CSV file " << output << "\" in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
         return result;
     }
 
@@ -387,12 +387,12 @@ EResult::Enum CSystemModule::SFile::SJson::SWrite::saveToCSV(const std::string &
             csvFile << "\n";
         }
 
-        result = EResult::Enum::RESULT_OK;
+        result = EResult::ENUM::RESULT_OK;
     }
     else
     {
         std::cerr << "ERROR: json data is not an array or is empty" << " in \"CSystemModule::SFile::SJson::SWrite::saveToCSV\"\n";
-        result = EResult::Enum::RESULT_ERROR;
+        result = EResult::ENUM::RESULT_ERROR;
     }
     csvFile.close();
 
@@ -449,9 +449,9 @@ bool CSystemModule::SFile::SPDF::SWrite::dataToTable(const std::vector<std::vect
 #endif // LIBPRCPP_PROJECT_USING_LIBHARU
 
 #if LIBPRCPP_PROJECT_USING_OPENSSL || LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+EResult::ENUM CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMode::ENUM &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     auto plaintext = readFile(input);
 
@@ -464,7 +464,7 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMod
     switch (encryptDecryptMode)
     {
     #if LIBPRCPP_PROJECT_USING_OPENSSL
-        case EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL:
         {
             OpenSSL_add_all_algorithms();
             ERR_load_crypto_strings();
@@ -474,7 +474,7 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMod
 
             auto ciphertext = aesEncryptOpenSSL(plaintext, _iv.data(), _ik.data());
 
-            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, ciphertext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
 
             EVP_cleanup();
             ERR_free_strings();
@@ -483,36 +483,36 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMod
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        case EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP:
         {
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
             auto ciphertext = aesEncryptCryptoPP(plaintext, _iv.data(), _ik.data());
 
-            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, ciphertext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
         }
         break;
 
-        case EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_XCHACHA20_CRYPTOPP:
         {
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
             auto ciphertext = xChaCha20encryptCryptoPP(plaintext, _iv.data(), _ik.data());
 
-            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, ciphertext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
         }
         break;
 
-        case EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_RC6_CRYPTOPP:
         {
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
             auto ciphertext = rc6encryptCryptoPP(plaintext, _iv.data(), _ik.data());
 
-            writeFile(output, ciphertext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, ciphertext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
         }
         break;
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
@@ -520,7 +520,7 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMod
         default:
         {
             std::cerr << "ERROR CSystemModule::SFile::SEncrypDecrypt::fileEncrypt: encryptDecryptMode is not supported\n";
-            result = EResult::Enum::RESULT_ERROR;
+            result = EResult::ENUM::RESULT_ERROR;
         }
         break;
     }
@@ -528,9 +528,9 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileEncrypt(const EEncDecMod
     return result;
 }
 
-EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileDecrypt(const EEncDecMode::Enum & encryptDecryptMode, const std::string & input, const std::string & output, const std::string & iv, const std::string & ik)
+EResult::ENUM CSystemModule::SFile::SEncrypDecrypt::fileDecrypt(const EEncDecMode::ENUM & encryptDecryptMode, const std::string & input, const std::string & output, const std::string & iv, const std::string & ik)
 {
-    EResult::Enum result = EResult::Enum::RESULT_UNDEFINED;
+    EResult::ENUM result = EResult::ENUM::RESULT_UNDEFINED;
 
     auto ciphertext = readFile(input);
 
@@ -543,7 +543,7 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileDecrypt(const EEncDecMod
     switch (encryptDecryptMode)
     {
     #if LIBPRCPP_PROJECT_USING_OPENSSL
-        case EEncDecMode::Enum::ENC_DEC_MODE_AES_OPENSSL:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_AES_OPENSSL:
         {
             OpenSSL_add_all_algorithms();
             ERR_load_crypto_strings();
@@ -553,7 +553,7 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileDecrypt(const EEncDecMod
 
             auto plaintext = aesDecryptOpenSSL(ciphertext, _iv.data(), _ik.data());
 
-            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, plaintext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
 
             EVP_cleanup();
             ERR_free_strings();
@@ -562,36 +562,36 @@ EResult::Enum CSystemModule::SFile::SEncrypDecrypt::fileDecrypt(const EEncDecMod
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
     #if LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
-        case EEncDecMode::Enum::ENC_DEC_MODE_AES_CRYPTOPP:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_AES_CRYPTOPP:
         {
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
             auto plaintext = aesDecryptCryptoPP(ciphertext, _iv.data(), _ik.data());
 
-            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, plaintext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
         }
         break;
 
-        case EEncDecMode::Enum::ENC_DEC_MODE_XCHACHA20_CRYPTOPP:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_XCHACHA20_CRYPTOPP:
         {
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
             auto plaintext = xChaCha20decryptCryptoPP(ciphertext, _iv.data(), _ik.data());
 
-            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, plaintext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
         }
         break;
 
-        case EEncDecMode::Enum::ENC_DEC_MODE_RC6_CRYPTOPP:
+        case EEncDecMode::ENUM::ENC_DEC_MODE_RC6_CRYPTOPP:
         {
             std::vector<unsigned char> _iv = stringToUnsignedChar(iv, 16);
             std::vector<unsigned char> _ik = stringToUnsignedChar(ik, 32);
 
             auto plaintext = rc6decryptCryptoPP(ciphertext, _iv.data(), _ik.data());
 
-            writeFile(output, plaintext) ? result = EResult::Enum::RESULT_OK : result = EResult::Enum::RESULT_ERROR;
+            writeFile(output, plaintext) ? result = EResult::ENUM::RESULT_OK : result = EResult::ENUM::RESULT_ERROR;
         }
         break;
     #endif // LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE
@@ -992,13 +992,13 @@ namespace systemFunctions
 {
     namespace directory
     {
-        EResult::Enum createDir(const std::string &path)
+        EResult::ENUM createDir(const std::string &path)
         {
             CSystemModule SYSTEM;
             return SYSTEM.Directory.createDir(path);
         }
 
-        EResult::Enum deleteDir(const std::string &path)
+        EResult::ENUM deleteDir(const std::string &path)
         {
             CSystemModule SYSTEM;
             return SYSTEM.Directory.deleteDir(path);
@@ -1013,7 +1013,7 @@ namespace systemFunctions
 
     namespace file
     {
-        EResult::Enum deleteFile(const std::string &filePath)
+        EResult::ENUM deleteFile(const std::string &filePath)
         {
             CSystemModule SYSTEM;
             return SYSTEM.File.deleteFile(filePath);
@@ -1029,19 +1029,19 @@ namespace systemFunctions
                     return SYSTEM.File.JSON.Read.toString(input, indent, precision);
                 }
 
-                EResult::Enum fromFileJSON(const std::string &filePath, Json::Value &jsonData)
+                EResult::ENUM fromFileJSON(const std::string &filePath, Json::Value &jsonData)
                 {
                     CSystemModule SYSTEM;
                     return SYSTEM.File.JSON.Read.fromFileJSON(filePath, jsonData);
                 }
 
-                EResult::Enum fromFileCSV(const std::string &filePath, Json::Value &jsonData)
+                EResult::ENUM fromFileCSV(const std::string &filePath, Json::Value &jsonData)
                 {
                     CSystemModule SYSTEM;
                     return SYSTEM.File.JSON.Read.fromFileCSV(filePath, jsonData);
                 }
 
-                EResult::Enum fromString(const std::string &inputString, Json::Value &jsonData, const int &indent, const int &precision)
+                EResult::ENUM fromString(const std::string &inputString, Json::Value &jsonData, const int &indent, const int &precision)
                 {
                     CSystemModule SYSTEM;
                     return SYSTEM.File.JSON.Read.fromString(inputString, jsonData, indent, precision);
@@ -1050,13 +1050,13 @@ namespace systemFunctions
 
             namespace write
             {
-                EResult::Enum saveToJSON(const Json::Value &input, const std::string &output, const int &indent, const int &precision)
+                EResult::ENUM saveToJSON(const Json::Value &input, const std::string &output, const int &indent, const int &precision)
                 {
                     CSystemModule SYSTEM;
                     return SYSTEM.File.JSON.Write.saveToJSON(input, output, indent, precision);
                 }
 
-                EResult::Enum saveToCSV(const std::string &jsonFilePath, const std::string &output)
+                EResult::ENUM saveToCSV(const std::string &jsonFilePath, const std::string &output)
                 {
                     CSystemModule SYSTEM;
                     return SYSTEM.File.JSON.Write.saveToCSV(jsonFilePath, output);
@@ -1078,13 +1078,13 @@ namespace systemFunctions
 
         namespace encryptDecrypt
         {
-            EResult::Enum fileEncrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+            EResult::ENUM fileEncrypt(const EEncDecMode::ENUM &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
             {
                 CSystemModule SYSTEM;
                 return SYSTEM.File.EncryptDecrypt.fileEncrypt(encryptDecryptMode, input, output, iv, ik);
             }
 
-            EResult::Enum fileDecrypt(const EEncDecMode::Enum &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
+            EResult::ENUM fileDecrypt(const EEncDecMode::ENUM &encryptDecryptMode, const std::string &input, const std::string &output, const std::string &iv, const std::string &ik)
             {
                 CSystemModule SYSTEM;
                 return SYSTEM.File.EncryptDecrypt.fileDecrypt(encryptDecryptMode, input, output, iv, ik);

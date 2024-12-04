@@ -15,7 +15,7 @@ struct EScyllaDbAuthMode
      * @brief enum for EScyllaAuthMode
      * 
      */
-    enum Enum : TInt32
+    enum ENUM : TInt32
     {
         SCYLLADB_AUTH_MODE_UNDEFINED = 0,
         SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR,
@@ -27,7 +27,7 @@ struct EScyllaDbAuthMode
      * @brief code for EScyllaAuthMode
      * 
      */
-    struct Code
+    struct CODE
     {
         inline static const char *SCYLLADB_AUTH_MODE_UNDEFINED = "Undefined";
         inline static const char *SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR = "AllowAllAuthenticator";
@@ -38,33 +38,33 @@ struct EScyllaDbAuthMode
     /**
      * @brief convert EScyllaAuthMode enum to string
      * 
-     * @param authModeEnum 
+     * @param authModeENUM 
      * @return std::string 
      */
-    static std::string toString(const Enum &authModeEnum)
+    static std::string toString(const ENUM &authModeENUM)
     {
-        std::string result = Code::SCYLLADB_AUTH_MODE_UNDEFINED;
+        std::string result = CODE::SCYLLADB_AUTH_MODE_UNDEFINED;
 
-        switch (authModeEnum)
+        switch (authModeENUM)
         {
-            case Enum::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR:
+            case ENUM::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR:
             {
-                result = Code::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR;
+                result = CODE::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR;
             }
             break;
-            case Enum::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR:
+            case ENUM::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR:
             {
-                result = Code::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR;
+                result = CODE::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR;
             }
             break;
-            case Enum::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR:
+            case ENUM::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR:
             {
-                result = Code::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR;
+                result = CODE::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR;
             }
             break;
             default:
             {
-                result = Code::SCYLLADB_AUTH_MODE_UNDEFINED;
+                result = CODE::SCYLLADB_AUTH_MODE_UNDEFINED;
             }
             break;
         }
@@ -76,27 +76,27 @@ struct EScyllaDbAuthMode
      * @brief convert EScyllaAuthMode string to enum
      * 
      * @param authModeString 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum toEnum(const char *&authModeString)
+    static ENUM toENUM(const char *&authModeString)
     {
-        Enum result = Enum::SCYLLADB_AUTH_MODE_UNDEFINED;
+        ENUM result = ENUM::SCYLLADB_AUTH_MODE_UNDEFINED;
 
-        if (authModeString == Code::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR)
+        if (authModeString == CODE::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR)
         {
-            result = Enum::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR;
+            result = ENUM::SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR;
         }
-        else if (authModeString == Code::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR)
+        else if (authModeString == CODE::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR)
         {
-            result = Enum::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR;
+            result = ENUM::SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR;
         }
-        else if (authModeString == Code::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR)
+        else if (authModeString == CODE::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR)
         {
-            result = Enum::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR;
+            result = ENUM::SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR;
         }
         else
         {
-            result = Enum::SCYLLADB_AUTH_MODE_UNDEFINED;
+            result = ENUM::SCYLLADB_AUTH_MODE_UNDEFINED;
         }
 
         return result;
@@ -113,7 +113,7 @@ struct EScyllaDbTopologyStrat
      * @brief enum for EScyllaDbTopologyStrat
      * 
      */
-    enum Enum : TInt32
+    enum ENUM : TInt32
     {
         SCYLLADB_TOPOLOGY_STRAT_UNDEFINED = 0,
         SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY,
@@ -126,7 +126,7 @@ struct EScyllaDbTopologyStrat
      * @brief code for EScyllaDbTopologyStrat
      * 
      */
-    struct Code
+    struct CODE
     {
         inline static const char *SCYLLADB_TOPOLOGY_STRAT_UNDEFINED = "Undefined";
         inline static const char *SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY = "SimpleStrategy";
@@ -138,38 +138,38 @@ struct EScyllaDbTopologyStrat
     /**
      * @brief convert EScyllaDbTopologyStrat enum to string
      * 
-     * @param topologyStratEnum 
+     * @param topologyStratENUM 
      * @return std::string 
      */
-    static std::string toString(const Enum &topologyStratEnum)
+    static std::string toString(const ENUM &topologyStratENUM)
     {
-        std::string result = Code::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
+        std::string result = CODE::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
 
-        switch (topologyStratEnum)
+        switch (topologyStratENUM)
         {
-            case Enum::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY:
+            case ENUM::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY:
             {
-                result = Code::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY;
+                result = CODE::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY;
             }
             break;
-            case Enum::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY:
+            case ENUM::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY:
             {
-                result = Code::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY;
+                result = CODE::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY;
             }
             break;
-            case Enum::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY:
+            case ENUM::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY:
             {
-                result = Code::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY;
+                result = CODE::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY;
             }
             break;
-            case Enum::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY:
+            case ENUM::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY:
             {
-                result = Code::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY;
+                result = CODE::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY;
             }
             break;
             default:
             {
-                result = Code::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
+                result = CODE::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
             }
             break;
         }
@@ -181,31 +181,31 @@ struct EScyllaDbTopologyStrat
      * @brief convert EScyllaDbTopologyStrat string to enum
      * 
      * @param topologyStratString 
-     * @return Enum 
+     * @return ENUM 
      */
-    static Enum toEnum(const char *&topologyStratString)
+    static ENUM toENUM(const char *&topologyStratString)
     {
-        Enum result = Enum::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
+        ENUM result = ENUM::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
 
-        if (topologyStratString == Code::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY)
+        if (topologyStratString == CODE::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY)
         {
-            result = Enum::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY;
+            result = ENUM::SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY;
         }
-        else if (topologyStratString == Code::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY)
+        else if (topologyStratString == CODE::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY)
         {
-            result = Enum::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY;
+            result = ENUM::SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY;
         }
-        else if (topologyStratString == Code::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY)
+        else if (topologyStratString == CODE::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY)
         {
-            result = Enum::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY;
+            result = ENUM::SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY;
         }
-        else if (topologyStratString == Code::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY)
+        else if (topologyStratString == CODE::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY)
         {
-            result = Enum::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY;
+            result = ENUM::SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY;
         }
         else
         {
-            result = Enum::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
+            result = ENUM::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
         }
 
         return result;

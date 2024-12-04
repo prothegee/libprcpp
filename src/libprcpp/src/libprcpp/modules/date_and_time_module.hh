@@ -109,11 +109,11 @@ public:
             /**
              * @brief get current month as human string, e.g. Jan, Jun, Jul, etc.
              * 
-             * @param languageEnum default "en"
+             * @param languageENUM default "en"
              * @param timeOffset 
              * @return std::string 
              */
-            std::string toStringHuman(const ELanguage::Enum &languageEnum, const int &timeOffset = 0);
+            std::string toStringHuman(const ELanguage::ENUM &languageENUM, const int &timeOffset = 0);
         };
         /**
          * @brief month object access
@@ -497,11 +497,11 @@ namespace dateAndTimeFunctions
             /**
              * @brief get current month as human string, e.g. Jan, Jun, Jul, etc.
              * 
-             * @param languageEnum default "en"
+             * @param languageENUM default "en"
              * @param timeOffset 
              * @return std::string 
              */
-            std::string toStringHuman(const ELanguage::Enum &languageEnum, const int &timeOffset = 0);
+            std::string toStringHuman(const ELanguage::ENUM &languageENUM, const int &timeOffset = 0);
         } // namespace month
 
         namespace day

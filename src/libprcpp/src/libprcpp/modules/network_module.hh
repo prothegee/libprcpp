@@ -59,9 +59,9 @@ public:
          * @param smtpSenderAddress e.g. no-reply@foo.baz
          * @param smtpSenderName e.g. no-reply
          * @param smtpSenderPassword your_smtp_user_password
-         * @return EResult::Enum 
+         * @return EResult::ENUM 
          */
-        EResult::Enum smtpsSendByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &smtpServer, const std::string &smtpServerPort, const std::string &smtpSenderAddress, const std::string &smtpSenderName, const std::string &smtpSenderPassword);
+        EResult::ENUM smtpsSendByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &smtpServer, const std::string &smtpServerPort, const std::string &smtpSenderAddress, const std::string &smtpSenderName, const std::string &smtpSenderPassword);
     };
     // curl cmd object access
     SCurlCmd CurlCmd = SCurlCmd();
@@ -92,9 +92,9 @@ public:
          * @param sparkpostEndpoint e.g. /api/v1/transmissions
          * @param senderUserAgent your sender user agent, default is "org.drogon-sparkpost"
          * @param enableTracking if true, some url will change to click not as original data pass from templateLookAndReplace
-         * @return EResult::Enum 
+         * @return EResult::ENUM 
          */
-        EResult::Enum sendMailByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &sparkpostApiKey, const std::string &sparkpostSenderName, const std::string &sparkpostUrl, const std::string &sparkpostEndpoint, const std::string &senderUserAgent = "org.drogon-sparkpost", const bool &enableTracking = false);
+        EResult::ENUM sendMailByTemplate(const std::string &templateHtml, const std::string &templateTitle, const std::string &templateRecipient, const std::vector<TLookAndReplace> &templateLookAndReplace, const std::string &sparkpostApiKey, const std::string &sparkpostSenderName, const std::string &sparkpostUrl, const std::string &sparkpostEndpoint, const std::string &senderUserAgent = "org.drogon-sparkpost", const bool &enableTracking = false);
     };
     // sparkpost drogon object access
     SSparkpostDrogon SparkpostDrogon = SSparkpostDrogon();
