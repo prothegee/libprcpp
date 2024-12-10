@@ -17,7 +17,7 @@ struct EOSEnvironment
      */
     enum ENUM : TInt32
     {
-        OS_ENVIRONMENT_UNDEFINED = 0,
+        OS_ENVIRONMENT_UNDEFINED,
         OS_ENVIRONMENT_DESKTOP,
         OS_ENVIRONMENT_MOBILE,
     };
@@ -136,7 +136,7 @@ struct EOSType
      */
     enum ENUM : TInt32
     {
-        OS_TYPE_UNDEFINED = 0,
+        OS_TYPE_UNDEFINED,
         OS_TYPE_LINUX,
         OS_TYPE_WINDOWS,
         OS_TYPE_MACOS,

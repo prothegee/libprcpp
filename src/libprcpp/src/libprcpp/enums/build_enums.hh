@@ -17,7 +17,7 @@ struct EBuildTarget
      */
     enum ENUM
     {
-        BUILD_TARGET_UNDEFINED = 0,
+        BUILD_TARGET_UNDEFINED,
         BUILD_TARGET_LINUX,
         BUILD_TARGET_WINDOWS,
         BUILD_TARGET_MACOS,
