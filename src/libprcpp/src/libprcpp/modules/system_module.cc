@@ -145,7 +145,7 @@ EResult::ENUM CSystemModule::SFile::SJson::SRead::fromFileJSON(const std::string
         }
         else
         {
-            result = EResult::ENUM::RESULT_EXISTS_NOT;
+            result = EResult::ENUM::RESULT_DOESNT_EXISTS;
         }
         f.close();
     }

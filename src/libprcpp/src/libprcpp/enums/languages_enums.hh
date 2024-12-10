@@ -19,7 +19,7 @@ struct ELanguage
      */
     enum ENUM : int32_t
     {
-        LANGUAGE_UNDEFINED = 0,
+        LANGUAGE_UNDEFINED,
         LANGUAGE_ENGLISH,
         LANGUAGE_BAHASA,
     };

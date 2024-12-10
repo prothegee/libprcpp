@@ -13,11 +13,11 @@ struct EResult
 {
     enum ENUM : TInt32
     {
-        RESULT_EXISTS_NOT = -2,
-        RESULT_ERROR = -1,
-        RESULT_UNDEFINED = 0,
-        RESULT_OK = 1,
-        RESULT_EXISTS = 2,
+        RESULT_UNDEFINED,
+        RESULT_OK,
+        RESULT_ERROR,
+        RESULT_EXISTS,
+        RESULT_DOESNT_EXISTS,
     };
 };
 
