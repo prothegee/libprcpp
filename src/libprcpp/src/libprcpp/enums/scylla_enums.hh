@@ -15,7 +15,7 @@ struct EScyllaDbAuthMode
      * @brief enum for EScyllaAuthMode
      * 
      */
-    enum ENUM : TInt32
+    enum ENUM : i32
     {
         SCYLLADB_AUTH_MODE_UNDEFINED,
         SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR,
@@ -113,7 +113,7 @@ struct EScyllaDbTopologyStrat
      * @brief enum for EScyllaDbTopologyStrat
      * 
      */
-    enum ENUM : TInt32
+    enum ENUM : i32
     {
         SCYLLADB_TOPOLOGY_STRAT_UNDEFINED,
         SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY,

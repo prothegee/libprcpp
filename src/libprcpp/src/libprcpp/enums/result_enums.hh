@@ -11,13 +11,25 @@ namespace libprcpp
  */
 struct EResult
 {
-    enum ENUM : TInt32
+    enum ENUM : i32
     {
         RESULT_UNDEFINED,
         RESULT_OK,
         RESULT_ERROR,
         RESULT_EXISTS,
         RESULT_DOESNT_EXISTS,
+        RESULT_FOUND,
+        RESULT_NOT_FOUND,
+        RESULT_SIZE_IS_OK,
+        RESULT_SIZE_IS_EMPTY,
+        RESULT_RESPONSE_IS_OK,
+        RESULT_RESPONSE_IS_FAIL,
+        RESULT_REQUEST_OK,
+        RESULT_REQUEST_ERROR_OR_FAIL,
+        RESULT_CONNECTION_OK,
+        RESULT_CONNECTION_FAIL,
+        RESULT_CONNECTING_AND_RESOLVING_OK,
+        RESULT_CONNECTING_AND_RESOLVING_FAIL,
     };
 };
 
