@@ -234,6 +234,23 @@ std::string CDateAndTime::SUTC::SMonth::toStringHuman(const ELanguage::ENUM &lan
         }
         break;
 
+        case ELanguage::ENUM::LANGUAGE_BAHASA:
+        {
+            if (MONTH ==  1) { result = "Jan"; } 
+            if (MONTH ==  2) { result = "Feb"; } 
+            if (MONTH ==  3) { result = "Mar"; } 
+            if (MONTH ==  4) { result = "Apr"; } 
+            if (MONTH ==  5) { result = "Mei"; } 
+            if (MONTH ==  6) { result = "Jun"; } 
+            if (MONTH ==  7) { result = "Jul"; } 
+            if (MONTH ==  8) { result = "Agu"; } 
+            if (MONTH ==  9) { result = "Sep"; } 
+            if (MONTH == 10) { result = "Okt"; } 
+            if (MONTH == 11) { result = "Nov"; } 
+            if (MONTH == 12) { result = "Des"; } 
+        }
+        break;
+
         default:
         {
             if (MONTH ==  1) { result = "Jan"; } 

@@ -15,7 +15,7 @@ struct ERequirementPasswordInput
      * @brief enum object for ERequirementPasswordInput
      * 
      */
-    enum ENUM : TInt32
+    enum ENUM : i32
     {
         REQUIREMENT_PASSWORD_INPUT_UNDEFINED,
         REQUIREMENT_PASSWORD_INPUT_MIN_LENGTH_6,
@@ -33,7 +33,7 @@ struct ERequirementUsernameInput
      * @brief enum object for ERequirementUsernameInput
      * 
      */
-    enum ENUM: TInt32
+    enum ENUM: i32
     {
         REQUIREMENT_USERNAME_INPUT_UNDEFINED = 0,
         REQUIREMENT_USERNAME_INPUT_ALPHANUMERIC_UNDERSCORE,

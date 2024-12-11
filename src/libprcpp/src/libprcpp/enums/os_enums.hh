@@ -15,7 +15,7 @@ struct EOSEnvironment
      * @brief enum object for EOSEnvironment
      * 
      */
-    enum ENUM : TInt32
+    enum ENUM : i32
     {
         OS_ENVIRONMENT_UNDEFINED,
         OS_ENVIRONMENT_DESKTOP,
@@ -134,7 +134,7 @@ struct EOSType
      * @brief enum object for EOSType
      * 
      */
-    enum ENUM : TInt32
+    enum ENUM : i32
     {
         OS_TYPE_UNDEFINED,
         OS_TYPE_LINUX,
