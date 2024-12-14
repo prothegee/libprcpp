@@ -78,7 +78,7 @@ struct EScyllaDbAuthMode
      * @param authModeString 
      * @return ENUM 
      */
-    static ENUM toENUM(const char *&authModeString)
+    static ENUM toEnum(const char *&authModeString)
     {
         ENUM result = ENUM::SCYLLADB_AUTH_MODE_UNDEFINED;
 
@@ -183,7 +183,7 @@ struct EScyllaDbTopologyStrat
      * @param topologyStratString 
      * @return ENUM 
      */
-    static ENUM toENUM(const char *&topologyStratString)
+    static ENUM toEnum(const char *&topologyStratString)
     {
         ENUM result = ENUM::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
 

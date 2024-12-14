@@ -14,7 +14,8 @@ add_library(${PROJECT_NAME}
     src/libprcpp/libprcpp.cc
 )
 
-set(PREFIX "")
+set(PREFIX        "")
+set(IMPORT_PREFIX "")
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 

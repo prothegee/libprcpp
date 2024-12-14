@@ -61,7 +61,7 @@ struct ELanguage
      * @param languageString 
      * @return ENUM 
      */
-    static ENUM toENUM(const char *languageString)
+    static ENUM toEnum(const char *languageString)
     {
         ENUM result = ENUM::LANGUAGE_UNDEFINED;
 

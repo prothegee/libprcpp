@@ -7,7 +7,7 @@
 #endif // PROJECT_BUILD_STATUS
 
 #ifndef PROJECT_BUILD_TARGET
-    // 0:undefined 1:linux 2:windows 3:osx 4:android 5:ios 6:web 7:ps 8:xbox 9:nintendo
+    // 0:undefined 1:linux 2:windows 3:macos_ 4:android 5:ios 6:web 7:ps 8:xbox 9:nintendo
     #define PROJECT_BUILD_TARGET @PROJECT_BUILD_TARGET@
 #endif // PROJECT_BUILD_TARGET
 

@@ -48,7 +48,7 @@ __*NOTES:*__
 -DPROJECT_BUILD_STATUS=1
 
 # required
-# 0:undefined 1:linux 2:windows 3:osx
+# 0:undefined 1:linux 2:windows 3:macos_
 -DPROJECT_BUILD_TARGET=1
 
 # not required | default false
