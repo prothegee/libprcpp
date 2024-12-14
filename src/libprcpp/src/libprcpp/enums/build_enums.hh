@@ -50,14 +50,14 @@ struct EBuildTarget
     /**
      * @brief convert EBuildTarget enum to string
      * 
-     * @param buildTargetENUM 
+     * @param buildTargetEnum 
      * @return std::string 
      */
-    static std::string toString(const ENUM &buildTargetENUM)
+    static std::string toString(const ENUM &buildTargetEnum)
     {
         std::string result = CODE::BUILD_TARGET_UNDEFINED;
 
-        switch (buildTargetENUM)
+        switch (buildTargetEnum)
         {
             case ENUM::BUILD_TARGET_LINUX: { result = CODE::BUILD_TARGET_LINUX; } break;
             case ENUM::BUILD_TARGET_WINDOWS: { result = CODE::BUILD_TARGET_WINDOWS; } break;
@@ -80,7 +80,7 @@ struct EBuildTarget
      * @param buildTargetString 
      * @return ENUM 
      */
-    static ENUM toENUM(const char *&buildTargetString)
+    static ENUM toEnum(const char *&buildTargetString)
     {
         ENUM result = ENUM::BUILD_TARGET_UNDEFINED;
 

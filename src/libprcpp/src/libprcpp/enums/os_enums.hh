@@ -59,7 +59,7 @@ struct EOSEnvironment
      * @param osEnvironmentString 
      * @return ENUM 
      */
-    static ENUM toENUM(const char *&osEnvironmentString)
+    static ENUM toEnum(const char *&osEnvironmentString)
     {
         ENUM result = ENUM::OS_ENVIRONMENT_UNDEFINED;
 
@@ -187,7 +187,7 @@ struct EOSType
      * @param osTypeString 
      * @return ENUM 
      */
-    static ENUM toENUM(const char *&osTypeString)
+    static ENUM toEnum(const char *&osTypeString)
     {
         ENUM result = ENUM::OS_TYPE_UNDEFINED;
 

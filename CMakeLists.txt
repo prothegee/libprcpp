@@ -4,7 +4,7 @@ project(libprcpp.project)
 # 0:undefined 1:debug 2:staging 3:demo 4:release
 set(PROJECT_BUILD_STATUS)
 
-# 0:undefined 1:linux 2:windows 3:osx 4:android 5:ios 6:web 7:ps 8:xbox 9:nintendo
+# 0:undefined 1:linux 2:windows 3:macos 4:android 5:ios 6:web 7:ps 8:xbox 9:nintendo
 set(PROJECT_BUILD_TARGET)
 
 # 0:undefined 1:GNU 2:MSVC 3:[Cc]lang
