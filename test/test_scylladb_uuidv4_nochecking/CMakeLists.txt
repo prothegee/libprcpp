@@ -12,7 +12,7 @@ set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(PROJECT_BUILD_COMPILER_ID 1)
+    set(LIBPRCPP_BUILD_COMPILER_ID 1)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wno-unused-value
@@ -28,13 +28,13 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         -Wno-unused-function
     )
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(PROJECT_BUILD_COMPILER_ID 2)
+    set(LIBPRCPP_BUILD_COMPILER_ID 2)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
         /W4
     )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
-    set(PROJECT_BUILD_COMPILER_ID 3)
+    set(LIBPRCPP_BUILD_COMPILER_ID 3)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wno-unused-value

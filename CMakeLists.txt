@@ -1,28 +1,194 @@
 cmake_minimum_required(VERSION 3.15...3.30)
-project(libprcpp.project)
+project(libprcpp LANGUAGES CXX)
 
-# 0:undefined 1:debug 2:staging 3:demo 4:release
-set(PROJECT_BUILD_STATUS)
+include(CheckIncludeFileCXX)
+include(CMakeDependentOption)
+include(GenerateExportHeader)
+include(FindPackageHandleStandardArgs)
+include(cmake/project-00-lib.cmake)
+include(cmake/project-01-config.cmake)
+include(cmake/project-02-post_build.cmake)
 
-# 0:undefined 1:linux 2:windows 3:macos 4:android 5:ios 6:web 7:ps 8:xbox 9:nintendo
-set(PROJECT_BUILD_TARGET)
+set(PREFIX        "")
+set(IMPORT_PREFIX "")
+set(CMAKE_STATIC_LIBRARY_PREFIX "")
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-# 0:undefined 1:GNU 2:MSVC 3:[Cc]lang
-set(PROJECT_BUILD_COMPILER_ID)
+if(LIBPRCPP_PROJECT_BUILD_SHARED_LIB)
+    add_library(${PROJECT_NAME} SHARED
+        src/libprcpp/libprcpp.hh
+        src/libprcpp/libprcpp.cc
+    )
+else()
+    add_library(${PROJECT_NAME}
+        src/libprcpp/libprcpp.hh
+        src/libprcpp/libprcpp.cc
+    )
+endif()
 
-# processor system type
-set(PROJECT_SYSTEM_PROCESSOR)
 
-# this project custom build target directory
-set(PROJECT_BUILD_TAGET_DIRECTORY)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(LIBPRCPP_BUILD_COMPILER_ID 1)
 
-# definition of if using build target directory
-set(LIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Wno-unused-value
+        -Wno-unused-variable
+        -Wno-reorder
+        -Wno-parentheses
+        -Wno-switch
+        -Wno-format
+        -Wno-invalid-offsetof
+        -Wno-multichar
+        -Wno-char-subscripts
+        -Wno-empty-body
+        -Wno-unused-function
+    )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(LIBPRCPP_BUILD_COMPILER_ID 2)
 
-# this project will build test
-set(LIBPRCPP_PROJECT_BUILD_TEST)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /W4
+    )
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
+    set(LIBPRCPP_BUILD_COMPILER_ID 3)
 
-# cmake include
-include(cmake/project-00-setup.cmake)
-include(cmake/project-01-packages.cmake)
-include(cmake/project-02-subdirs.cmake)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Wno-unused-value
+        -Wno-unused-variable
+        -Wno-reorder
+        -Wno-parentheses
+        -Wno-switch
+        -Wno-format
+        -Wno-dynamic-class-memaccess
+        -Wno-unused-private-field
+        -Wno-invalid-offsetof
+        -Wno-multichar
+        -Wno-char-subscripts
+        -Wno-null-conversion
+        -Wno-empty-body
+        -Wno-unused-lambda-capture
+        -Wno-unused-function
+        -Wno-tautological-constant-out-of-range-compare
+    )
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   -DCMAKE_CXX_COMPILER_ID is not supported as ${CMAKE_CXX_COMPILER_ID}")
+endif()
+
+if(LIBPRCPP_PROJECT_USING_JSONCPP)
+    set(LIBPRCPP_PROJECT_USING_JSONCPP true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE JsonCpp::JsonCpp)
+else()
+    set(LIBPRCPP_PROJECT_USING_JSONCPP false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_OPENSSL)
+    set(LIBPRCPP_PROJECT_USING_OPENSSL true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL)
+    target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::Crypto)
+else()
+    set(LIBPRCPP_PROJECT_USING_OPENSSL false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK)
+    set(LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
+
+    # drogon_create_views(${PROJECT_NAME}
+    #     ${CMAKE_CURRENT_SOURCE_DIR}/src/libprcpp/views
+    #     ${EXECUTABLE_OUTPUT_PATH}
+    # )
+else()
+    set(LIBPRCPP_PROJECT_USING_DROGON_FRAMEWORK false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE)
+    set(LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE cryptopp::cryptopp)
+else()
+    set(LIBPRCPP_PROJECT_USING_CRYPTOPP_CMAKE false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_ARGON2)
+    set(LIBPRCPP_PROJECT_USING_ARGON2 true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE argon2)
+else()
+    set(LIBPRCPP_PROJECT_USING_ARGON2 false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_SCYLLADB)
+    set(LIBPRCPP_PROJECT_USING_SCYLLADB true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE scylla-cpp-driver)
+else()
+    set(LIBPRCPP_PROJECT_USING_SCYLLADB false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_JWT_CPP)
+    set(LIBPRCPP_PROJECT_USING_JWT_CPP true)
+else()
+    set(LIBPRCPP_PROJECT_USING_JWT_CPP false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_LIBHARU)
+    set(LIBPRCPP_PROJECT_USING_LIBHARU true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE hpdf)
+else()
+    set(LIBPRCPP_PROJECT_USING_LIBHARU false)
+endif()
+
+generate_export_header(${PROJECT_NAME}
+    EXPORT_FILE_NAME
+        ${PROJECT_SOURCE_DIR}/src/libprcpp/base/export.hh
+)
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/src/libprcpp/base/config.in.hh
+    ${PROJECT_SOURCE_DIR}/src/libprcpp/base/config.hh
+)
+
+aux_source_directory(src/libprcpp            LIBPRCPP_DIR)
+aux_source_directory(src/libprcpp/base       LIBPRCPP_DIR_BASE)
+aux_source_directory(src/libprcpp/constants  LIBPRCPP_DIR_CONSTANTS)
+aux_source_directory(src/libprcpp/enums      LIBPRCPP_DIR_ENUMS)
+aux_source_directory(src/libprcpp/interfaces LIBPRCPP_DIR_INTERFACES)
+aux_source_directory(src/libprcpp/modules    LIBPRCPP_DIR_MODULES)
+aux_source_directory(src/libprcpp/types      LIBPRCPP_DIR_TYPES)
+
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${LIBPRCPP_DIR}
+        ${LIBPRCPP_DIR_BASE}
+        ${LIBPRCPP_DIR_CONSTANTS}
+        ${LIBPRCPP_DIR_ENUMS}
+        ${LIBPRCPP_DIR_INTERFACES}
+        ${LIBPRCPP_DIR_MODULES}
+        ${LIBPRCPP_DIR_TYPES}
+)
+
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/src
+)
+
+if(LIBPRCPP_PROJECT_BUILD_TEST)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_cryptography)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_csv_rw)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_date_and_time)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_file_encdec)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_generate_pdf)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_parser_json)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_scylladb_drogon)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_scylladb_uuidv4_nochecking)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_smtps)
+endif()
+
+if(LIBPRCPP_PROJECT_BUILD_TOOL)
+    # RESERVED
+endif()
+

@@ -3,13 +3,13 @@
 #include <libprcpp/base/config.hh>
 
 #ifndef HTTP_OR_HHTTPS
-    #if PROJECT_BUILD_STATUS == 1
+    #if LIBPRCPP_BUILD_STATUS == 1
         #define HTTP_OR_HHTTPS "http://"
-    #elif PROJECT_BUILD_STATUS == 2
+    #elif LIBPRCPP_BUILD_STATUS == 2
         #define HTTP_OR_HHTTPS "https://"
-    #elif PROJECT_BUILD_STATUS == 3
+    #elif LIBPRCPP_BUILD_STATUS == 3
         #define HTTP_OR_HHTTPS "https://"
-    #elif PROJECT_BUILD_STATUS == 4
+    #elif LIBPRCPP_BUILD_STATUS == 4
         #define HTTP_OR_HHTTPS "https://"
     #else
         #define HTTP_OR_HHTTPS "https://"
@@ -17,13 +17,13 @@
 #endif // HTTP_OR_HHTTPS
 
 #ifndef WS_OR_WSS
-    #if PROJECT_BUILD_STATUS == 1
+    #if LIBPRCPP_BUILD_STATUS == 1
         #define WS_OR_WSS "ws://"
-    #elif PROJECT_BUILD_STATUS == 2
+    #elif LIBPRCPP_BUILD_STATUS == 2
         #define WS_OR_WSS "wss://"
-    #elif PROJECT_BUILD_STATUS == 3
+    #elif LIBPRCPP_BUILD_STATUS == 3
         #define WS_OR_WSS "wss://"
-    #elif PROJECT_BUILD_STATUS == 4
+    #elif LIBPRCPP_BUILD_STATUS == 4
         #define WS_OR_WSS "wss://"
     #else
         #define WS_OR_WSS "wss://"

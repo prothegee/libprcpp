@@ -58,7 +58,7 @@ void IPostgreSQLCoreInterface::SIPostgreSQL::initializeDb(const TPostgreSQLConne
                 }
                 else
                 {
-                    #if PROJECT_BUILD_STATUS == 1
+                    #if LIBPRCPP_BUILD_STATUS == 1
                     std::cout << "DEBUG: database created\n";
                     #endif
                 }
