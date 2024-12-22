@@ -31,7 +31,7 @@ __*NOTES:*__
 
 ## tested operating system
 
-- [V] GNU\Linux Debian 12
+- [V] GNU/Linux Debian 12
 - [?] Microsoft Windows (__has error when build test__)
 - [X] Apple MacOS/OSX
 
@@ -45,11 +45,11 @@ __*NOTES:*__
 ```sh
 # required
 # 0:undefined 1:debug 2:staging 3:demo 4:release
--DPROJECT_BUILD_STATUS=1
+-DLIBPRCPP_BUILD_STATUS=1
 
 # required
 # 0:undefined 1:linux 2:windows 3:macos_
--DPROJECT_BUILD_TARGET=1
+-DLIBPRCPP_BUILD_TARGET=1
 
 # not required | default false
 # error for windows if true, on false is ok
@@ -57,7 +57,7 @@ __*NOTES:*__
 -DLIBPRCPP_PROJECT_BUILD_TEST=true
 
 # not required | default false
-# will make output under PROJECT_BUILD_TAGET_DIRECTORY
+# will make output under LIBPRCPP_BUILD_TAGET_DIRECTORY
 -DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true
 ```
 
@@ -68,7 +68,7 @@ look on [cmake directory for more info](./cmake)
 `cmake build debug - linux`
 ```sh
 mkdir -p build/debug;
-cmake -B build/debug -DCMAKE_CXX_FLAGS="-std=c++17" -DCMAKE_BUILD_TYPE=Debug -DPROJECT_BUILD_STATUS=1 -DPROJECT_BUILD_TARGET=1 -DLIBPRCPP_PROJECT_BUILD_TEST=false -DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true;
+cmake -B build/debug -DCMAKE_CXX_FLAGS="-std=c++17" -DCMAKE_BUILD_TYPE=Debug -DLIBPRCPP_BUILD_STATUS=1 -DLIBPRCPP_BUILD_TARGET=1 -DLIBPRCPP_PROJECT_BUILD_TEST=false -DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true;
 cmake --build build/debug --config Debug;
 ```
 

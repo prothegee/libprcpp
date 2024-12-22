@@ -1,10 +1,10 @@
 #include "idrogon_http_controller_helper.hh"
 
-#if PROJECT_BUILD_COMPILER_ID == 1
+#if LIBPRCPP_BUILD_COMPILER_ID == 1
 // RESERVED
-#elif PROJECT_BUILD_COMPILER_ID == 2
+#elif LIBPRCPP_BUILD_COMPILER_ID == 2
 // RESERVED
-#elif PROJECT_BUILD_COMPILER_ID == 3
+#elif LIBPRCPP_BUILD_COMPILER_ID == 3
 // RESERVED
 #endif
 
@@ -19,7 +19,7 @@ void IDrogonHttpControllerHelper::SIBeforeCallback::addStrictTransportSecurity(H
 {
     std::string maxAgeStr = "max-age=" + std::to_string(maxAge);
 
-    if (PROJECT_BUILD_STATUS != 1 || force)
+    if (LIBPRCPP_BUILD_STATUS != 1 || force)
     {
         pResp->addHeader(HEADER::HTTP_HEADER_ALIASES::STRICT_TRANSPORT_SECURITY, maxAgeStr);
     }
@@ -27,7 +27,7 @@ void IDrogonHttpControllerHelper::SIBeforeCallback::addStrictTransportSecurity(H
 
 void IDrogonHttpControllerHelper::SIBeforeCallback::addCrossOriginCommonDefault(HttpResponsePtr &pResp, const bool &force)
 {
-    if (PROJECT_BUILD_STATUS != 1 || force)
+    if (LIBPRCPP_BUILD_STATUS != 1 || force)
     {
         pResp->addHeader(HEADER::HTTP_HEADER_ALIASES::CROSS_ORIGIN_OPENER_POLICY, "same-origin");
         pResp->addHeader(HEADER::HTTP_HEADER_ALIASES::CROSS_ORIGIN_EMBEDDER_POLICY, "required-corp");
@@ -246,10 +246,10 @@ void IDrogonHttpControllerHelper::SIStartInvokeMeta::customParameter(const std::
 
 } // namespace libprcpp
 
-#if PROJECT_BUILD_COMPILER_ID == 1
+#if LIBPRCPP_BUILD_COMPILER_ID == 1
 // RESERVED
-#elif PROJECT_BUILD_COMPILER_ID == 2
+#elif LIBPRCPP_BUILD_COMPILER_ID == 2
 // RESERVED
-#elif PROJECT_BUILD_COMPILER_ID == 3
+#elif LIBPRCPP_BUILD_COMPILER_ID == 3
 // RESERVED
 #endif

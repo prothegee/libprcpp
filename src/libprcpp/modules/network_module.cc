@@ -72,9 +72,9 @@ Content-Type: text/html; charset="UTF-8"
 
         if (std::thread::hardware_concurrency() >= 2)
         {
-        #if PROJECT_BUILD_STATUS == 1
+        #if LIBPRCPP_IS_DEBUG
             std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: system has multiple threads\n";
-        #endif // PROJECT_BUILD_STATUS
+        #endif // LIBPRCPP_IS_DEBUG
 
             auto status = std::async(std::launch::async, system, CMD.c_str());
 
@@ -86,9 +86,9 @@ Content-Type: text/html; charset="UTF-8"
         }
         else
         {
-        #if PROJECT_BUILD_STATUS == 1
+        #if LIBPRCPP_IS_DEBUG == 1
             std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: system has single thread\n";
-        #endif // PROJECT_BUILD_STATUS
+        #endif // LIBPRCPP_IS_DEBUG
 
             auto status = system(CMD.c_str());
 
@@ -108,7 +108,7 @@ Content-Type: text/html; charset="UTF-8"
 
     auto statusAndResult = responseFuture.get();
 
-#if PROJECT_BUILD_STATUS == 1
+#if LIBPRCPP_IS_DEBUG
     if (statusAndResult == EResult::ENUM::RESULT_OK)
     {
         std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: result ok\n";
@@ -117,7 +117,7 @@ Content-Type: text/html; charset="UTF-8"
     {
         std::cout << "DEBUG CNetworkModule::SCurlCmd::smtpsSendByTemplate: result error\n";
     }
-#endif // PROJECT_BUILD_STATUS
+#endif // LIBPRCPP_IS_DEBUG
     return statusAndResult;
 }
 
@@ -180,18 +180,18 @@ EResult::ENUM CNetworkModule::SSparkpostDrogon::sendMailByTemplate(const std::st
 
         if (result == ReqResult::Ok && pResp->getStatusCode() == k200OK)
         {
-        #if PROJECT_BUILD_STATUS == 1
+        #if LIBPRCPP_IS_DEBUG
             std::cout << "DEBUG CNetworkModule::SSparkpostDrogon::sendMailByTemplate: sparkpost reponse ok\n";
-        #endif
+        #endif // LIBPRCPP_IS_DEBUG
             tmpVal1 = EResult::ENUM::RESULT_OK;
 
             responsePromise.set_value(tmpVal1);
         }
         else
         {
-        #if PROJECT_BUILD_STATUS == 1
+        #if LIBPRCPP_IS_DEBUG
             std::cout << "DEBUG CNetworkModule::SSparkpostDrogon::sendMailByTemplate: sparkpost status code is " << pResp->getStatusCode() << "\n";
-        #endif
+        #endif // LIBPRCPP_IS_DEBUG
             responsePromise.set_value(tmpVal1);
         }
     });

@@ -4,12 +4,12 @@
 
 #include <cstring>
 
-#if PROJECT_BUILD_COMPILER_ID == 1
+#if LIBPRCPP_BUILD_COMPILER_ID == 1
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-#elif PROJECT_BUILD_COMPILER_ID == 2
+#elif LIBPRCPP_BUILD_COMPILER_ID == 2
 // RESERVED
-#elif PROJECT_BUILD_COMPILER_ID == 3
+#elif LIBPRCPP_BUILD_COMPILER_ID == 3
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #endif
@@ -145,7 +145,7 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
     }
     else
     {
-        #if PROJECT_BUILD_STATUS == 1
+        #if LIBPRCPP_BUILD_STATUS == 1
         std::cout << "DEBUG: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected\n";
         #endif 
     }
@@ -264,11 +264,11 @@ CassUuid IScyllaDbCoreInterface::SIScyllaDb::stringToCassUuid(const std::string 
 
 } // namespace libprcpp
 
-#if PROJECT_BUILD_COMPILER_ID == 1
+#if LIBPRCPP_BUILD_COMPILER_ID == 1
 #pragma GCC diagnostic pop
-#elif PROJECT_BUILD_COMPILER_ID == 2
+#elif LIBPRCPP_BUILD_COMPILER_ID == 2
 // RESERVED
-#elif PROJECT_BUILD_COMPILER_ID == 3
+#elif LIBPRCPP_BUILD_COMPILER_ID == 3
 // RESERVED
 #pragma clang diagnostic pop
 #endif

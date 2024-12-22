@@ -16,19 +16,19 @@
 #include <cstring>
 
 // includes os specification
-#if PROJECT_BUILD_TARGET == 1
+#if LIBPRCPP_BUILD_TARGET == 1
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#elif PROJECT_BUILD_TARGET == 2
+#elif LIBPRCPP_BUILD_TARGET == 2
 #include <iostream>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
 #pragma comment(lib, "ws2_32.lib")
-#elif PROJECT_BUILD_TARGET == 3
+#elif LIBPRCPP_BUILD_TARGET == 3
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -36,7 +36,7 @@
 #include <arpa/inet.h>
 #else
 // nothing to include
-#endif // PROJECT_BUILD_TARGET
+#endif // LIBPRCPP_BUILD_TARGET
 
 #if LIBPRCPP_PROJECT_USING_LIBHARU
 #include "hpdf.h"
@@ -238,12 +238,12 @@ public:
          */
         struct SPDF
         {
-        #if PROJECT_BUILD_COMPILER_ID == 1
+        #if LIBPRCPP_BUILD_COMPILER_ID == 1
         #pragma GCC diagnostic push
         #pragma GCC diagnostic ignored "-Wunused-parameter"
-        #elif PROJECT_BUILD_COMPILER_ID == 2
+        #elif LIBPRCPP_BUILD_COMPILER_ID == 2
         // RESERVED
-        #elif PROJECT_BUILD_COMPILER_ID == 3
+        #elif LIBPRCPP_BUILD_COMPILER_ID == 3
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wunused-parameter"
         #endif
@@ -251,11 +251,11 @@ public:
             {
                 std::cerr << "ERROR FilePDF: error_no=" << error_no << ", detail_no=" << detail_no << "\n";
             }
-        #if PROJECT_BUILD_COMPILER_ID == 1
+        #if LIBPRCPP_BUILD_COMPILER_ID == 1
         #pragma GCC diagnostic pop
-        #elif PROJECT_BUILD_COMPILER_ID == 2
+        #elif LIBPRCPP_BUILD_COMPILER_ID == 2
         // RESERVED
-        #elif PROJECT_BUILD_COMPILER_ID == 3
+        #elif LIBPRCPP_BUILD_COMPILER_ID == 3
         // RESERVED
         #pragma clang diagnostic pop
         #endif

@@ -88,7 +88,7 @@ struct EOSEnvironment
     {
         std::string result = CODE::OS_ENVIRONMENT_UNDEFINED;
 
-        switch (PROJECT_BUILD_TARGET)
+        switch (LIBPRCPP_BUILD_TARGET)
         {
             case 1: { result = CODE::OS_ENVIRONMENT_DESKTOP; } break;
             case 2: { result = CODE::OS_ENVIRONMENT_DESKTOP; } break;
@@ -110,7 +110,7 @@ struct EOSEnvironment
     {
         ENUM result = ENUM::OS_ENVIRONMENT_UNDEFINED;
 
-        switch (PROJECT_BUILD_TARGET)
+        switch (LIBPRCPP_BUILD_TARGET)
         {
             case 1: { result = ENUM::OS_ENVIRONMENT_DESKTOP; } break;
             case 2: { result = ENUM::OS_ENVIRONMENT_DESKTOP; } break;
@@ -228,7 +228,7 @@ struct EOSType
     {
         std::string result = CODE::OS_TYPE_UNDEFINED;
 
-        switch (PROJECT_BUILD_TARGET)
+        switch (LIBPRCPP_BUILD_TARGET)
         {
             case 1: { result = CODE::OS_TYPE_LINUX; } break;
             case 2: { result = CODE::OS_TYPE_WINDOWS; } break;
@@ -250,7 +250,7 @@ struct EOSType
     {
         ENUM result = ENUM::OS_TYPE_UNDEFINED;
 
-        switch (PROJECT_BUILD_TARGET)
+        switch (LIBPRCPP_BUILD_TARGET)
         {
             case 1: { result = ENUM::OS_TYPE_LINUX; } break;
             case 2: { result = ENUM::OS_TYPE_WINDOWS; } break;

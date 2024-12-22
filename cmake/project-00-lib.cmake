@@ -1,8 +1,5 @@
-include(FindPackageHandleStandardArgs)
-
-
 # check toolchain and depend on target build
-if(PROJECT_BUILD_TARGET EQUAL 2)
+if(LIBPRCPP_BUILD_TARGET EQUAL 2)
     message(NOTICE "-- ${PROJECT_NAME}:\n   build target is windows, checking toolchain")
     if(${CMAKE_TOOLCHAIN_FILE} STREQUAL "")
         message(NOTICE "-- ${PROJECT_NAME}:\n   cmake toolchain file is empty")

@@ -440,9 +440,9 @@ bool CSystemModule::SFile::SPDF::SWrite::dataToTable(const std::vector<std::vect
 
     result = true;
 
-    #if PROJECT_BUILD_STATUS == 1
+    #if LIBPRCPP_IS_DEBUG
     std::cout << "CSystemModule::SFile::SPDF::SWrite::dataToTable: generated successfully!\n";
-    #endif // PROJECT_BUILD_STATUS
+    #endif // LIBPRCPP_IS_DEBUG
 
     return result;
 }
@@ -903,7 +903,7 @@ bool CSystemModule::SSYSENV::isPortAvailable(int port)
 {
     bool result = false;
 
-#if PROJECT_BUILD_TARGET == 1
+#if LIBPRCPP_BUILD_TARGET == 1
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
@@ -924,7 +924,7 @@ bool CSystemModule::SSYSENV::isPortAvailable(int port)
     close(sockfd);
 
     result = bindResult == 0;
-#elif PROJECT_BUILD_TARGET == 2
+#elif LIBPRCPP_BUILD_TARGET == 2
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
@@ -946,13 +946,13 @@ bool CSystemModule::SSYSENV::isPortAvailable(int port)
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
 
-#if PROJECT_BUILD_COMPILER_ID == 2
+#if LIBPRCPP_BUILD_COMPILER_ID == 2
     #pragma warning (push)
     #pragma warning (disable : 4242)
     #pragma warning (disable : 4244)
     addr.sin_port = htons(port); // TMP: ignored, figure it out to handle when MAY data loss
     #pragma warning (pop)
-#endif // PROJECT_BUILD_COMPILER_ID
+#endif // LIBPRCPP_BUILD_COMPILER_ID
 
     int bindResult = bind(sock, (SOCKADDR*)&addr, sizeof(addr));
 
@@ -960,7 +960,7 @@ bool CSystemModule::SSYSENV::isPortAvailable(int port)
     WSACleanup();
 
     result = bindResult == 0;
-#elif PROJECT_BUILD_TARGET == 3
+#elif LIBPRCPP_BUILD_TARGET == 3
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd < 0)
@@ -983,7 +983,7 @@ bool CSystemModule::SSYSENV::isPortAvailable(int port)
     result = bindResult == 0;
 #else
     std::cerr << "ERROR CSystemModule::SSYSENV::isPortAvailable: build target is unknown\n";
-#endif // #if PROJECT_BUILD_TARGET == 1
+#endif // #if LIBPRCPP_BUILD_TARGET == 1
 
     return result;
 }

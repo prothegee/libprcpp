@@ -333,13 +333,13 @@ std::string CCryptographyModule::SHasher::scryptOpenSSL(const std::string &input
 
     std::vector<unsigned char> deriveKey(derived);
 
-#if PROJECT_BUILD_TARGET == 1
+#if LIBPRCPP_BUILD_TARGET == 1
     if (EVP_PBE_scrypt(input.c_str(), input.length(), reinterpret_cast<const unsigned char*>(salt.c_str()), salt.length(), reinterpret_cast<uint32_t>(computation), blockSize, threads, 0, deriveKey.data(), deriveKey.size()) != 1)
-#elif PROJECT_BUILD_TARGET == 2
+#elif LIBPRCPP_BUILD_TARGET == 2
     if (EVP_PBE_scrypt(input.c_str(), input.length(), reinterpret_cast<const unsigned char*>(salt.c_str()), salt.length(), computation, blockSize, threads, 0, deriveKey.data(), deriveKey.size()) != 1)
-#elif PROJECT_BUILD_TARGET == 3
+#elif LIBPRCPP_BUILD_TARGET == 3
     if (EVP_PBE_scrypt(input.c_str(), input.length(), reinterpret_cast<const unsigned char*>(salt.c_str()), salt.length(), reinterpret_cast<uint32_t>(computation), blockSize, threads, 0, deriveKey.data(), deriveKey.size()) != 1)
-#endif // PROJECT_BUILD_TARGET
+#endif // LIBPRCPP_BUILD_TARGET
     {
         ERR_print_errors_fp(stderr);
         throw std::runtime_error("ERROR scryptOpenSSL: deriving key with scrypt\n");
