@@ -14,7 +14,7 @@ namespace libprcpp
  */
 struct TPdfConfig
 {
-    std::string font = "Helvetica";
+    std::string font = "Arial";
     float table_top_y = 750.0f;
     float table_left_x = 50.0f;
     float cell_width = 100.0f;

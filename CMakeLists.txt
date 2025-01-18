@@ -30,6 +30,10 @@ endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(LIBPRCPP_BUILD_COMPILER_ID 1)
 
+    set(LIBPRCPP_COMPILER_GNU   true)
+    set(LIBPRCPP_COMPILER_MSVC  false)
+    set(LIBPRCPP_COMPILER_CLANG false)
+
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall
         -Wextra
@@ -49,11 +53,19 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(LIBPRCPP_BUILD_COMPILER_ID 2)
 
+    set(LIBPRCPP_COMPILER_GNU   false)
+    set(LIBPRCPP_COMPILER_MSVC  true)
+    set(LIBPRCPP_COMPILER_CLANG false)
+
     target_compile_options(${PROJECT_NAME} PRIVATE
         /W4
     )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
     set(LIBPRCPP_BUILD_COMPILER_ID 3)
+
+    set(LIBPRCPP_COMPILER_GNU   false)
+    set(LIBPRCPP_COMPILER_MSVC  false)
+    set(LIBPRCPP_COMPILER_CLANG true)
 
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall
@@ -77,7 +89,7 @@ elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
         -Wno-tautological-constant-out-of-range-compare
     )
 else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   -DCMAKE_CXX_COMPILER_ID is not supported as ${CMAKE_CXX_COMPILER_ID}")
+    message(WARNING "-- ${PROJECT_NAME}:\n   -DCMAKE_CXX_COMPILER_ID is not supported as ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
 if(LIBPRCPP_PROJECT_USING_JSONCPP)
