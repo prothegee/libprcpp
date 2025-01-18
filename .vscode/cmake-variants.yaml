@@ -8,12 +8,16 @@ buildType:
       short: debug
       long: Emit debug information
       buildType: Debug
-    staging:
-      short: staging
+    profile:
+      short: profile
+      long: Emit debug information
+      buildType: Profile
+    relwithdebinfo:
+      short: relwithdebinfo
       long: Optimize for speed - include debug information
       buildType: RelWithDebInfo
-    demo:
-      short: demo
+    minsizerel:
+      short: minsizerel
       long: Optimize for smallest binary size - exlude debug information
       buildType: MinSizeRel
     release:
