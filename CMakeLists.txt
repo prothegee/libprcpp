@@ -153,6 +153,26 @@ else()
     set(LIBPRCPP_PROJECT_USING_LIBHARU false)
 endif()
 
+if(LIBPRCPP_PROJECT_USING_LIBQRENCODE)
+    set(LIBPRCPP_PROJECT_USING_LIBQRENCODE true)
+    if(LIBPRCPP_PROJECT_USING_LIBQRENCODE_DEFAULT)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${QRENCODE_INCLUDE_DIR})
+        target_link_libraries(${PROJECT_NAME} PRIVATE qrencode)
+    else()
+        target_include_directories(${PROJECT_NAME} PRIVATE ${QRENCODE_INCLUDE_DIR})
+        target_link_libraries(${PROJECT_NAME} PRIVATE ${QRENCODE_LIBRARIES})
+    endif()
+else()
+    set(LIBPRCPP_PROJECT_USING_LIBQRENCODE false)
+endif()
+
+if(LIBPRCPP_PROJECT_USING_ZXING)
+    set(LIBPRCPP_PROJECT_USING_ZXING true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ZXing::Core ZXing::ZXing)
+else()
+    set(LIBPRCPP_PROJECT_USING_ZXING false)
+endif()
+
 generate_export_header(${PROJECT_NAME}
     EXPORT_FILE_NAME
         ${PROJECT_SOURCE_DIR}/src/libprcpp/base/export.hh
