@@ -59,6 +59,9 @@ typedef float f32;
 // alter type of double
 typedef double f64;
 
+// alter type of const char
+typedef const char cchar;
+
 } // namespace libprcpp
 
 #endif // LIBPRCPP_BASIC_TYPES_HH
