@@ -9,6 +9,8 @@
         "LIBPRCPP_PROJECT_BUILD_SHARED_LIB": false,
         "LIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY": true,
 
+        "ZXING_EXPERIMENTAL_API": true,
+
         "_": "don't use me"
     }
 }

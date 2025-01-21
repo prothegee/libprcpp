@@ -188,11 +188,31 @@ else()
 endif()
 
 
+# stb
+set(LIBPRCPP_PROJECT_USING_STB false)
+
+find_package(Stb CONFIG)
+if(Stb_FOUND)
+set(LIBPRCPP_PROJECT_USING_STB true)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   Stb found")
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   Stb not found, attempt to check file")
+    find_file(LIBPRCPP_STB_INCLUDE_DIRS "stb/stb_image_write.h")
+    if(LIBPRCPP_STB_INCLUDE_DIRS)
+        set(LIBPRCPP_PROJECT_USING_STB true)
+        message(NOTICE "-- ${PROJECT_NAME}:\n   stb path found as path in ${LIBPRCPP_STB_INCLUDE_DIRS}")
+    else()
+        message(NOTICE "-- ${PROJECT_NAME}:\n   stb path not found in default include dir and when try to find file")
+    endif()
+endif()
+
+
 # zxing
 set(LIBPRCPP_PROJECT_USING_ZXING false)
 
 find_package(ZXing CONFIG)
 if(ZXing_FOUND)
+    set(ZXING_EXPERIMENTAL_API true)
     set(LIBPRCPP_PROJECT_USING_ZXING true)
     message(NOTICE "-- ${PROJECT_NAME}:\n   libzxing package found")
 else()

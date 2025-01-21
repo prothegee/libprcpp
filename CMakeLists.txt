@@ -20,7 +20,7 @@ if(LIBPRCPP_PROJECT_BUILD_SHARED_LIB)
         src/libprcpp/libprcpp.cc
     )
 else()
-    add_library(${PROJECT_NAME}
+    add_library(${PROJECT_NAME} STATIC
         src/libprcpp/libprcpp.hh
         src/libprcpp/libprcpp.cc
     )
@@ -166,6 +166,14 @@ else()
     set(LIBPRCPP_PROJECT_USING_LIBQRENCODE false)
 endif()
 
+if(LIBPRCPP_PROJECT_USING_STB)
+    set(LIBPRCPP_PROJECT_USING_STB true)
+    target_link_libraries(${PROJECT_NAME} PRIVATE stb)
+else()
+    set(LIBPRCPP_PROJECT_USING_STB false)
+endif()
+
+
 if(LIBPRCPP_PROJECT_USING_ZXING)
     set(LIBPRCPP_PROJECT_USING_ZXING true)
     target_link_libraries(${PROJECT_NAME} PRIVATE ZXing::Core ZXing::ZXing)
@@ -187,6 +195,7 @@ aux_source_directory(src/libprcpp            LIBPRCPP_DIR)
 aux_source_directory(src/libprcpp/base       LIBPRCPP_DIR_BASE)
 aux_source_directory(src/libprcpp/constants  LIBPRCPP_DIR_CONSTANTS)
 aux_source_directory(src/libprcpp/enums      LIBPRCPP_DIR_ENUMS)
+aux_source_directory(src/libprcpp/functions  LIBPRCPP_DIR_FUNCTIONS)
 aux_source_directory(src/libprcpp/interfaces LIBPRCPP_DIR_INTERFACES)
 aux_source_directory(src/libprcpp/modules    LIBPRCPP_DIR_MODULES)
 aux_source_directory(src/libprcpp/types      LIBPRCPP_DIR_TYPES)
@@ -198,6 +207,7 @@ target_sources(${PROJECT_NAME}
         ${LIBPRCPP_DIR_BASE}
         ${LIBPRCPP_DIR_CONSTANTS}
         ${LIBPRCPP_DIR_ENUMS}
+        ${LIBPRCPP_DIR_FUNCTIONS}
         ${LIBPRCPP_DIR_INTERFACES}
         ${LIBPRCPP_DIR_MODULES}
         ${LIBPRCPP_DIR_TYPES}
@@ -209,6 +219,13 @@ target_include_directories(${PROJECT_NAME}
 )
 
 if(LIBPRCPP_PROJECT_BUILD_TEST)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   adding LIBPRCPP_PROJECT_BUILD_TEST")
+
+    # windows still got a problem
+    if(${LIBPRCPP_SYSTEM_NAME} STREQUAL "windows")
+        message(WARNING "-- ${PROJECT_NAME}:\n   LIBPRCPP_PROJECT_BUILD_TEST is on Windows system environment, this one may cause a problem")
+    endif()
+
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_cryptography)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_csv_rw)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/test_date_and_time)
@@ -221,6 +238,6 @@ if(LIBPRCPP_PROJECT_BUILD_TEST)
 endif()
 
 if(LIBPRCPP_PROJECT_BUILD_TOOL)
-    # RESERVED
+    message(NOTICE "-- ${PROJECT_NAME}:\n   adding LIBPRCPP_PROJECT_BUILD_TOOL")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/tools/prgent)
 endif()
-
