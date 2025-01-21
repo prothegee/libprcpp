@@ -118,7 +118,7 @@ else()
             set(LIBPRCPP_PROJECT_USING_POSTGRESQL true)
             message(NOTICE "-- ${PROJECT_NAME}:\n   postgresql path found as path in ${LIBPRCPP_PROJECT_USING_POSTGRESQL}")
         else()
-            message(NOTICE "-- ${PROJECT_NAME}:\n   OpenSSL path not found in default include dir and when try to find file")
+            message(NOTICE "-- ${PROJECT_NAME}:\n   postgresql path not found in default include dir and when try to find file")
         endif()
     endif()
 endif()
@@ -158,3 +158,44 @@ if(LIBPRCPP_LIBHARU_INCLUDE_DIRS)
 else()
     message(NOTICE "-- ${PROJECT_NAME}:\n   libharu header not found")
 endif()
+
+
+# qrencode
+set(LIBPRCPP_PROJECT_USING_LIBQRENCODE false)
+set(LIBPRCPP_PROJECT_USING_LIBQRENCODE_DEFAULT false) # not sure it's supposed to be marked from vcpkg
+
+find_file(LIBPRCPP_LIBQRENCODE_INCLUDE_DIRS "qrencode.h")
+if(LIBPRCPP_LIBQRENCODE_INCLUDE_DIRS)
+    set(LIBPRCPP_PROJECT_USING_LIBQRENCODE true)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   libqrencode package found")
+    find_path(QRENCODE_INCLUDE_DIR NAMES qrencode.h)
+    find_library(QRENCODE_LIBRARY_RELEASE qrencode)
+    find_library(QRENCODE_LIBRARY_DEBUG qrencoded)
+    set(QRENCODE_LIBRARIES optimized ${QRENCODE_LIBRARY_RELEASE} debug ${QRENCODE_LIBRARY_DEBUG})
+    set(LIBPRCPP_PROJECT_USING_LIBQRENCODE_DEFAULT true)
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   not found libqrencode, attempting another way")
+    find_path(QRENCODE_INCLUDE_DIR NAMES qrencode.h)
+    if(QRENCODE_INCLUDE_DIR)
+        set(LIBPRCPP_PROJECT_USING_LIBQRENCODE true)
+        message(NOTICE "-- ${PROJECT_NAME}:\n   found libqrencode as ${QRENCODE_INCLUDE_DIR}")
+        find_library(QRENCODE_LIBRARY_RELEASE qrencode)
+        find_library(QRENCODE_LIBRARY_DEBUG qrencoded)
+        set(QRENCODE_LIBRARIES optimized ${QRENCODE_LIBRARY_RELEASE} debug ${QRENCODE_LIBRARY_DEBUG})
+    else()
+        message(NOTICE "-- ${PROJECT_NAME}:\n   libqrencode path not found in default include dir and when try to find file or find library")
+    endif()
+endif()
+
+
+# zxing
+set(LIBPRCPP_PROJECT_USING_ZXING false)
+
+find_package(ZXing CONFIG)
+if(ZXing_FOUND)
+    set(LIBPRCPP_PROJECT_USING_ZXING true)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   libzxing package found")
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   libzxing package not found")
+endif()
+
