@@ -43,13 +43,13 @@ int mainProcess(int argc, char *argv[])
         {
             if
             (
-                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_BARCODE_FROM_TEXT_ARG_AS_NUM // 1
+                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_BARCODE_ENCODE_ARG_AS_NUM // 1
                 ||
-                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_BARCODE_FROM_TEXT_ARG_AS_STR // barcode-text
+                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_BARCODE_ENCODE_ARG_AS_STR // barcode-encode
             )
             {
-                generateMode = GENERATE_MODE_BARCODE_FROM_TEXT;
-                generateModeStr = GENERATE_MODE_BARCODE_FROM_TEXT_ARG_AS_STR;
+                generateMode = GENERATE_MODE_BARCODE_ENCODE;
+                generateModeStr = GENERATE_MODE_BARCODE_ENCODE_ARG_AS_STR;
                 i++;
             }
             else if
@@ -65,20 +65,20 @@ int mainProcess(int argc, char *argv[])
             }
             else if
             (
-                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_QRCODE_FROM_TEXT_ARG_AS_NUM // 3
+                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_QRCODE_ENCODE_ARG_AS_NUM // 3
                 ||
-                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_QRCODE_FROM_TEXT_ARG_AS_STR // qrcode-text
+                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_QRCODE_ENCODE_ARG_AS_STR // qrcode-encode
             )
             {
-                generateMode = GENERATE_MODE_QRCODE_FROM_TEXT;
-                generateModeStr = GENERATE_MODE_QRCODE_FROM_TEXT_ARG_AS_STR;
+                generateMode = GENERATE_MODE_QRCODE_ENCODE;
+                generateModeStr = GENERATE_MODE_QRCODE_ENCODE_ARG_AS_STR;
                 i++;
             }
             else if
             (
                 i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_QRCODE_DECODE_AS_NUM // 4
                 ||
-                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_QRCODE_DECODE_AS_STR // qrcode-text
+                i + 1 < argc && std::string(argv[i + 1]) == GENERATE_MODE_QRCODE_DECODE_AS_STR // qrcode-encode
             )
             {
                 generateMode = GENERATE_MODE_QRCODE_DECODE;
@@ -143,8 +143,10 @@ int mainProcess(int argc, char *argv[])
     // process what generate mode is
     switch (generateMode)
     {
-        case GENERATE_MODE_BARCODE_FROM_TEXT:
+        case GENERATE_MODE_BARCODE_ENCODE:
         {
+            std::printf("###### prgent mode %s:%s\n", GENERATE_MODE_BARCODE_ENCODE_ARG_AS_NUM, GENERATE_MODE_BARCODE_ENCODE_ARG_AS_STR);
+
             if (inputStr.empty())
             {
                 log::errorBase();
@@ -198,9 +200,60 @@ int mainProcess(int argc, char *argv[])
         }
         break;
 
-        case GENERATE_MODE_QRCODE_FROM_TEXT:
+        case GENERATE_MODE_QRCODE_ENCODE:
         {
-            std::printf("TODO: case GENERATE_MODE_QRCODE_FROM_TEXT\n");
+            std::printf("###### prgent mode %s:%s\n", GENERATE_MODE_QRCODE_DECODE_AS_NUM, GENERATE_MODE_QRCODE_DECODE_AS_STR);
+
+            if (inputStr.empty())
+            {
+                log::errorBase();
+                std::printf("--input is requied\n");
+                return RETURN_MAIN_RESULT_ERROR_INPUT_IS_REQUIRED;
+            }
+
+            // replace all empty space with -
+            utilityFunctions::find::andReplaceAll(inputStr, " ", "-");
+
+            if (outputStr.empty())
+            {
+                std::printf("--output arg is not supplied, using default output from input\n");
+                outputStr = inputStr;
+            }
+
+            if (outputDirStr.empty())
+            {
+                std::printf("--output-dir arg is not supplied, using current path as output dir\n");
+            }
+            else
+            {
+                if (!outputDirStr.empty() && !std::filesystem::exists(outputDirStr))
+                {
+                    std::filesystem::create_directories(outputDirStr);
+                }
+
+                outputStr = outputDirStr + "/" + outputStr;
+            }
+
+            if (outputExtStr.empty())
+            {
+                std::printf("--output-dir arg is not supplied, using default output ext as .png\n");
+                outputStr += FILE_EXTENSION_IS_PNG_HINT; // use .png
+            }
+            else
+            {
+                outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .png
+            }
+
+            if (qrcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate qrcode
+            {
+                std::printf("output save as: %s", outputStr.c_str());
+            }
+            else
+            {
+                log::errorBase();
+                std::printf("fail to encode image for barcode from text");
+                return RETURN_MAIN_RESULT_ERROR_ENCODE_IMAGE;
+            }
         }
         break;
 

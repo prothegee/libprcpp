@@ -1,4 +1,4 @@
-#include "barcode_funcs.hh"
+#include "qrcode_funcs.hh"
 
 #include "image_gen_funcs.hh"
 
@@ -8,7 +8,7 @@
 
 namespace prgent
 {
-namespace barcode
+namespace qrcode
 {
 
 bool encodeImage(const std::string &content, const std::string &output, const i32 &width, const i32 &height, const i32 &margin)
@@ -18,7 +18,7 @@ bool encodeImage(const std::string &content, const std::string &output, const i3
         i32 _width = width, _height = height, _margin = margin;
 
         BitMatrix matrix;
-        MultiFormatWriter writer(BarcodeFormat::Code128);
+        MultiFormatWriter writer(BarcodeFormat::QRCode);
         WriterOptions writerOption;
 
         writer.setMargin(_margin);
@@ -83,9 +83,9 @@ bool encodeImage(const std::string &content, const std::string &output, const i3
     }
 }
 
-} // namespace barcode
+} // namespace qrcode
 } // namespace prgent
 
-#endif // LIBPRCPP_PROJECT_USING_STB
-
 #endif // LIBPRCPP_PROJECT_USING_ZXING
+
+#endif // PRGENT_QRCODE_FUNCS_HH

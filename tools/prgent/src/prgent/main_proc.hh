@@ -14,6 +14,7 @@
 #include <prgent/constants/file_extension_const.hh>
 #include <prgent/constants/generate_const.hh>
 #include <prgent/functions/barcode_funcs.hh>
+#include <prgent/functions/qrcode_funcs.hh>
 #include <prgent/functions/prgent_log_funcs.hh>
 #include <prgent/enums/generate_enums.hh>
 #include <prgent/enums/return_enums.hh>
