@@ -20,12 +20,8 @@
 #include <ZXing/WriteBarcode.h>
 #endif // ZXING_EXPERIMENTAL_API
 
-#if LIBPRCPP_PROJECT_USING_STB
-#include <stb/stb_image_write.h>
-#endif // LIBPRCPP_PROJECT_USING_STB
-
-using namespace libprcpp;
 using namespace ZXing;
+using namespace libprcpp;
 
 namespace prgent
 {

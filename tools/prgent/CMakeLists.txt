@@ -99,6 +99,12 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libprcpp)
 
+if(${LIBPRCPP_SYSTEM_NAME} STREQUAL "windows")
+    # you are annoying, Windows
+    target_include_directories(${PROJECT_NAME} PRIVATE ${Stb_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ZXing::Core ZXing::ZXing)
+endif()
+
 configure_file(
     ${PROJECT_SOURCE_DIR}/src/prgent/base/config.in.hh
     ${PROJECT_SOURCE_DIR}/src/prgent/base/config.hh
@@ -110,15 +116,31 @@ aux_source_directory(src/prgent/constants   PRGENT_DIR_CONSTANTS)
 aux_source_directory(src/prgent/enums       PRGENT_DIR_ENUMS)
 aux_source_directory(src/prgent/functions   PRGENT_DIR_FUNCTIONS)
 
-target_sources(${PROJECT_NAME}
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${PRGENT_DIR}
-        ${PRGENT_DIR_BASE}
-        ${PRGENT_DIR_CONSTANTS}
-        ${PRGENT_DIR_ENUMS}
-        ${PRGENT_DIR_FUNCTIONS}
-)
+if(${LIBPRCPP_SYSTEM_NAME} STREQUAL "windows")
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${PRGENT_DIR}
+            ${PRGENT_DIR_BASE}
+            ${PRGENT_DIR_CONSTANTS}
+            ${PRGENT_DIR_ENUMS}
+            ${PRGENT_DIR_FUNCTIONS}
+
+            src/prgent/functions/image_gen_funcs.cc
+                src/prgent/functions/barcode_funcs.cc
+                    src/prgent/functions/qrcode_funcs.cc
+    )
+else()
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${PRGENT_DIR}
+            ${PRGENT_DIR_BASE}
+            ${PRGENT_DIR_CONSTANTS}
+            ${PRGENT_DIR_ENUMS}
+            ${PRGENT_DIR_FUNCTIONS}
+    )
+endif()
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

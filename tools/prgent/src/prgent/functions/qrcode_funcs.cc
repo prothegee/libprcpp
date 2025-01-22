@@ -5,6 +5,7 @@
 #if LIBPRCPP_PROJECT_USING_ZXING
 
 #if LIBPRCPP_PROJECT_USING_STB
+#include <stb/stb_image_write.h>
 
 namespace prgent
 {

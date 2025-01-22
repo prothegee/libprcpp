@@ -2,14 +2,39 @@
     "cmake.generator": "Ninja",
     "cmake.buildDirectory": "${workspaceFolder}/build/${variant:buildType}", // for debug in vscode only
     "cmake.configureSettings": {
-        "CMAKE_CXX_FLAGS": "-std=c++17", // windows:"/std:c++20 /EHsc" linux:"-std=c++20 -fcoroutines"
+        "CMAKE_CXX_FLAGS": "", // windows:"/std:c++20 /EHsc" linux:"-std=c++20 -fcoroutines"
+        "CMAKE_TOOLCHAIN_FILE": "",
 
+        "LIBPRCPP_VCPKG": false, // required env of "VCPKG_ROOT" or "VCPKG_DIR" if true
+        /*
+        list:
+        - x86-linux
+        - x64-linux
+        - arm64-linux
+        - arm-linux
+        - x86-windows
+        - x64-window
+        - x86-osx
+        - x64-osx
+        - arm64-osx
+        - arm-android
+        - x86-android
+        - x64-android
+        - arm64-android
+        - x86-ios
+        - x64-ios
+        - arm-ios
+        - arm64-ios
+        */
+        "LIBPRCPP_VCPKG_TRIPLET": "",
         "LIBPRCPP_PROJECT_BUILD_TEST": false,
-        "LIBPRCPP_PROJECT_BUILD_TOOL": false,
+        "LIBPRCPP_PROJECT_BUILD_TOOL": true,
         "LIBPRCPP_PROJECT_BUILD_SHARED_LIB": false,
         "LIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY": true,
 
         "ZXING_EXPERIMENTAL_API": true,
+
+        "Stb_INCLUDE_DIR": "", // path where stb is clone, in windows also should be stb/some_stb_header.h
 
         "_": "don't use me"
     }

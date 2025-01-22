@@ -23,7 +23,7 @@ inline static cchar *FILE_EXTENSION_IS_SVG_HINT  = ".svg"; // .svg
  * @param argKey 
  * @return std::string 
  */
-static std::string validateAllowedImageFileExtension(const std::string &fileExtension, const char *argKey = "")
+inline static std::string validateAllowedImageFileExtension(const std::string &fileExtension, const char *argKey = "")
 {
     const std::vector<std::string> allowed = {
         "jpeg",
