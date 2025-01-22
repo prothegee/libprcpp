@@ -3,6 +3,13 @@
 #if LIBPRCPP_PROJECT_USING_ZXING
 
 #if LIBPRCPP_PROJECT_USING_STB
+#if LIBPRCPP_COMPILER_MSVC
+#pragma message("IMPORTANT: STB_IMAGE_WRITE_IMPLEMENTATION should be only here")
+#ifndef STB_IMAGE_WRITE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION // should be only here
+#endif // STB_IMAGE_WRITE_IMPLEMENTATION
+#endif // LIBPRCPP_COMPILER_MSVC
+#include <stb/stb_image_write.h>
 
 #include <iostream>
 #include <string>
