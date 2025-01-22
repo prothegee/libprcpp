@@ -9,7 +9,7 @@ int mainProcess(int argc, char *argv[])
     bool argSizeInUse = false;
 
     // default value for size in pixel/px
-    i32 sizeWidth = 128, sizeHeight = 128, sizeMargin = 0;
+    i32 sizeWidth = 127, sizeHeight = 127, sizeMargin = 0;
 
     EGenerateMode generateMode = GENERATE_MODE_UNDEFINED;
 
