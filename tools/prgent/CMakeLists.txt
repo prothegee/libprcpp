@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.15...3.30)
-project(prgent LANGUAGES CXX)
 
 set(PRGENT_VERSION_MAJOR 0)
-set(PRGENT_VERSION_MINOR 3)
+set(PRGENT_VERSION_MINOR 4)
 set(PRGENT_VERSION_PATCH 0)
 set(PRGENT_VERSION_DATES 20250123)
 set(PRGENT_VERSION_STRING "${PRGENT_VERSION_MAJOR}.${PRGENT_VERSION_MINOR}.${PRGENT_VERSION_PATCH}.${PRGENT_VERSION_DATES}")
+
+project(prgent LANGUAGES CXX)
 
 # 0: executeable
 # 1: static lib
@@ -102,6 +103,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE libprcpp)
 if(${LIBPRCPP_SYSTEM_NAME} STREQUAL "windows")
     # you are annoying, Windows
     target_include_directories(${PROJECT_NAME} PRIVATE ${Stb_INCLUDE_DIR})
+    target_link_libraries(${PROJECT_NAME} PRIVATE lunasvg::lunasvg)
     target_link_libraries(${PROJECT_NAME} PRIVATE ZXing::Core ZXing::ZXing)
 endif()
 
@@ -126,9 +128,9 @@ if(${LIBPRCPP_SYSTEM_NAME} STREQUAL "windows")
             ${PRGENT_DIR_ENUMS}
             ${PRGENT_DIR_FUNCTIONS}
 
-            src/prgent/functions/image_gen_funcs.cc
-                src/prgent/functions/barcode_funcs.cc
-                    src/prgent/functions/qrcode_funcs.cc
+            # src/prgent/functions/image_gen_funcs.cc
+            #     src/prgent/functions/barcode_funcs.cc
+            #         src/prgent/functions/qrcode_funcs.cc
     )
 else()
     target_sources(${PROJECT_NAME}
