@@ -208,6 +208,7 @@ endif()
 
 # start: postgresql
 set(LIBPRCPP_PROJECT_USING_POSTGRESQL false)
+set(LIBPRCPP_PROJECT_USING_POSTGRESQL_HAS_PARENT_DIR false)
 
 find_package(PostgreSQL CONFIG)
 if(PostgreSQL_FOUND)
@@ -224,9 +225,16 @@ else()
         find_file(LIBPRCPP_POSTGRESQL_INCLUDE_DIRS "postgresql/libpq-fe.h")
         if(LIBPRCPP_POSTGRESQL_INCLUDE_DIRS)
             set(LIBPRCPP_PROJECT_USING_POSTGRESQL true)
-            message(NOTICE "-- ${PROJECT_NAME}:\n   postgresql path found as path in ${LIBPRCPP_PROJECT_USING_POSTGRESQL}")
+            include_directories(${LIBPRCPP_POSTGRESQL_INCLUDE_DIRS})
+            message(NOTICE "-- ${PROJECT_NAME}:\n   postgresql path found as path in ${LIBPRCPP_POSTGRESQL_INCLUDE_DIRS}")
         else()
             message(NOTICE "-- ${PROJECT_NAME}:\n   postgresql path not found in default include dir and when try to find file")
+        endif()
+    endif()
+
+    if(LIBPRCPP_PROJECT_USING_POSTGRESQL)
+        if(LIBPRCPP_POSTGRESQL_INCLUDE_DIRS MATCHES "postgresql/libpq-fe.h")
+            set(LIBPRCPP_PROJECT_USING_POSTGRESQL_HAS_PARENT_DIR true)
         endif()
     endif()
 endif()
@@ -303,6 +311,7 @@ endif()
 
 # start: stb
 set(LIBPRCPP_PROJECT_USING_STB false)
+set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR false)
 
 find_package(Stb)
 if(Stb_FOUND)
@@ -313,10 +322,21 @@ else()
     find_file(LIBPRCPP_STB_INCLUDE_DIRS "stb/stb_image_write.h")
     if(LIBPRCPP_STB_INCLUDE_DIRS)
         set(LIBPRCPP_PROJECT_USING_STB true)
+        include_directories(${LIBPRCPP_STB_INCLUDE_DIRS})
         message(NOTICE "-- ${PROJECT_NAME}:\n   stb path found as path in ${LIBPRCPP_STB_INCLUDE_DIRS} attempt #1")
     else()
         message(NOTICE "-- ${PROJECT_NAME}:\n   stb path not found in default include dir and when try to find file")
     endif()
+
+    if(LIBPRCPP_PROJECT_USING_STB)
+        if(LIBPRCPP_STB_INCLUDE_DIRS MATCHES "stb/stb_image_write.h")
+            set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR true)
+        endif()
+    endif()
+endif()
+
+if(NOT ${Stb_INCLUDE_DIR} STREQUAL "")
+    include_directories(${Stb_INCLUDE_DIR})
 endif()
 # end: stb
 

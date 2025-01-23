@@ -6,7 +6,7 @@ namespace prgent
 int mainProcess(int argc, char *argv[])
 {
     bool argHelpInUse = false;
-    bool argSizeInUse = false;
+    bool supportsImageSizeAndMargin = false;
 
     // default value for size in pixel/px
     i32 sizeWidth = 128, sizeHeight = 128, sizeMargin = 0;
@@ -85,6 +85,11 @@ int mainProcess(int argc, char *argv[])
                 generateModeStr = GENERATE_MODE_QRCODE_DECODE_AS_STR;
                 i++;
             }
+
+            if (generateMode == GENERATE_MODE_BARCODE_ENCODE || generateMode == GENERATE_MODE_QRCODE_ENCODE) // image size & margin validation
+            {
+                supportsImageSizeAndMargin = true;
+            }
         }
         else if (arg == ARG_IS_INPUT) // this arg is "--input"
         {
@@ -118,10 +123,50 @@ int mainProcess(int argc, char *argv[])
                 i++;
             }
         }
-        // this arg is "--image-size" format NNNxNNN & N is numeric value
-        // this arg is "--image-width"
-        // this arg is "--image-height"
-        // this arg is "--image-margin"
+        else if (arg == ARG_IS_IMAGE_SIZE) // this arg is "--image-size" format NNNxNNN where N is numeric value
+        {
+            if (supportsImageSizeAndMargin && i + 1 < argc)
+            {
+                imageSizeStr = argv[i + 1]; // also ignore if --output-ext is svg
+
+                if (parseSizeArg(imageSizeStr, sizeWidth, sizeHeight))
+                {
+                    i++;
+                }
+                else
+                {
+                    log::errorBase();
+                    std::printf("Invalid --image-size format. Expected format: NNNxNNN (e.g., 128x64)\n");
+                    return RETURN_MAIN_RESULT_ERROR_INVALID_IMAGE_SIZE;
+                }
+            }
+            else if (!supportsImageSizeAndMargin)
+            {
+                log::noticeBase();
+                std::printf("--image-size is ignored for mode: %s\n", generateModeStr.c_str());
+                i++;
+            }
+        }
+        else if (arg == ARG_IS_IMAGE_MARGIN) // this arg is "--image-margin" only numeric value
+        {
+            if (supportsImageSizeAndMargin && i + 1 < argc)
+            {
+                imageSizeMarginStr = argv[i + 1];
+
+                if (isNumeric(imageSizeMarginStr))
+                {
+                    sizeMargin = std::stoi(imageSizeMarginStr);
+                    i++;
+                }
+            }
+            else if (!supportsImageSizeAndMargin)
+            {
+                log::noticeBase();
+                std::printf("--image-margin is ignored for mode: %s\n", generateModeStr.c_str());
+                i++;
+            }
+        }
+        // RESERVED
     }
 
     //////////////////////////////////////////////////////
@@ -179,12 +224,12 @@ int mainProcess(int argc, char *argv[])
 
             if (outputExtStr.empty())
             {
-                std::printf("--output-dir arg is not supplied, using default output ext as .png\n");
-                outputStr += FILE_EXTENSION_IS_PNG_HINT; // use .png
+                std::printf("--output-dir arg is not supplied, using default output ext as .svg\n");
+                outputStr += FILE_EXTENSION_IS_SVG_HINT; // use .svg
             }
             else
             {
-                outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .png
+                outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
             }
 
             if (barcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate barcode
@@ -236,12 +281,12 @@ int mainProcess(int argc, char *argv[])
 
             if (outputExtStr.empty())
             {
-                std::printf("--output-dir arg is not supplied, using default output ext as .png\n");
-                outputStr += FILE_EXTENSION_IS_PNG_HINT; // use .png
+                std::printf("--output-dir arg is not supplied, using default output ext as .svg\n");
+                outputStr += FILE_EXTENSION_IS_SVG_HINT; // use .svg
             }
             else
             {
-                outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .png
+                outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
             }
 
             if (qrcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate qrcode
@@ -280,9 +325,9 @@ int mainProcess(int argc, char *argv[])
 
     //////////////////////////////////////////////////////
 
-    // process --batch-out-csv
+    // TODO: process --batch-out-csv
 
-    // process --batch-out-json
+    // TODO: process --batch-out-json
 
     //////////////////////////////////////////////////////
 

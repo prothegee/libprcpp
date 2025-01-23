@@ -9,7 +9,11 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION // should be only here
 #endif // STB_IMAGE_WRITE_IMPLEMENTATION
 #endif // LIBPRCPP_COMPILER_MSVC
+#if LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR
 #include <stb/stb_image_write.h>
+#else
+#include <stb_image_write.h>
+#endif // LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR
 
 #include <iostream>
 #include <string>

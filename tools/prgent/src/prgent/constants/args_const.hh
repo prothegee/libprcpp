@@ -14,9 +14,7 @@ inline static cchar *ARG_IS_OUTPUT = "--output"; // arg for `--output`
 inline static cchar *ARG_IS_OUTPUT_DIR = "--output-dir"; // arg for `--output-dir`
 inline static cchar *ARG_IS_OUTPUT_EXT = "--output-ext"; // arg for `--output-ext`
 inline static cchar *ARG_IS_IMAGE_SIZE = "--image-size"; // arg for `--image-size` apply NNNxNNN where N is numeric value
-inline static cchar *ARG_IS_IMAGE_WIDTH = "--image-width"; // arg for `--image-width`
-inline static cchar *ARG_IS_IMAGE_HEIGHT = "--image-height"; // arg for `--image-height`
-inline static cchar *ARG_IS_IMAGE_MARGIN = "--image-height"; // arg for `--image-margin`
+inline static cchar *ARG_IS_IMAGE_MARGIN = "--image-margin"; // arg for `--image-margin`
 
 } // namespace prgent
 

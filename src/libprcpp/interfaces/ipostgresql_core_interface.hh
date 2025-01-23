@@ -3,7 +3,11 @@
 #include <libprcpp/base/config.hh>
 
 #if LIBPRCPP_PROJECT_USING_POSTGRESQL
+#if LIBPRCPP_PROJECT_USING_POSTGRESQL_HAS_PARENT_DIR
 #include <postgresql/libpq-fe.h>
+#else
+#include <libpq-fe.h>
+#endif
 
 #include <libprcpp/types/postgresql_types.hh>
 
