@@ -31,11 +31,11 @@ __*NOTES:*__
 
 ---
 
-## tested operating system
+## tested system
 
-- [V] GNU/Linux Debian 12
-- [?] Microsoft Windows (__has error when build test__)
-- [X] Apple MacOS/OSX
+- [X] GNU/Linux Debian 12
+- [ ] Microsoft Windows (__has error when build test__)
+- [ ] Apple MacOS/OSX
 
 <br>
 

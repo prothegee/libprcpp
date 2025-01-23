@@ -367,7 +367,7 @@ public:
         SYYYYMMDDhhmmss YYYYMMDDhhmmss = SYYYYMMDDhhmmss();
 
         /**
-         * @brief YYYYMMDDhhmmssms structure
+         * @brief YYYYMMDDhhmmssms structure with millisecond
          * 
          */
         struct SYYYYMMDDhhmmssms
@@ -422,10 +422,38 @@ public:
             std::string toStringSecondOffset(const int &secondsOffset = 0);
         };
         /**
-         * @brief YYYYMMDDhhmmssms object access
+         * @brief YYYYMMDDhhmmssms (millisecond) object access
          * 
          */
         SYYYYMMDDhhmmssms YYYYMMDDhhmmssms = SYYYYMMDDhhmmssms();
+
+        /**
+         * @brief YYYYMMDDhhmmssms structure with microsecond
+         * 
+         */
+        struct SYYYYMMDDhhmmssmc
+        {
+            /* data */
+        }; 
+        /**
+         * @brief YYYYMMDDhhmmssmc (microsecond) object access
+         * 
+         */
+        SYYYYMMDDhhmmssmc YYYYMMDDhhmmssmc = SYYYYMMDDhhmmssmc();
+
+        /**
+         * @brief YYYYMMDDhhmmssms structure with nanosecond
+         * 
+         */
+        struct SYYYYMMDDhhmmssnn
+        {
+            /* data */
+        };
+        /**
+         * @brief YYYYMMDDhhmmssnn (nanosecond) object access
+         * 
+         */
+        SYYYYMMDDhhmmssnn YYYYMMDDhhmmssnn = SYYYYMMDDhhmmssnn();
     };
     /**
      * @brief UTC object access

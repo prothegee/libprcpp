@@ -9,7 +9,7 @@ int mainProcess(int argc, char *argv[])
     bool supportsImageSizeAndMargin = false;
 
     // default value for size in pixel/px
-    i32 sizeWidth = 128, sizeHeight = 128, sizeMargin = 0;
+    i32 sizeWidth = 256, sizeHeight = 256, sizeMargin = 0;
 
     EGenerateMode generateMode = GENERATE_MODE_UNDEFINED;
 
@@ -19,7 +19,7 @@ int mainProcess(int argc, char *argv[])
 
     std::string inputStr;
 
-    std::string outputStr, outputDirStr, outputExtStr;
+    std::string outputStr, outputDirStr, outputExtStr, outputDecodedStr;
 
     std::string imageSizeStr, imageSizeWidthStr, imageSizeHeightStr, imageSizeMarginStr;
 
@@ -136,7 +136,7 @@ int mainProcess(int argc, char *argv[])
                 else
                 {
                     log::errorBase();
-                    std::printf("Invalid --image-size format. Expected format: NNNxNNN (e.g., 128x64)\n");
+                    std::printf("Invalid --image-size format. Expected format: NNNxNNN (e.g. 128x64)\n");
                     return RETURN_MAIN_RESULT_ERROR_INVALID_IMAGE_SIZE;
                 }
             }
@@ -183,6 +183,27 @@ int mainProcess(int argc, char *argv[])
         return RETURN_MAIN_RESULT_SHOW_HELP;
     }
 
+    if (sizeWidth < 256)
+    {
+        log::warningBase();
+        std::printf("- image width is to small, force set it to 256px\n");
+        sizeWidth = 256;
+    }
+
+    if (sizeHeight < 256)
+    {
+        log::warningBase();
+        std::printf("- image height is to small, force set it to 256px\n");
+        sizeHeight = 256;
+    }
+
+    if (sizeMargin < 0)
+    {
+        log::warningBase();
+        std::printf("- margin can't be negative value, force set to 0\n");
+        sizeMargin = 0;
+    }
+
     //////////////////////////////////////////////////////
 
     // process what generate mode is
@@ -198,9 +219,6 @@ int mainProcess(int argc, char *argv[])
                 std::printf("--input is requied\n");
                 return RETURN_MAIN_RESULT_ERROR_INPUT_IS_REQUIRED;
             }
-
-            // replace all empty space with -
-            utilityFunctions::find::andReplaceAll(inputStr, " ", "-");
 
             if (outputStr.empty())
             {
@@ -256,9 +274,6 @@ int mainProcess(int argc, char *argv[])
                 return RETURN_MAIN_RESULT_ERROR_INPUT_IS_REQUIRED;
             }
 
-            // replace all empty space with -
-            utilityFunctions::find::andReplaceAll(inputStr, " ", "-");
-
             if (outputStr.empty())
             {
                 std::printf("--output arg is not supplied, using default output from input\n");
@@ -304,13 +319,73 @@ int mainProcess(int argc, char *argv[])
 
         case GENERATE_MODE_BARCODE_DECODE:
         {
-            std::printf("TODO: case GENERATE_MODE_BARCODE_DECODE\n");
+            std::printf("###### prgent mode %s:%s\n", GENERATE_MODE_BARCODE_DECODE_AS_NUM, GENERATE_MODE_BARCODE_DECODE_AS_STR);
+
+            if (inputStr.empty())
+            {
+                log::errorBase();
+                std::printf("--input is requied\n");
+                return RETURN_MAIN_RESULT_ERROR_INPUT_IS_REQUIRED;
+            }
+
+            if (!isExtensionAllowed(inputStr, ALLOWED_MODE_IMAGE_EXTENSIONS))
+            {
+                log::errorBase();
+                std::printf("--input file extension is not allowed, allowed file extension for this mode\n");
+                for (auto &extension : ALLOWED_MODE_IMAGE_EXTENSIONS)
+                {
+                    std::printf("- %s\n", extension.c_str());
+                }
+                return RETURN_MAIN_RESULT_ERROR_INPUT_EXTENSION_IS_NOT_ALLOWED;
+            }
+
+            if (!barcode::decodeImage(inputStr, outputDecodedStr))
+            {
+                log::errorBase();
+                std::printf("can't decode barcode from %s\n", inputStr.c_str());
+                return RETURN_MAIN_RESULT_ERROR_DECODE_FAIL;
+            }
+            else
+            {
+                log::okBase();
+                std::printf("decode result:\n`````` START BARCODE DECODE ``````\n%s\n`````` END BARCODE DECODE ``````\n", outputDecodedStr.c_str());
+            }
         }
         break;
 
         case GENERATE_MODE_QRCODE_DECODE:
         {
-            std::printf("TODO: case GENERATE_MODE_QRCODE_DECODE\n");
+            std::printf("###### prgent mode %s:%s\n", GENERATE_MODE_BARCODE_DECODE_AS_NUM, GENERATE_MODE_BARCODE_DECODE_AS_STR);
+
+            if (inputStr.empty())
+            {
+                log::errorBase();
+                std::printf("--input is requied\n");
+                return RETURN_MAIN_RESULT_ERROR_INPUT_IS_REQUIRED;
+            }
+
+            if (!isExtensionAllowed(inputStr, ALLOWED_MODE_IMAGE_EXTENSIONS))
+            {
+                log::errorBase();
+                std::printf("--input file extension is not allowed, allowed file extension for this mode\n");
+                for (auto &extension : ALLOWED_MODE_IMAGE_EXTENSIONS)
+                {
+                    std::printf("- %s\n", extension.c_str());
+                }
+                return RETURN_MAIN_RESULT_ERROR_INPUT_EXTENSION_IS_NOT_ALLOWED;
+            }
+
+            if (!qrcode::decodeImage(inputStr, outputDecodedStr))
+            {
+                log::errorBase();
+                std::printf("can't decode qrcode from %s\n", inputStr.c_str());
+                return RETURN_MAIN_RESULT_ERROR_DECODE_FAIL;
+            }
+            else
+            {
+                log::okBase();
+                std::printf("decode result:\n`````` START QRCODE DECODE ``````\n%s\n``````  END QRCODE DECODE  ``````\n", outputDecodedStr.c_str());
+            }
         }
         break;
 

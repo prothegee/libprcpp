@@ -62,6 +62,16 @@ typedef double f64;
 // alter type of const char
 typedef const char cchar;
 
+#ifndef LIBPRCPP_TRUE_BUT_STRING
+    // yes, it's "true"
+    #define LIBPRCPP_TRUE_BUT_STRING "true"
+#endif // LIBPRCPP_TRUE_BUT_STRING
+
+#ifndef LIBPRCPP_FALSE_BUT_STRING
+    // no, it's "false"
+    #define LIBPRCPP_FALSE_BUT_STRING "false"
+#endif // LIBPRCPP_FALSE_BUT_STRING
+
 } // namespace libprcpp
 
 #endif // LIBPRCPP_BASIC_TYPES_HH

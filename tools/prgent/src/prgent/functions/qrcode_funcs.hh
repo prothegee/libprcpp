@@ -12,6 +12,20 @@ namespace qrcode
 {
 
 /**
+ * @brief decode/read barcode content
+ * 
+ * @note there's no sanity check for width & height for content image, do verify first before using this function
+ * @note some image with less than 256 may cause error
+ * @note may similar with qrcode::decodeImage, but it's preserve for qrcode
+ * 
+ * @param content 
+ * @param output data to pass
+ * @return true 
+ * @return false 
+ */
+bool decodeImage(const std::string &content, std::string &output);
+
+/**
  * @brief encode/generate qrcode as image
  * 
  * @param content 
@@ -19,8 +33,8 @@ namespace qrcode
  * @param width 
  * @param height 
  * @param margin 
- * @return true ok,
- * @return false fail
+ * @return true 
+ * @return false 
  */
 bool encodeImage(const std::string &content, const std::string &output, const i32 &width, const i32 &height, const i32 &margin);
 

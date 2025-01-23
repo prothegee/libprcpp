@@ -6,8 +6,10 @@
 
 #if LIBPRCPP_PROJECT_USING_STB
 #if LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR
+#include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 #else
+#include <stb_image.h>
 #include <stb_image_write.h>
 #endif // LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR
 
@@ -15,6 +17,83 @@ namespace prgent
 {
 namespace barcode
 {
+
+bool decodeImage(const std::string &content, std::string &output)
+{
+    i32 width, height, channels;
+
+    std::vector<uint8_t> luminanceData;
+
+    if (content.size() >= 4 && content.substr(content.size() - 4) == ".svg")
+    {
+        if (!rasterizeFromSVG(content, luminanceData, width, height))
+        {
+            std::printf("failed to render svg: %s\n", content.c_str());
+            return false;
+        }
+    }
+    else
+    {
+        auto imageData = stbi_load(content.c_str(), &width, &height, &channels, 0);
+
+        if (!imageData)
+        {
+            std::printf("image data can't be loaded from %s\n", content.c_str());
+            return false;
+        }
+
+        if (channels == 3 || channels == 4) // RGB or TGBA
+        {
+            luminanceData.resize(width * height);
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int sourceIndex = (y * width + x) * channels;
+                    int destinationIndex = y * width + x;
+
+                    luminanceData[destinationIndex] = static_cast<uint8_t>(
+                        0.2126 * imageData[sourceIndex] +      // R
+                        0.7152 * imageData[sourceIndex + 1] +  // G
+                        0.0722 * imageData[sourceIndex + 2]    // B
+                    );
+                }
+            }
+        }
+        else if (channels == 1) // grayscale
+        {
+            luminanceData.assign(imageData, imageData + width * height);
+        }
+        else
+        {
+            std::printf("error: Image channel count (%d) is not supported\n", channels);
+            stbi_image_free(imageData);
+            return false;
+        }
+
+        stbi_image_free(imageData);
+    }
+
+    ZXing::ImageView imageView(luminanceData.data(), width, height, ImageFormat::Lum);
+
+    ReaderOptions option;
+    
+    option.setTryHarder(true);
+    option.setFormats(ZXing::BarcodeFormat::Any); // use Any for now, or forever
+
+    auto result = ZXing::ReadBarcode(imageView, option);
+
+    if (!result.isValid())
+    {
+        std::printf("result invalid to decode barcode, format is %s\n", ZXing::ToString(result.format()).c_str());
+        return false;
+    }
+
+    output = result.text();
+
+    return true;
+}
 
 bool encodeImage(const std::string &content, const std::string &output, const i32 &width, const i32 &height, const i32 &margin)
 {

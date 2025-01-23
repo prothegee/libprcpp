@@ -280,35 +280,6 @@ endif()
 # end: libharu
 
 
-# start: qrencode
-set(LIBPRCPP_PROJECT_USING_LIBQRENCODE false)
-set(LIBPRCPP_PROJECT_USING_LIBQRENCODE_DEFAULT false) # not sure it's supposed to be marked from vcpkg
-
-find_file(LIBPRCPP_LIBQRENCODE_INCLUDE_DIRS "qrencode.h")
-if(LIBPRCPP_LIBQRENCODE_INCLUDE_DIRS)
-    set(LIBPRCPP_PROJECT_USING_LIBQRENCODE true)
-    message(NOTICE "-- ${PROJECT_NAME}:\n   libqrencode package found")
-    find_path(QRENCODE_INCLUDE_DIR NAMES qrencode.h)
-    find_library(QRENCODE_LIBRARY_RELEASE qrencode)
-    find_library(QRENCODE_LIBRARY_DEBUG qrencoded)
-    set(QRENCODE_LIBRARIES optimized ${QRENCODE_LIBRARY_RELEASE} debug ${QRENCODE_LIBRARY_DEBUG})
-    set(LIBPRCPP_PROJECT_USING_LIBQRENCODE_DEFAULT true)
-else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   not found libqrencode, attempting another way")
-    find_path(QRENCODE_INCLUDE_DIR NAMES qrencode.h)
-    if(QRENCODE_INCLUDE_DIR)
-        set(LIBPRCPP_PROJECT_USING_LIBQRENCODE true)
-        message(NOTICE "-- ${PROJECT_NAME}:\n   found libqrencode as ${QRENCODE_INCLUDE_DIR}")
-        find_library(QRENCODE_LIBRARY_RELEASE qrencode)
-        find_library(QRENCODE_LIBRARY_DEBUG qrencoded)
-        set(QRENCODE_LIBRARIES optimized ${QRENCODE_LIBRARY_RELEASE} debug ${QRENCODE_LIBRARY_DEBUG})
-    else()
-        message(NOTICE "-- ${PROJECT_NAME}:\n   libqrencode path not found in default include dir and when try to find file or find library")
-    endif()
-endif()
-# end: qrencode
-
-
 # start: stb
 set(LIBPRCPP_PROJECT_USING_STB false)
 set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR false)
@@ -339,6 +310,20 @@ if(NOT ${Stb_INCLUDE_DIR} STREQUAL "")
     include_directories(${Stb_INCLUDE_DIR})
 endif()
 # end: stb
+
+
+# start: lunasvg
+set(LIBPRCPP_PROJECT_USING_LUNASVG false)
+
+find_package(lunasvg CONFIG)
+
+if(lunasvg_FOUND)
+    set(LIBPRCPP_PROJECT_USING_LUNASVG true)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   lunasvg package found")
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   lunasvg package not found")
+endif()
+# end: lunasvg
 
 
 # start: zxing
