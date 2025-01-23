@@ -30,9 +30,10 @@ void warningBase()
 
 void showHelpBaseHint()
 {
+    #pragma message("TODO: specify this")
     std::printf("prgent usage:\n");
-    std::printf("--help: show this help message\n");
-    std::printf("--mode: specify the mode (e.g., barcode or qr code)\n");
+    std::printf("--help: show this help message\n    - use --help mode to show supported mode usage\n");
+    std::printf("--mode: specify the mode use number or string\n    - e.g.: 1:barcode-encode 3:qrcode-encode\n");
     std::printf("--input: input file path\n");
     std::printf("--output: output file path\n");
 }

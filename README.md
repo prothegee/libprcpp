@@ -10,11 +10,13 @@ currently for personal use, as module and just reference
 
 ## package that might required
 
+- [stb](https://github.com/nothings/stb)
 - [argon2](https://github.com/P-H-C/phc-winner-argon2)
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - [openssl](https://github.com/openssl/openssl)
 - [jwt cpp](https://github.com/Thalhammer/jwt-cpp)
 - [libharu](https://github.com/libharu/libharu)
+- [zxing-cpp](https://github.com/zxing-cpp/zxing-cpp)
 - [cryptopp cmake](https://github.com/abdes/cryptopp-cmake)
 - [drogon framework](https://github.com/drogonframework/drogon)
 - [scylla cpp driver](https://github.com/scylladb/cpp-driver)
@@ -22,7 +24,7 @@ currently for personal use, as module and just reference
 __*NOTES:*__
 ```
 - if above package doesn't exists project will skip that package library
-- may cause some module not implemented
+- may cause some module & functionality not implemented
 ```
 
 <br>
@@ -39,7 +41,7 @@ __*NOTES:*__
 
 ---
 
-## cmake
+<!-- ## cmake
 
 `cmake conf`
 ```sh
@@ -74,6 +76,6 @@ cmake --build build/debug --config Debug;
 
 <br>
 
----
+--- -->
 
-###### end of libprcpp
+###### end of libprcpp README

@@ -49,9 +49,9 @@ inline static std::string validateAllowedImageFileExtension(const std::string &f
     {
         if (!std::string(argKey).empty())
         {
-            std::cout << argKey << " file extension not supported, use .png instead\n";
+            std::cout << argKey << " file extension not supported, use .svg instead\n";
         }
-        result = FILE_EXTENSION_IS_PNG_HINT;
+        result = FILE_EXTENSION_IS_SVG_HINT;
     }
 
     return result;
