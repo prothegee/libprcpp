@@ -2,7 +2,18 @@
     "cmake.generator": "Ninja",
     "cmake.buildDirectory": "${workspaceFolder}/build/${variant:buildType}", // for debug in vscode only
     "cmake.configureSettings": {
-        "CMAKE_CXX_FLAGS": "", // windows:"/std:c++20 /EHsc" linux:"-std=c++20 -fcoroutines"
+        /*
+        - gnu: -std=c++17 -lm
+        - msvc: /std:c++17 /EHsc
+        - clang: -std=c++17 -fPIC -v -lm -ldl
+        */
+        "CMAKE_CXX_FLAGS": "",
+        /*
+        - gnu: -Wl,-no-pie
+        - msvc: NONE
+        - clang: -Wl,-no-pie
+        */
+        "CMAKE_EXE_LINKER_FLAGS": "",
         "CMAKE_TOOLCHAIN_FILE": "",
 
         "LIBPRCPP_VCPKG": false, // required env of "VCPKG_ROOT" or "VCPKG_DIR" if true
@@ -35,6 +46,7 @@
         "ZXING_EXPERIMENTAL_API": true,
 
         "Stb_INCLUDE_DIR": "", // path where stb is clone, in windows also should be stb/some_stb_header.h
+        "Stb_DIR": "", // same as above
 
         "_": "don't use me"
     }

@@ -3,16 +3,38 @@
 #if LIBPRCPP_PROJECT_USING_ZXING
 
 #if LIBPRCPP_PROJECT_USING_STB
+
 #if LIBPRCPP_COMPILER_MSVC
-#pragma message("IMPORTANT msvc compiler: STB_IMAGE_WRITE_IMPLEMENTATION should be only here")
-#ifndef STB_IMAGE_WRITE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION // should be only here
-#endif // STB_IMAGE_WRITE_IMPLEMENTATION
-#pragma message("IMPORTANT msvc compiler: STB_IMAGE_IMPLEMENTATION should be only here")
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION // should be only here
-#endif // STB_IMAGE_IMPLEMENTATION
+    #pragma message("IMPORTANT msvc compiler: STB_IMAGE_WRITE_IMPLEMENTATION should be only here")
+    #ifndef STB_IMAGE_WRITE_IMPLEMENTATION
+    #define STB_IMAGE_WRITE_IMPLEMENTATION // should be only here
+    #endif // STB_IMAGE_WRITE_IMPLEMENTATION
+    #pragma message("IMPORTANT msvc compiler: STB_IMAGE_IMPLEMENTATION should be only here")
+    #ifndef STB_IMAGE_IMPLEMENTATION
+    #define STB_IMAGE_IMPLEMENTATION // should be only here
+    #endif // STB_IMAGE_IMPLEMENTATION
 #endif // LIBPRCPP_COMPILER_MSVC
+#if LIBPRCPP_COMPILER_CLANG
+    #ifndef STB_IMAGE_WRITE_IMPLEMENTATION
+    #pragma message "IMPORTANT clang compiler: STB_IMAGE_WRITE_IMPLEMENTATION should be only here"
+    #define STB_IMAGE_WRITE_IMPLEMENTATION
+    #endif // STB_IMAGE_WRITE_IMPLEMENTATION
+    #ifndef STB_IMAGE_IMPLEMENTATION
+    #pragma message "IMPORTANT clang compiler: STB_IMAGE_IMPLEMENTATION should be only here"
+    #define STB_IMAGE_IMPLEMENTATION
+    #endif // STB_IMAGE_IMPLEMENTATION
+#endif // LIBPRCPP_COMPILER_CLANG
+#if LIBPRCPP_COMPILER_GNU
+    #ifndef STB_IMAGE_WRITE_IMPLEMENTATION
+    #pragma message "IMPORTANT gnu compiler: STB_IMAGE_WRITE_IMPLEMENTATION should be only here"
+    #define STB_IMAGE_WRITE_IMPLEMENTATION
+    #endif // STB_IMAGE_WRITE_IMPLEMENTATION
+    #ifndef STB_IMAGE_IMPLEMENTATION
+    #pragma message "IMPORTANT gnu compiler: STB_IMAGE_IMPLEMENTATION should be only here"
+    #define STB_IMAGE_IMPLEMENTATION
+    #endif // STB_IMAGE_IMPLEMENTATION
+#endif // LIBPRCPP_COMPILER_GNU
+
 #if LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>

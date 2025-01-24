@@ -348,7 +348,7 @@ int mainProcess(int argc, char *argv[])
             else
             {
                 log::okBase();
-                std::printf("decode result:\n`````` START BARCODE DECODE ``````\n%s\n`````` END BARCODE DECODE ``````\n", outputDecodedStr.c_str());
+                std::printf("decode result:\n`````` START BARCODE DECODE ``````\n%s\n``````  END BARCODE DECODE  ``````\n", outputDecodedStr.c_str());
             }
         }
         break;
