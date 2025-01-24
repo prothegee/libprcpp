@@ -22,28 +22,106 @@ else()
     # IGNORED
 endif()
 
+
+#[=[ c++ standar ]=]
+if(NOT CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 17)
+elseif(CMAKE_CXX_STANDARD LESS_EQUAL 17)
+    set(CMAKE_CXX_STANDARD 17)
+    message(WARNING "-- can't use cxx standard less than 17")
+else()
+    set(CMAKE_CXX_STANDARD ${CMAKE_CXX_STANDARD})
+endif()
+
+
+#[=[ executeable linker flags ]=]
+if(NOT DEFINED CMAKE_EXE_LINKER_FLAGS)
+    set(CMAKE_EXE_LINKER_FLAGS "")
+endif()
+
+
 #[====================================[
 PRECONFIGURE COMPILER flags for:
 - CMAKE_CXX_FLAGS
 - CMAKE_EXE_LINKER_FLAGS
 #]====================================]
 if(LIBPRCPP_BASE_COMPILER_GNU)
-    set(CMAKE_CXX_FLAGS "-lm")
-    set(CMAKE_EXE_LINKER_FLAGS "-Wl,-no-pie")
+    if(CMAKE_CXX_STANDARD EQUAL 17)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    elseif(CMAKE_CXX_STANDARD EQUAL 20)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+    else()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    endif()
+    
+    #[====================================[
+    CMAKE_CXX_FLAGS
+    #]====================================]
+    if(NOT CMAKE_CXX_FLAGS MATCHES "-lm")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lm")
+    endif()
+
+    #[====================================[
+    CMAKE_EXE_LINKER_FLAGS
+    #]====================================]
+    if(NOT CMAKE_EXE_LINKER_FLAGS MATCHES "-Wl,-no-pie")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-no-pie")
+    endif()
 endif()
 if(LIBPRCPP_BASE_COMPILER_MSVC)
-    # skipped
+    if(CMAKE_CXX_STANDARD EQUAL 17)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+    elseif(CMAKE_CXX_STANDARD EQUAL 20)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20")
+    else()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+    endif()
+    
+    #[====================================[
+    CMAKE_CXX_FLAGS
+    #]====================================]
+    if(NOT CMAKE_CXX_FLAGS MATCHES "/EHsc")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+    endif()
+
+    #[====================================[
+    CMAKE_EXE_LINKER_FLAGS
+    #]====================================]
+    # n/a
 endif()
 if(LIBPRCPP_BASE_COMPILER_CLANG)
-    set(CMAKE_CXX_FLAGS "-fPIC -v -lm -ldl")
-    set(CMAKE_EXE_LINKER_FLAGS "-Wl,-no-pie")
+    if(CMAKE_CXX_STANDARD EQUAL 17)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    elseif(CMAKE_CXX_STANDARD EQUAL 20)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+    else()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    endif()
+    
+    #[====================================[
+    CMAKE_CXX_FLAGS
+    #]====================================]
+    if(NOT CMAKE_CXX_FLAGS MATCHES "-fPIC")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+    endif()
+    if(NOT CMAKE_CXX_FLAGS MATCHES "-v")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -v")
+    endif()
+    if(NOT CMAKE_CXX_FLAGS MATCHES "-lm")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lm")
+    endif()
+    if(NOT CMAKE_CXX_FLAGS MATCHES "-ldl")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ldl")
+    endif()
+
+    #[====================================[
+    CMAKE_EXE_LINKER_FLAGS
+    #]====================================]
+    if(NOT CMAKE_EXE_LINKER_FLAGS MATCHES "-Wl,-no-pie")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-no-pie")
+    endif()
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
-
-if(${CMAKE_CXX_STANDARD} LESS_EQUAL 17)
-    set(CMAKE_CXX_STANDARD 17)
-endif()
 
 # start: check toolchain
 if("${CMAKE_TOOLCHAIN_FILE}" STREQUAL "")
