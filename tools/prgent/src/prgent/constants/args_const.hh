@@ -15,6 +15,7 @@ inline static cchar *ARG_IS_OUTPUT_DIR = "--output-dir"; // arg for `--output-di
 inline static cchar *ARG_IS_OUTPUT_EXT = "--output-ext"; // arg for `--output-ext`
 inline static cchar *ARG_IS_IMAGE_SIZE = "--image-size"; // arg for `--image-size` apply NNNxNNN where N is numeric value
 inline static cchar *ARG_IS_IMAGE_MARGIN = "--image-margin"; // arg for `--image-margin`
+inline static cchar *ARG_IS_BATCH_ITER = "--batch-iter"; // arg for `--image-margin`
 
 } // namespace prgent
 

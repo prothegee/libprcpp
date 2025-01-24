@@ -1,15 +1,23 @@
 #include "main_proc.hh"
 
+#include <thread>
+#include <future>
+
+#include <libprcpp/modules/date_and_time_module.hh>
+
 namespace prgent
 {
 
 int mainProcess(int argc, char *argv[])
 {
     bool argHelpInUse = false;
+    bool argBatchInUse = false;
     bool supportsImageSizeAndMargin = false;
 
     // default value for size in pixel/px
     i32 sizeWidth = 256, sizeHeight = 256, sizeMargin = 0;
+
+    i32 batchIter = 0;
 
     EGenerateMode generateMode = GENERATE_MODE_UNDEFINED;
 
@@ -22,6 +30,8 @@ int mainProcess(int argc, char *argv[])
     std::string outputStr, outputDirStr, outputExtStr, outputDecodedStr;
 
     std::string imageSizeStr, imageSizeWidthStr, imageSizeHeightStr, imageSizeMarginStr;
+
+    std::string batchIterStr, batchOutCsv, batchOutJson;
 
     for (i32 i = 1; i < argc; i++)
     {
@@ -166,7 +176,35 @@ int mainProcess(int argc, char *argv[])
                 i++;
             }
         }
-        // RESERVED
+        else if (arg == ARG_IS_BATCH_ITER) // this arg is "--batch-iter" only numeric 
+        {
+            batchIterStr = argv[i + 1];
+
+            if (isNumeric(batchIterStr))
+            {
+                batchIter = std::stoi(batchIterStr);
+
+                if (batchIter >= 1)
+                {
+                    argBatchInUse = true;
+                    i++;
+                }
+                else
+                {
+                    log::errorBase();
+                    std::printf("--batch-iter can't be zero value");
+                    return RETURN_MAIN_RESULT_ERROR_BATCH_ITER_CANT_ZERO_VALUE;
+                }
+            }
+            else
+            {
+                log::errorBase();
+                std::printf("--batch-iter must numeric value");
+                return RETURN_MAIN_RESULT_ERROR_BATCH_ITER_NOT_NUMERIC;
+            }
+        }
+        // RESERVED --batch-out-csv
+        // RESERVED --batch-out-json
     }
 
     //////////////////////////////////////////////////////
@@ -206,6 +244,84 @@ int mainProcess(int argc, char *argv[])
 
     //////////////////////////////////////////////////////
 
+    bool batchModeFail = false; // double check
+
+    // future object storage for batch save csv/json
+    std::vector<std::future<std::string>> futureBatchCsv, futureBatchJson;
+
+    // only used for encode
+    auto generateBatchEncode = [&](i32 batchNum) -> std::string
+    {
+        i32 localTime = 0;
+        std::string result, timestampStr;
+
+        localTime = dateAndTimeFunctions::localTimeZone();
+        timestampStr = dateAndTimeFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
+
+        // create output if empty
+        if (argBatchInUse && outputStr.empty())
+        {
+            outputStr = inputStr;
+        }
+
+        // create dir if batch iter in use while output dir empty
+        if (argBatchInUse && outputDirStr.empty())
+        {
+            std::filesystem::create_directories(inputStr);
+            outputDirStr = inputStr; // assign output since it batch and empty from inputStr
+        }
+
+        // if output dir not empty and batch iter is in use, create it too
+        if (argBatchInUse && !outputDirStr.empty())
+        {
+            std::filesystem::create_directories(outputDirStr);
+        }
+
+        // if output extension is mepty and batch in use, set the extension
+        if (argBatchInUse && outputExtStr.empty())
+        {
+            outputExtStr = FILE_EXTENSION_IS_SVG_HINT;
+        }
+
+        std::cout << "timestampStr: " << timestampStr << '\n';
+
+        switch (generateMode)
+        {
+            case GENERATE_MODE_BARCODE_ENCODE:
+            {
+                result = outputDirStr + "/" + outputStr + "-" + timestampStr + "-" + std::to_string(batchNum) + "." + outputExtStr;
+
+                barcode::encodeImage(std::string(outputStr + "-" + timestampStr + std::to_string(batchNum)), result, sizeWidth, sizeHeight, sizeMargin);
+            }
+            break;
+
+            case GENERATE_MODE_QRCODE_ENCODE:
+            {
+                result = outputDirStr + "/" + outputStr + "-" + timestampStr + "-" + std::to_string(batchNum) + "." + outputExtStr;
+
+                qrcode::encodeImage(std::string(outputStr + "-" + timestampStr + std::to_string(batchNum)), result, sizeWidth, sizeHeight, sizeMargin);
+            }
+            break;
+
+            default:
+            {
+                batchModeFail = true;
+            }
+            break;
+        }
+
+        return result;
+    };
+
+    if (batchModeFail)
+    {
+        log::errorBase();
+        std::printf("- this mode (%d) batch iter not supported, only 1:barcode-encode & 3:qrcode-encode is allowed\n", (int)generateMode);
+        return RETURN_MAIN_RESULT_ERROR_BATCH_ITER_FAIL_DUE_MODE;
+    }
+
+    //////////////////////////////////////////////////////
+
     // process what generate mode is
     switch (generateMode)
     {
@@ -220,45 +336,70 @@ int mainProcess(int argc, char *argv[])
                 return RETURN_MAIN_RESULT_ERROR_INPUT_IS_REQUIRED;
             }
 
-            if (outputStr.empty())
+            // check batch or not
+            if (!argBatchInUse)
             {
-                std::printf("--output arg is not supplied, using default output from input\n");
-                outputStr = inputStr;
-            }
-
-            if (outputDirStr.empty())
-            {
-                std::printf("--output-dir arg is not supplied, using current path as output dir\n");
-            }
-            else
-            {
-                if (!outputDirStr.empty() && !std::filesystem::exists(outputDirStr))
+                if (outputStr.empty())
                 {
-                    std::filesystem::create_directories(outputDirStr);
+                    std::printf("--output arg is not supplied, using default output from input\n");
+                    outputStr = inputStr;
                 }
 
-                outputStr = outputDirStr + "/" + outputStr;
-            }
+                if (outputDirStr.empty())
+                {
+                    std::printf("--output-dir arg is not supplied, using current path as output dir\n");
+                }
+                else
+                {
+                    if (!outputDirStr.empty() && !std::filesystem::exists(outputDirStr))
+                    {
+                        std::filesystem::create_directories(outputDirStr);
+                    }
 
-            if (outputExtStr.empty())
-            {
-                std::printf("--output-dir arg is not supplied, using default output ext as .svg\n");
-                outputStr += FILE_EXTENSION_IS_SVG_HINT; // use .svg
+                    outputStr = outputDirStr + "/" + outputStr;
+                }
+
+                if (outputExtStr.empty())
+                {
+                    std::printf("--output-dir arg is not supplied, using default output ext as .svg\n");
+                    outputStr += FILE_EXTENSION_IS_SVG_HINT; // use .svg
+                }
+                else
+                {
+                    outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
+                }
+
+                if (barcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate barcode
+                {
+                    std::printf("output save as: %s", outputStr.c_str());
+                }
+                else
+                {
+                    log::errorBase();
+                    std::printf("fail to encode image for barcode from text");
+                    return RETURN_MAIN_RESULT_ERROR_ENCODE_IMAGE;
+                }
             }
             else
             {
-                outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
-            }
+                std::printf("TODO: barcode using batch iter\n");
+                for (i32 i = 1; i <= batchIter; i++)
+                {
+                    auto iterRes = std::async(std::launch::async, generateBatchEncode, i);
 
-            if (barcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate barcode
-            {
-                std::printf("output save as: %s", outputStr.c_str());
-            }
-            else
-            {
-                log::errorBase();
-                std::printf("fail to encode image for barcode from text");
-                return RETURN_MAIN_RESULT_ERROR_ENCODE_IMAGE;
+                    if (batchOutCsv == "true")
+                    {
+                        futureBatchCsv.push_back(std::move(iterRes));
+                    }
+
+                    if (batchOutJson == "true")
+                    {
+                        futureBatchJson.push_back(std::move(iterRes));
+                    }
+                }
+
+                log::okBase();
+                std::printf("- batch encode barcode saved in \"%s\"\n", outputDirStr.c_str());
             }
         }
         break;
@@ -274,45 +415,69 @@ int mainProcess(int argc, char *argv[])
                 return RETURN_MAIN_RESULT_ERROR_INPUT_IS_REQUIRED;
             }
 
-            if (outputStr.empty())
+            // check batch or not
+            if (!argBatchInUse)
             {
-                std::printf("--output arg is not supplied, using default output from input\n");
-                outputStr = inputStr;
-            }
-
-            if (outputDirStr.empty())
-            {
-                std::printf("--output-dir arg is not supplied, using current path as output dir\n");
-            }
-            else
-            {
-                if (!outputDirStr.empty() && !std::filesystem::exists(outputDirStr))
+                if (outputStr.empty())
                 {
-                    std::filesystem::create_directories(outputDirStr);
+                    std::printf("--output arg is not supplied, using default output from input\n");
+                    outputStr = inputStr;
                 }
 
-                outputStr = outputDirStr + "/" + outputStr;
-            }
+                if (outputDirStr.empty())
+                {
+                    std::printf("--output-dir arg is not supplied, using current path as output dir\n");
+                }
+                else
+                {
+                    if (!outputDirStr.empty() && !std::filesystem::exists(outputDirStr))
+                    {
+                        std::filesystem::create_directories(outputDirStr);
+                    }
 
-            if (outputExtStr.empty())
-            {
-                std::printf("--output-dir arg is not supplied, using default output ext as .svg\n");
-                outputStr += FILE_EXTENSION_IS_SVG_HINT; // use .svg
+                    outputStr = outputDirStr + "/" + outputStr;
+                }
+
+                if (outputExtStr.empty())
+                {
+                    std::printf("--output-dir arg is not supplied, using default output ext as .svg\n");
+                    outputStr += FILE_EXTENSION_IS_SVG_HINT; // use .svg
+                }
+                else
+                {
+                    outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
+                }
+
+                if (qrcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate qrcode
+                {
+                    std::printf("output save as: %s", outputStr.c_str());
+                }
+                else
+                {
+                    log::errorBase();
+                    std::printf("fail to encode image for qrcode from text");
+                    return RETURN_MAIN_RESULT_ERROR_ENCODE_IMAGE;
+                }
             }
             else
             {
-                outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
-            }
+                for (i32 i = 1; i <= batchIter; i++)
+                {
+                    auto iterRes = std::async(std::launch::async, generateBatchEncode, i);
 
-            if (qrcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate qrcode
-            {
-                std::printf("output save as: %s", outputStr.c_str());
-            }
-            else
-            {
-                log::errorBase();
-                std::printf("fail to encode image for barcode from text");
-                return RETURN_MAIN_RESULT_ERROR_ENCODE_IMAGE;
+                    if (batchOutCsv == "true")
+                    {
+                        futureBatchCsv.push_back(std::move(iterRes));
+                    }
+
+                    if (batchOutJson == "true")
+                    {
+                        futureBatchJson.push_back(std::move(iterRes));
+                    }
+                }
+
+                log::okBase();
+                std::printf("- batch encode qrcode saved in \"%s\"\n", outputDirStr.c_str());
             }
         }
         break;

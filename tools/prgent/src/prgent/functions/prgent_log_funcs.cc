@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include <libprcpp/base/config.hh>
+
 namespace prgent
 {
 namespace log
@@ -30,17 +32,30 @@ void warningBase()
 
 void showHelpBaseHint()
 {
-    #pragma message("TODO: specify this")
     std::printf("prgent usage:\n");
-    std::printf("--help: show this help message\n    - use --help mode to show supported mode usage\n");
+    std::printf("--help: show this help message\n    - to show supported mode usage use \"--help mode\"\n");
     std::printf("--mode: specify the mode use number or string\n    - e.g.: 1:barcode-encode 3:qrcode-encode\n");
     std::printf("--input: input file path\n");
     std::printf("--output: output file path\n");
+    std::printf("--output-dir: output directory/folder\n");
+    std::printf("--output-ext: output extension name\n   - encode barcode & qrcode only supported .svg, .png, .jpg, .jpeg\n");
+    std::printf("--image-size: specify image size in NNNxNNN format, where N is must numeric as pixel/px\n   - 256x256 px is default size\n   - .svg will ignore size\n");
+    std::printf("--image-margin: specify margin of image\n   - only support for barcode & qrcode encode\n");
+    #if LIBPRCPP_COMPILER_MSVC
+    #pragma message ("TODO: --batch-iter")
+    #else
+    #pragma message "TODO: --batch-iter"
+    #endif // LIBPRCPP_COMPILER_MSVC
 }
 
 void showHelpConfigurations(const std::string &helpHint)
 {
     std::printf("TODO: help is using arg of %s", helpHint.c_str());
+    #if LIBPRCPP_COMPILER_MSVC
+    #pragma message ("TODO: help is using arg of helpHint param")
+    #else
+    #pragma message "TODO: help is using arg of helpHint param"
+    #endif // LIBPRCPP_COMPILER_MSVC
 }
 
 } // namespace log
