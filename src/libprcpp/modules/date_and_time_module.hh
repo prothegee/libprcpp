@@ -27,6 +27,13 @@ public:
     ~CDateAndTime();
 
     /**
+     * @brief get this local machine timzone
+     * 
+     * @return int 
+     */
+    int localTimeZone();
+
+    /**
      * @brief UTC structure
      * 
      */
@@ -464,6 +471,13 @@ public:
 
 namespace dateAndTimeFunctions
 {
+    /**
+     * @brief get this local machine timzone
+     * 
+     * @return int 
+     */
+    int localTimeZone();
+
     namespace UTC
     {
         namespace timezone

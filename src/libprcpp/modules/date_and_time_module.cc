@@ -11,6 +11,24 @@ CDateAndTime::~CDateAndTime()
 {
 }
 
+int CDateAndTime::localTimeZone()
+{
+    int result = 0;
+
+    std::time_t now = std::time(nullptr);
+    std::tm utcTime = *std::gmtime(&now);
+    std::tm localTime = *std::localtime(&now);
+
+    std::time_t localTimeT = std::mktime(&localTime);
+    std::time_t utcTimeT = std::mktime(&utcTime);
+
+    int localOffset = static_cast<int>(localTimeT - utcTimeT);
+
+    result = localOffset / 3600;
+
+    return result;
+}
+
 std::string CDateAndTime::SUTC::STimeZone::toString()
 {
     std::string result;
@@ -954,6 +972,12 @@ std::string CDateAndTime::SUTC::SYYYYMMDDhhmmssms::toStringSecondOffset(const in
 
 namespace dateAndTimeFunctions
 {
+    int localTimeZone()
+    {
+        CDateAndTime DT;
+        return DT.localTimeZone();
+    }
+
     namespace UTC
     {
         namespace timezone

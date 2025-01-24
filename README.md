@@ -31,11 +31,11 @@ __*NOTES:*__
 
 ---
 
-## tested system
+## tested compiler
 
-- [X] GNU/Linux Debian 12
-- [ ] Microsoft Windows (__has error when build test__)
-- [ ] Apple MacOS/OSX
+- [X] Clang ( 14.0 )
+- [X] GNU GCC ( 12.2 )
+- [X] Microsoft MSVC ( 19.42 )
 
 <br>
 
