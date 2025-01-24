@@ -382,7 +382,6 @@ int mainProcess(int argc, char *argv[])
             }
             else
             {
-                std::printf("TODO: barcode using batch iter\n");
                 for (i32 i = 1; i <= batchIter; i++)
                 {
                     auto iterRes = std::async(std::launch::async, generateBatchEncode, i);

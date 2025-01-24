@@ -12,6 +12,7 @@ currently for personal use, as module and just reference
 
 - [stb](https://github.com/nothings/stb)
 - [argon2](https://github.com/P-H-C/phc-winner-argon2)
+- [lunasvg](https://github.com/sammycage/lunasvg)
 - [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - [openssl](https://github.com/openssl/openssl)
 - [jwt cpp](https://github.com/Thalhammer/jwt-cpp)
