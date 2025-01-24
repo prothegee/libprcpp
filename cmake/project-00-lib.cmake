@@ -2,6 +2,49 @@ string(TOLOWER ${CMAKE_SYSTEM_NAME}      LIBPRCPP_BASE_SYSTEM_NAME)
 string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} LIBPRCPP_BASE_SYSTEM_PROCESSOR)
 string(TOLOWER ${CMAKE_BUILD_TYPE}       LIBPRCPP_BASE_SYSTEM_BUILD_TYPE)
 
+set(LIBPRCPP_BASE_COMPILER_GNU   false)
+set(LIBPRCPP_BASE_COMPILER_MSVC  false)
+set(LIBPRCPP_BASE_COMPILER_CLANG false)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(LIBPRCPP_BASE_COMPILER_GNU   true)
+    set(LIBPRCPP_BASE_COMPILER_MSVC  false)
+    set(LIBPRCPP_BASE_COMPILER_CLANG false)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(LIBPRCPP_BASE_COMPILER_GNU   false)
+    set(LIBPRCPP_BASE_COMPILER_MSVC  true)
+    set(LIBPRCPP_BASE_COMPILER_CLANG false)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "[Cc]lang")
+    set(LIBPRCPP_BASE_COMPILER_GNU   false)
+    set(LIBPRCPP_BASE_COMPILER_MSVC  false)
+    set(LIBPRCPP_BASE_COMPILER_CLANG true)
+else()
+    # IGNORED
+endif()
+
+#[====================================[
+PRECONFIGURE COMPILER flags for:
+- CMAKE_CXX_FLAGS
+- CMAKE_EXE_LINKER_FLAGS
+#]====================================]
+if(LIBPRCPP_BASE_COMPILER_GNU)
+    set(CMAKE_CXX_FLAGS "-lm")
+    set(CMAKE_EXE_LINKER_FLAGS "-Wl,-no-pie")
+endif()
+if(LIBPRCPP_BASE_COMPILER_MSVC)
+    # skipped
+endif()
+if(LIBPRCPP_BASE_COMPILER_CLANG)
+    set(CMAKE_CXX_FLAGS "-fPIC -v -lm -ldl")
+    set(CMAKE_EXE_LINKER_FLAGS "-Wl,-no-pie")
+endif()
+
+set(CMAKE_CXX_STANDARD 17)
+
+if(${CMAKE_CXX_STANDARD} LESS_EQUAL 17)
+    set(CMAKE_CXX_STANDARD 17)
+endif()
+
 # start: check toolchain
 if("${CMAKE_TOOLCHAIN_FILE}" STREQUAL "")
     message(NOTICE "-- ${PROJECT_NAME}:\n   cmake toolchain file is empty")
@@ -111,6 +154,19 @@ if(LIBPRCPP_VCPKG)
     endif()
 endif()
 # end: vcpkg
+
+
+# start: threads
+set(LIBPRCPP_PROJECT_USING_THREADS false)
+
+find_package(Threads)
+if(Threads_FOUND)
+    set(LIBPRCPP_PROJECT_USING_THREADS true)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   threads package found")
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   threads package not found")
+endif()
+# end: threads
 
 
 # start: jsoncpp
@@ -281,10 +337,41 @@ endif()
 
 
 # start: stb
+#[====================================[
+ZXing build help:
+
+- clone the repo
+
+- run
+```sh
+cmake -G "Ninja" -S zxing-cpp -B zxing-cpp.release -DCMAKE_BUILD_TYPE=Release -DZXING_EXPERIMENTAL_API=true
+cmake --build zxing-cpp.release --config all
+sudo cmake --install zxing-cpp.release
+
+cmake -G "Ninja" -S zxing-cpp -B zxing-cpp.debug -DCMAKE_BUILD_TYPE=Debug -DZXING_EXPERIMENTAL_API=true
+cmake --build zxing-cpp.debug --config all
+sudo cmake --install zxing-cpp.debug
+
+# may required to use -DCMAKE_INSTALL_PREFIX=/path/to/install as seperate debug and release lib
+```
+
+- you need to include that dir
+
+------------------------------------------
+
+may requires:
+- STB_IMAGE_WRITE_IMPLEMENTATION
+- STB_IMAGE_IMPLEMENTATION
+]====================================]
 set(LIBPRCPP_PROJECT_USING_STB false)
 set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR false)
 
-find_package(Stb)
+if(LIBPRCPP_BASE_SYSTEM_NAME STREQUAL "windows")
+    find_package(Stb)
+else()
+    find_package(Stb CONFIG) # Has warning if CONFIG not passed
+endif()
+
 if(Stb_FOUND)
     set(LIBPRCPP_PROJECT_USING_STB true)
     message(NOTICE "-- ${PROJECT_NAME}:\n   Stb found")
@@ -307,6 +394,9 @@ else()
 endif()
 
 if(NOT ${Stb_INCLUDE_DIR} STREQUAL "")
+    if(Stb_DIR STREQUAL "")
+        set(Stb_DIR "${Stb_INCLUDE_DIR}")
+    endif()
     include_directories(${Stb_INCLUDE_DIR})
 endif()
 # end: stb
