@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15...3.30)
 
 set(PRGENT_VERSION_MAJOR 0)
-set(PRGENT_VERSION_MINOR 7)
+set(PRGENT_VERSION_MINOR 8)
 set(PRGENT_VERSION_PATCH 0)
-set(PRGENT_VERSION_DATES 20250124)
+set(PRGENT_VERSION_DATES 20250125)
 set(PRGENT_VERSION_STRING "${PRGENT_VERSION_MAJOR}.${PRGENT_VERSION_MINOR}.${PRGENT_VERSION_PATCH}.${PRGENT_VERSION_DATES}")
 
 project(prgent LANGUAGES CXX)
@@ -122,6 +122,7 @@ aux_source_directory(src/prgent/base        PRGENT_DIR_BASE)
 aux_source_directory(src/prgent/constants   PRGENT_DIR_CONSTANTS)
 aux_source_directory(src/prgent/enums       PRGENT_DIR_ENUMS)
 aux_source_directory(src/prgent/functions   PRGENT_DIR_FUNCTIONS)
+aux_source_directory(src/prgent/types       PRGENT_DIR_TYPES)
 
 target_sources(${PROJECT_NAME}
     PRIVATE
@@ -131,6 +132,7 @@ target_sources(${PROJECT_NAME}
         ${PRGENT_DIR_CONSTANTS}
         ${PRGENT_DIR_ENUMS}
         ${PRGENT_DIR_FUNCTIONS}
+        ${PRGENT_DIR_TYPES}
 )
 
 target_include_directories(${PROJECT_NAME}
