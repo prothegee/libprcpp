@@ -2,8 +2,11 @@
 
 #include <thread>
 #include <future>
+#include <fstream>
 
 #include <libprcpp/modules/date_and_time_module.hh>
+
+#include <prgent/types/batch_types.hh>
 
 namespace prgent
 {
@@ -203,8 +206,22 @@ int mainProcess(int argc, char *argv[])
                 return RETURN_MAIN_RESULT_ERROR_BATCH_ITER_NOT_NUMERIC;
             }
         }
-        // RESERVED --batch-out-csv
-        // RESERVED --batch-out-json
+        else if (arg == ARG_IS_BATCH_OUT_CSV) // this arg is "--batch-out-csv", only accept "true" & "false", default is "false"
+        {
+            if (i + 1 < argc)
+            {
+                batchOutCsv = argv[i + 1];
+                i++;
+            }
+        }
+        else if (arg == ARG_IS_BATCH_OUT_JSON) // this arg is "--batch-out-json", only accept "true" & "false", default is "false"
+        {
+            if (i + 1 < argc)
+            {
+                batchOutJson = argv[i + 1];
+                i++;
+            }
+        }
     }
 
     //////////////////////////////////////////////////////
@@ -246,17 +263,15 @@ int mainProcess(int argc, char *argv[])
 
     bool batchModeFail = false; // double check
 
-    // future object storage for batch save csv/json
+    std::vector<std::string> batchIds;
+
+    // future object storage for batch id & save csv/json
     std::vector<std::future<std::string>> futureBatchCsv, futureBatchJson;
 
     // only used for encode
-    auto generateBatchEncode = [&](i32 batchNum) -> std::string
+    auto generateBatchEncode = [&](i32 batchNum, std::string timestampObject) -> std::string
     {
-        i32 localTime = 0;
-        std::string result, timestampStr;
-
-        localTime = dateAndTimeFunctions::localTimeZone();
-        timestampStr = dateAndTimeFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
+        std::string result;
 
         // create output if empty
         if (argBatchInUse && outputStr.empty())
@@ -283,23 +298,21 @@ int mainProcess(int argc, char *argv[])
             outputExtStr = FILE_EXTENSION_IS_SVG_HINT;
         }
 
-        std::cout << "timestampStr: " << timestampStr << '\n';
-
         switch (generateMode)
         {
             case GENERATE_MODE_BARCODE_ENCODE:
             {
-                result = outputDirStr + "/" + outputStr + "-" + timestampStr + "-" + std::to_string(batchNum) + "." + outputExtStr;
+                result = outputDirStr + "/" + outputStr + "-" + timestampObject + "-" + std::to_string(batchNum) + "." + outputExtStr;
 
-                barcode::encodeImage(std::string(outputStr + "-" + timestampStr + std::to_string(batchNum)), result, sizeWidth, sizeHeight, sizeMargin);
+                barcode::encodeImage(std::string(outputStr + "-" + timestampObject + std::to_string(batchNum)), result, sizeWidth, sizeHeight, sizeMargin);
             }
             break;
 
             case GENERATE_MODE_QRCODE_ENCODE:
             {
-                result = outputDirStr + "/" + outputStr + "-" + timestampStr + "-" + std::to_string(batchNum) + "." + outputExtStr;
+                result = outputDirStr + "/" + outputStr + "-" + timestampObject + "-" + std::to_string(batchNum) + "." + outputExtStr;
 
-                qrcode::encodeImage(std::string(outputStr + "-" + timestampStr + std::to_string(batchNum)), result, sizeWidth, sizeHeight, sizeMargin);
+                qrcode::encodeImage(std::string(outputStr + "-" + timestampObject + std::to_string(batchNum)), result, sizeWidth, sizeHeight, sizeMargin);
             }
             break;
 
@@ -384,16 +397,32 @@ int mainProcess(int argc, char *argv[])
             {
                 for (i32 i = 1; i <= batchIter; i++)
                 {
-                    auto iterRes = std::async(std::launch::async, generateBatchEncode, i);
+                    auto localTime = dateAndTimeFunctions::localTimeZone();
+                    auto iterTimestampObject = dateAndTimeFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
+
+                    // NOTE: iterRes has their own purpose
+
+                    std::string iterBatchId = inputStr + "-" + iterTimestampObject + "-" + std::to_string(i);
 
                     if (batchOutCsv == "true")
                     {
+                        std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
+
                         futureBatchCsv.push_back(std::move(iterRes));
+                        batchIds.push_back(iterBatchId);
                     }
 
                     if (batchOutJson == "true")
                     {
+                        std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
+
                         futureBatchJson.push_back(std::move(iterRes));
+                        batchIds.push_back(iterBatchId);
+                    }
+
+                    if (batchOutCsv != "true" && batchOutJson != "true")
+                    {
+                        std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
                     }
                 }
 
@@ -462,16 +491,23 @@ int mainProcess(int argc, char *argv[])
             {
                 for (i32 i = 1; i <= batchIter; i++)
                 {
-                    auto iterRes = std::async(std::launch::async, generateBatchEncode, i);
+                    auto localTime = dateAndTimeFunctions::localTimeZone();
+                    auto iterTimestampObject = dateAndTimeFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
+
+                    std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
+
+                    std::string iterBatchId = inputStr + "-" + iterTimestampObject + "-" + std::to_string(i);
 
                     if (batchOutCsv == "true")
                     {
                         futureBatchCsv.push_back(std::move(iterRes));
+                        batchIds.push_back(iterBatchId);
                     }
 
                     if (batchOutJson == "true")
                     {
                         futureBatchJson.push_back(std::move(iterRes));
+                        batchIds.push_back(iterBatchId);
                     }
                 }
 
@@ -512,7 +548,7 @@ int mainProcess(int argc, char *argv[])
             else
             {
                 log::okBase();
-                std::printf("decode result:\n`````` START BARCODE DECODE ``````\n%s\n``````  END BARCODE DECODE  ``````\n", outputDecodedStr.c_str());
+                std::printf("decode result:\n------ START BARCODE DECODE ------\n%s\n------  END BARCODE DECODE  ------\n", outputDecodedStr.c_str());
             }
         }
         break;
@@ -548,7 +584,7 @@ int mainProcess(int argc, char *argv[])
             else
             {
                 log::okBase();
-                std::printf("decode result:\n`````` START QRCODE DECODE ``````\n%s\n``````  END QRCODE DECODE  ``````\n", outputDecodedStr.c_str());
+                std::printf("decode result:\n------ START QRCODE DECODE ------\n%s\n------  END QRCODE DECODE  ------\n", outputDecodedStr.c_str());
             }
         }
         break;
@@ -564,9 +600,133 @@ int mainProcess(int argc, char *argv[])
 
     //////////////////////////////////////////////////////
 
-    // TODO: process --batch-out-csv
+    // process --batch-out-csv
+    if (batchOutCsv == "true" && argBatchInUse)
+    {
+        if (outputStr.empty())
+        {
+            outputStr = inputStr;
+        }
 
-    // TODO: process --batch-out-json
+        // output csv
+        std::string fileOutput = outputStr + "-batch.csv";
+
+        std::ofstream csvFile(fileOutput);
+
+        if (!csvFile.is_open())
+        {
+            log::errorBase();
+            std::printf("- unable to write to .csv for \"%s\"\n", fileOutput.c_str());
+            csvFile.close();
+            return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_CSV;
+        }
+
+        // csv header
+        std::string csvHeader;
+            csvHeader += TBatchOutRecordDefault_HINT::id;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::batch_id;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::batch_origin;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::batch_result;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::timestamp_created;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::owned;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::owner;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::claimed_date_and_time;
+            csvHeader += ",";
+            csvHeader += TBatchOutRecordDefault_HINT::claimed_date_and_time_num;
+            csvHeader += "\n"; // end of the csv file header
+
+        csvFile << csvHeader;
+
+        // create rows
+        for (i32 i = 1; i <= batchIter; i++)
+        {
+            std::string batchId = batchIds[i - 1];
+            std::string fileName = futureBatchCsv[i - 1].get();
+
+            std::string timestampCreated = dateAndTimeFunctions::UTC::YYYYMMDDhhmmss::toStringHuman(dateAndTimeFunctions::localTimeZone());
+
+            if (!fileName.empty())
+            {
+                csvFile << i << ",";
+                csvFile << batchId << ",";
+                csvFile << inputStr << ",";
+                csvFile << fileName << ",";
+                csvFile << timestampCreated << ",";
+                csvFile << "false" << ",";
+                csvFile << "" << ",";
+                csvFile << "" << ",";
+                csvFile << 0 << "\n"; // end of csv row data
+            }
+        }
+
+        // finally
+        csvFile.close();
+
+        std::printf("- using --batch-out-csv save to \"%s\"\n", fileOutput.c_str());
+    }
+
+    // process --batch-out-json
+    if (batchOutJson == "true" && argBatchInUse)
+    {
+        if (outputStr.empty())
+        {
+            outputStr = inputStr;
+        }
+
+        // output json
+        std::string fileOutput = outputStr + "-batch.json";
+
+        std::ofstream jsonFile(fileOutput);
+
+        Json::Value jsonArray(Json::arrayValue);
+
+        if (!jsonFile.is_open())
+        {
+            log::errorBase();
+            std::printf("- unable to write to .json for \"%s\"\n", fileOutput.c_str());
+            jsonFile.close();
+            return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_CSV;
+        }
+
+        // create data
+        for (i32 i = 1; i <= batchIter; i++)
+        {
+            std::string batchId = batchIds[i - 1];
+            std::string fileName = futureBatchJson[i - 1].get();
+
+            std::string timestampCreated = dateAndTimeFunctions::UTC::YYYYMMDDhhmmss::toStringHuman(dateAndTimeFunctions::localTimeZone());
+
+            if (!fileName.empty())
+            {
+                Json::Value jsonObject;
+
+                jsonObject[TBatchOutRecordDefault_HINT::id] = i;
+                jsonObject[TBatchOutRecordDefault_HINT::batch_id] = batchId;
+                jsonObject[TBatchOutRecordDefault_HINT::batch_origin] = inputStr;
+                jsonObject[TBatchOutRecordDefault_HINT::batch_result] = fileName;
+                jsonObject[TBatchOutRecordDefault_HINT::timestamp_created] = timestampCreated;
+                jsonObject[TBatchOutRecordDefault_HINT::owned] = false;
+                jsonObject[TBatchOutRecordDefault_HINT::owner] = "";
+                jsonObject[TBatchOutRecordDefault_HINT::claimed_date_and_time] = "";
+                jsonObject[TBatchOutRecordDefault_HINT::claimed_date_and_time_num] = 0;
+
+                jsonArray.append(jsonObject);
+            }
+        }
+
+        // finally
+        jsonFile << jsonArray.toStyledString();
+        jsonFile.close();
+
+        std::printf("- using --batch-out-json save to \"%s\"\n", fileOutput.c_str());
+    }
 
     //////////////////////////////////////////////////////
 
