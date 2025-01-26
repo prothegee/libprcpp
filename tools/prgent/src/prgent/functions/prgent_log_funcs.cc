@@ -32,18 +32,20 @@ void warningBase()
 
 void showHelpBaseHint()
 {
-    std::printf("prgent usage:\n");
-    std::printf("--help: show this help message\n    - to show supported mode usage use \"--help mode\"\n");
-    std::printf("--mode: specify the mode use number or string\n    - e.g.: 1:barcode-encode 3:qrcode-encode\n");
-    std::printf("--input: input file path\n");
-    std::printf("--output: output file path\n");
-    std::printf("--output-dir: output directory/folder\n");
-    std::printf("--output-ext: output extension name\n   - encode barcode & qrcode, only supported .svg, .png, .jpg, .jpeg, use .svg by default if not supply\n");
-    std::printf("--image-size: specify image size in NNNxNNN format, where N is must numeric as pixel/px\n   - 256x256 px is default size\n   - .svg will ignore size\n");
-    std::printf("--image-margin: specify margin of image\n   - only support for barcode & qrcode encode\n");
-    std::printf("--batch-iter: create batch iteration from value of number\n   - only allowed number\n   - can't be less/equal to 0\n   - only support for barcode & qrcode encode\n");
-    std::printf("--batch-out-csv: create output of batch record to csv file\n   - only apply if true");
-    std::printf("--batch-out-json: create output of batch record to json file\n   - only apply if true");
+    std::printf("###### prgent usage:\n");
+    std::printf("--help: show this help message\n\n");
+    // std::printf("--help: show this help message\n    - to show supported mode usage use \"--help mode\"\n\n");
+    std::printf("--mode: specify the mode use number or string\n    - e.g.: 1:barcode-encode 3:qrcode-encode\n\n");
+    std::printf("--input: input file path\n\n");
+    std::printf("--output: output file path\n\n");
+    std::printf("--output-dir: output directory/folder\n\n");
+    std::printf("--output-ext: output extension name\n   - encode barcode & qrcode, only supported .svg, .png, .jpg, .jpeg, use .svg by default if not supply\n\n");
+    std::printf("--image-size: specify image size in NNNxNNN format, where N is must numeric as pixel/px\n   - 256x256 px is default size\n   - .svg will ignore size\n\n");
+    std::printf("--image-margin: specify margin of image\n   - only support for barcode & qrcode encode\n\n");
+    std::printf("--batch-iter: create batch iteration from value of number\n   - only allowed number\n   - can't be less/equal to 0\n   - only support for barcode & qrcode encode\n\n");
+    std::printf("--batch-out-csv: create output of batch record to csv file\n   - only apply if true\n\n");
+    std::printf("--batch-out-json: create output of batch record to json file\n   - only apply if true\n\n");
+    std::printf("###### end of prgent usage\n");
 }
 
 void showHelpConfigurations(const std::string &helpHint)

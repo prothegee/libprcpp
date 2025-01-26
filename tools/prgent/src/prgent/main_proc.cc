@@ -4,6 +4,7 @@
 #include <future>
 #include <fstream>
 
+#include <libprcpp/constants/string_const.hh>
 #include <libprcpp/modules/date_and_time_module.hh>
 
 #include <prgent/types/batch_types.hh>
@@ -358,6 +359,13 @@ int mainProcess(int argc, char *argv[])
                     outputStr = inputStr;
                 }
 
+                // re-evaluate outputStr
+                for (auto chr : STRINGS_INTERNAL::special_character)
+                {
+                    std::string query(1, chr);
+                    utilityFunctions::find::andReplaceAll(outputStr, query, "-");
+                }
+
                 if (outputDirStr.empty())
                 {
                     std::printf("--output-dir arg is not supplied, using current path as output dir\n");
@@ -382,6 +390,14 @@ int mainProcess(int argc, char *argv[])
                     outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
                 }
 
+                // break if already exists
+                if (std::filesystem::exists(outputStr))
+                {
+                    log::errorBase();
+                    std::printf("- \"%s\" already exists\n", outputStr.c_str());
+                    return RETURN_MAIN_RESULT_ERROR_FILE_ALREADY_EXISTS;
+                }
+
                 if (barcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate barcode
                 {
                     std::printf("output save as: %s", outputStr.c_str());
@@ -395,6 +411,38 @@ int mainProcess(int argc, char *argv[])
             }
             else
             {
+                if (outputStr.empty())
+                {
+                    std::printf("--output arg is not supplied, using default output from input\n");
+                    outputStr = inputStr;
+                }
+
+                // re-evaluate outputStr
+                for (auto chr : STRINGS_INTERNAL::special_character)
+                {
+                    std::string query(1, chr);
+                    utilityFunctions::find::andReplaceAll(outputStr, query, "-");
+                }
+
+                std::string batchCsv = outputStr + "-batch.csv";
+                std::string batchJson = outputStr + "-batch.json";
+
+                // check batchOutCsv file
+                if (batchOutCsv == "true" && std::filesystem::exists(batchCsv))
+                {
+                    log::errorBase();
+                    std::printf("- \"%s\" already exists", batchCsv.c_str());
+                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_CSV;
+                }
+
+                // check batchOutJson file
+                if (batchOutJson == "true" && std::filesystem::exists(batchJson))
+                {
+                    log::errorBase();
+                    std::printf("- \"%s\" already exists", batchJson.c_str());
+                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_JSON;
+                }
+
                 for (i32 i = 1; i <= batchIter; i++)
                 {
                     auto localTime = dateAndTimeFunctions::localTimeZone();
@@ -452,6 +500,13 @@ int mainProcess(int argc, char *argv[])
                     outputStr = inputStr;
                 }
 
+                // re-evaluate outputStr
+                for (auto chr : STRINGS_INTERNAL::special_character)
+                {
+                    std::string query(1, chr);
+                    utilityFunctions::find::andReplaceAll(outputStr, query, "-");
+                }
+
                 if (outputDirStr.empty())
                 {
                     std::printf("--output-dir arg is not supplied, using current path as output dir\n");
@@ -476,6 +531,14 @@ int mainProcess(int argc, char *argv[])
                     outputStr += validateAllowedImageFileExtension(outputExtStr, ARG_IS_OUTPUT_EXT); // default will return .svg
                 }
 
+                // break if already exists
+                if (std::filesystem::exists(outputStr))
+                {
+                    log::errorBase();
+                    std::printf("- \"%s\" already exists\n", outputStr.c_str());
+                    return RETURN_MAIN_RESULT_ERROR_FILE_ALREADY_EXISTS;
+                }
+
                 if (qrcode::encodeImage(inputStr, outputStr, sizeWidth, sizeHeight, sizeMargin)) // generate qrcode
                 {
                     std::printf("output save as: %s", outputStr.c_str());
@@ -489,25 +552,66 @@ int mainProcess(int argc, char *argv[])
             }
             else
             {
+                if (outputStr.empty())
+                {
+                    std::printf("--output arg is not supplied, using default output from input\n");
+                    outputStr = inputStr;
+                }
+
+                // re-evaluate outputStr
+                for (auto chr : STRINGS_INTERNAL::special_character)
+                {
+                    std::string query(1, chr);
+                    utilityFunctions::find::andReplaceAll(outputStr, query, "-");
+                }
+
+                std::string batchCsv = outputStr + "-batch.csv";
+                std::string batchJson = outputStr + "-batch.json";
+
+                // check batchOutCsv file
+                if (batchOutCsv == "true" && std::filesystem::exists(batchCsv))
+                {
+                    log::errorBase();
+                    std::printf("- \"%s\" already exists", batchCsv.c_str());
+                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_CSV;
+                }
+
+                // check batchOutJson file
+                if (batchOutJson == "true" && std::filesystem::exists(batchJson))
+                {
+                    log::errorBase();
+                    std::printf("- \"%s\" already exists", batchJson.c_str());
+                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_JSON;
+                }
+
                 for (i32 i = 1; i <= batchIter; i++)
                 {
                     auto localTime = dateAndTimeFunctions::localTimeZone();
                     auto iterTimestampObject = dateAndTimeFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
 
-                    std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
+                    // NOTE: iterRes has their own purpose
 
                     std::string iterBatchId = inputStr + "-" + iterTimestampObject + "-" + std::to_string(i);
 
                     if (batchOutCsv == "true")
                     {
+                        std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
+
                         futureBatchCsv.push_back(std::move(iterRes));
                         batchIds.push_back(iterBatchId);
                     }
 
                     if (batchOutJson == "true")
                     {
+                        std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
+
                         futureBatchJson.push_back(std::move(iterRes));
                         batchIds.push_back(iterBatchId);
+                    }
+
+                    if (batchOutCsv != "true" && batchOutJson != "true")
+                    {
+                        std::future<std::string> iterRes = std::async(std::launch::async, generateBatchEncode, i, iterTimestampObject);
                     }
                 }
 
