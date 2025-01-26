@@ -14,17 +14,21 @@ set(IMPORT_PREFIX "")
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
-if(LIBPRCPP_PROJECT_BUILD_SHARED_LIB)
-    add_library(${PROJECT_NAME} SHARED
-        src/libprcpp/libprcpp.hh
-        src/libprcpp/libprcpp.cc
-    )
-else()
-    add_library(${PROJECT_NAME} STATIC
-        src/libprcpp/libprcpp.hh
-        src/libprcpp/libprcpp.cc
-    )
-endif()
+# if(LIBPRCPP_PROJECT_BUILD_SHARED_LIB)
+#     add_library(${PROJECT_NAME} SHARED
+#         src/libprcpp/libprcpp.hh
+#         src/libprcpp/libprcpp.cc
+#     )
+# else()
+#     add_library(${PROJECT_NAME} STATIC
+#         src/libprcpp/libprcpp.hh
+#         src/libprcpp/libprcpp.cc
+#     )
+# endif()
+add_library(${PROJECT_NAME} STATIC
+    src/libprcpp/libprcpp.hh
+    src/libprcpp/libprcpp.cc
+)
 
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")

@@ -68,6 +68,7 @@ if(LIBPRCPP_BASE_COMPILER_GNU)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-no-pie")
     endif()
 endif()
+
 if(LIBPRCPP_BASE_COMPILER_MSVC)
     if(CMAKE_CXX_STANDARD EQUAL 17)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
@@ -89,6 +90,7 @@ if(LIBPRCPP_BASE_COMPILER_MSVC)
     #]====================================]
     # n/a
 endif()
+
 if(LIBPRCPP_BASE_COMPILER_CLANG)
     if(CMAKE_CXX_STANDARD EQUAL 17)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
@@ -416,6 +418,70 @@ endif()
 
 # start: stb
 #[====================================[
+stb build:
+
+- clone the repo somewhere https://github.com/nothings/stb
+- add to environment path as below
+- you cand add as "/dir/stb"
+- or add it as "/dir/include" where cloned repo is inside include directory
+]====================================]
+set(LIBPRCPP_PROJECT_USING_STB false)
+set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR false)
+
+if(LIBPRCPP_BASE_SYSTEM_NAME STREQUAL "windows")
+    find_package(Stb)
+else()
+    find_package(Stb CONFIG) # Has warning if CONFIG not passed
+endif()
+
+if(Stb_FOUND)
+    set(LIBPRCPP_PROJECT_USING_STB true)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   Stb package found")
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   Stb package not found, attempt to check file")
+    find_file(LIBPRCPP_STB_INCLUDE_DIRS "stb/stb_image_write.h")
+    if(LIBPRCPP_STB_INCLUDE_DIRS)
+        get_filename_component(STB_INCLUDE_DIR "${LIBPRCPP_STB_INCLUDE_DIRS}" DIRECTORY)
+        
+        set(LIBPRCPP_PROJECT_USING_STB true)
+        include_directories(${STB_INCLUDE_DIR})
+        message(NOTICE "-- ${PROJECT_NAME}:\n   stb path found as path in ${STB_INCLUDE_DIR} attempt #1")
+    else()
+        message(NOTICE "-- ${PROJECT_NAME}:\n   stb path not found in default include dir and when try to find file")
+    endif()
+
+    if(LIBPRCPP_PROJECT_USING_STB)
+        if(LIBPRCPP_STB_INCLUDE_DIRS MATCHES "stb/stb_image_write.h")
+            set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR true)
+        endif()
+    endif()
+endif()
+
+if(NOT "${Stb_INCLUDE_DIR}" STREQUAL "")
+    if("${Stb_DIR}" STREQUAL "")
+        set(Stb_DIR "${Stb_INCLUDE_DIR}")
+    endif()
+    include_directories(${Stb_INCLUDE_DIR})
+endif()
+# end: stb
+
+
+# start: lunasvg
+set(LIBPRCPP_PROJECT_USING_LUNASVG false)
+
+find_package(lunasvg CONFIG)
+
+if(lunasvg_FOUND)
+    set(LIBPRCPP_PROJECT_USING_LUNASVG true)
+    message(NOTICE "-- ${PROJECT_NAME}:\n   lunasvg package found")
+else()
+    message(NOTICE "-- ${PROJECT_NAME}:\n   lunasvg package not found")
+endif()
+# end: lunasvg
+
+
+# start: zxing
+#[====================================[
 ZXing build help:
 
 - clone the repo
@@ -441,60 +507,6 @@ may requires:
 - STB_IMAGE_WRITE_IMPLEMENTATION
 - STB_IMAGE_IMPLEMENTATION
 ]====================================]
-set(LIBPRCPP_PROJECT_USING_STB false)
-set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR false)
-
-if(LIBPRCPP_BASE_SYSTEM_NAME STREQUAL "windows")
-    find_package(Stb)
-else()
-    find_package(Stb CONFIG) # Has warning if CONFIG not passed
-endif()
-
-if(Stb_FOUND)
-    set(LIBPRCPP_PROJECT_USING_STB true)
-    message(NOTICE "-- ${PROJECT_NAME}:\n   Stb found")
-else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   Stb not found, attempt to check file")
-    find_file(LIBPRCPP_STB_INCLUDE_DIRS "stb/stb_image_write.h")
-    if(LIBPRCPP_STB_INCLUDE_DIRS)
-        set(LIBPRCPP_PROJECT_USING_STB true)
-        include_directories(${LIBPRCPP_STB_INCLUDE_DIRS})
-        message(NOTICE "-- ${PROJECT_NAME}:\n   stb path found as path in ${LIBPRCPP_STB_INCLUDE_DIRS} attempt #1")
-    else()
-        message(NOTICE "-- ${PROJECT_NAME}:\n   stb path not found in default include dir and when try to find file")
-    endif()
-
-    if(LIBPRCPP_PROJECT_USING_STB)
-        if(LIBPRCPP_STB_INCLUDE_DIRS MATCHES "stb/stb_image_write.h")
-            set(LIBPRCPP_PROJECT_USING_STB_HAS_PARENT_DIR true)
-        endif()
-    endif()
-endif()
-
-if(NOT ${Stb_INCLUDE_DIR} STREQUAL "")
-    if(Stb_DIR STREQUAL "")
-        set(Stb_DIR "${Stb_INCLUDE_DIR}")
-    endif()
-    include_directories(${Stb_INCLUDE_DIR})
-endif()
-# end: stb
-
-
-# start: lunasvg
-set(LIBPRCPP_PROJECT_USING_LUNASVG false)
-
-find_package(lunasvg CONFIG)
-
-if(lunasvg_FOUND)
-    set(LIBPRCPP_PROJECT_USING_LUNASVG true)
-    message(NOTICE "-- ${PROJECT_NAME}:\n   lunasvg package found")
-else()
-    message(NOTICE "-- ${PROJECT_NAME}:\n   lunasvg package not found")
-endif()
-# end: lunasvg
-
-
-# start: zxing
 set(LIBPRCPP_PROJECT_USING_ZXING false)
 
 find_package(ZXing CONFIG)
