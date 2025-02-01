@@ -1,8 +1,0 @@
-/file_out*
-/test_libprcpp_scylladb*
-/test_libprcpp_smtps_curl*
-
-!/test_libprcpp_scylladb.cc
-!/test_libprcpp_scylladb.debug.json
-!/test_libprcpp_smtps_curl.cc
-!/test_libprcpp_smtps_curl.debug.json
