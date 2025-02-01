@@ -5,7 +5,7 @@ endif()
 
 # use jsoncpp
 if(LIBPRCPP_PROJECT_USING_JSONCPP)
-    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE jsoncpp_static)
+    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE JsonCpp::JsonCpp)
 endif()
 
 # use openssl
