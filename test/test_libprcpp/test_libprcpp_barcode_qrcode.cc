@@ -59,6 +59,9 @@ int main()
         {
             batchOutRes.emplace_back(qrcodeBatchOut);
         }
+
+        std::cout << "\r    \r";
+        std::cout << "current iter #" << i+1 << std::flush;
     }
 
     if (errorBatchBarcode != 0)
@@ -82,6 +85,8 @@ int main()
     {
         std::filesystem::remove("thresholds_new.pnm");
     }
+
+    std::cout << "\nfinished\n";
 
     return 0;
 }
