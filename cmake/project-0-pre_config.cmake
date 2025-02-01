@@ -55,6 +55,14 @@ if(NOT DEFINED CMAKE_CXX_FLAGS)
 endif()
 
 
+# # cmake install prefix
+# # somehow jsoncpp will create error if this not include
+# if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+#     set(CMAKE_INSTALL_PREFIX "${LIBPRCPP_PROJECT_ROOT}/build/tmp")
+# endif()
+
+
+
 # c++ standard
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 17)

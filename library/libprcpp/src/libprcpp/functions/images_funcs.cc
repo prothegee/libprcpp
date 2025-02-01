@@ -108,9 +108,13 @@ namespace rasterize
 {
     bool fromSVG(const std::string &svgPath, std::vector<uint8_t> &output, int32_t &width, int32_t &height)
     {
-        // load the SVG file using nanosvg
-        NSVGimage *image = nsvgParseFromFile(svgPath.c_str(), "px", 96.0f);
-        if (!image)
+        auto fuImage = std::async(std::launch::async, nsvgParseFromFile, svgPath.c_str(), "px", 96.0f);
+
+        fuImage.wait(); // well...
+
+        NSVGimage *pImage = fuImage.get();
+
+        if (!pImage)
         {
             std::printf("rasterize::fromSVG failed to load .svg file: %s\n", svgPath.c_str());
             return false;
@@ -120,21 +124,21 @@ namespace rasterize
         if (width < 256 || height < 256)
         {
             width = 256;
-            height = static_cast<int32_t>(256 * image->height / image->width);
+            height = static_cast<int32_t>(256 * pImage->height / pImage->width);
         }
 
-        // Create a rasterizer context
-        NSVGrasterizer *rast = nsvgCreateRasterizer();
-        if (!rast)
+        // rasterizer context
+        NSVGrasterizer *pRast = nsvgCreateRasterizer();
+        if (!pRast)
         {
             std::printf("rasterize::fromSVG  failed to create rasterizer\n");
-            nsvgDelete(image);
+            nsvgDelete(pImage);
             return false;
         }
 
         // allocate memory for the output image (RGBA format)
         std::vector<uint8_t> rgbaImage(width * height * 4);
-        nsvgRasterize(rast, image, 0, 0, width / image->width, rgbaImage.data(), width, height, width * 4);
+        nsvgRasterize(pRast, pImage, 0, 0, width / pImage->width, rgbaImage.data(), width, height, width * 4);
 
         // convert the RGBA pixels to grayscale
         output.resize(width * height);
@@ -155,8 +159,8 @@ namespace rasterize
         }
 
         // clean up
-        nsvgDeleteRasterizer(rast);
-        nsvgDelete(image);
+        nsvgDeleteRasterizer(pRast);
+        nsvgDelete(pImage);
 
         return true;
     }

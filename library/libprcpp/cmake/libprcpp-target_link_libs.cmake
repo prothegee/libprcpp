@@ -5,7 +5,7 @@ endif()
 
 # use jsoncpp
 if(LIBPRCPP_PROJECT_USING_JSONCPP)
-    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE jsoncpp_static)
+    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE JsonCpp::JsonCpp)
 endif()
 
 # use openssl
@@ -26,6 +26,12 @@ endif()
 # use argon2
 if(LIBPRCPP_PROJECT_USING_ARGON2)        
     target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE argon2)
+endif()
+
+# use postgresql
+if(LIBPRCPP_PROJECT_USING_POSTGRESQL)
+    # target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE PostgreSQL::PostgreSQL)
+    target_include_directories(${LIBPRCPP_PROJECT} PRIVATE ${LIBPRCPP_POSTGRESQL_INCLUDE_DIRS})
 endif()
 
 # use scylla-cpp-driver

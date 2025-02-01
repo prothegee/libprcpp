@@ -60,11 +60,6 @@ void showHelpBaseHint()
 void showHelpConfigurations(const std::string &helpHint)
 {
     std::printf("TODO: help is using arg of %s", helpHint.c_str());
-    #if LIBPRCPP_COMPILER_MSVC
-    #pragma message ("TODO: help is using arg of helpHint param")
-    #else
-    #pragma message "TODO: help is using arg of helpHint param"
-    #endif // LIBPRCPP_COMPILER_MSVC
 }
 
 } // namespace log

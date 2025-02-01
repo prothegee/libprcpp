@@ -109,6 +109,7 @@ namespace barcode
     /**
      * @brief encode barcode
      * 
+     * @note consider use try catch
      * @note important: size of width & height if less than 256 may cause a trouble
      * @note important: considering use std::thread or std::asyc is recomended, it can cause invalid pointer if the usage is more than once in the same implementation
      * 
@@ -126,6 +127,7 @@ namespace barcode
     /**
      * @brief decode barcode
      * 
+     * @note consider use try catch
      * @note important: size of width & height if less than 256 may cause a trouble
      * 
      * @param content 
@@ -144,7 +146,9 @@ namespace qrcode
     /**
      * @brief encode qrcode
      * 
+     * @note consider use try catch
      * @note important: size of width & height if less than 256 may cause a trouble
+     * @note important: considering use std::thread or std::asyc is recomended, it can cause invalid pointer if the usage is more than once in the same implementation
      * 
      * @param content 
      * @param output 
@@ -160,6 +164,7 @@ namespace qrcode
     /**
      * @brief decode qrcode
      * 
+     * @note consider use try catch
      * @note important: size of width & height if less than 256 may cause a trouble
      * 
      * @param content 

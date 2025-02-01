@@ -11,7 +11,7 @@ if(OpenSSL_FOUND)
     message(NOTICE "-- openssl package found")
 else()
     message(NOTICE "-- openssl package not found")
-    message(NOTICE "-- openssl attempt #1 search")
+    message(NOTICE "-- openssl attempt to search #1")
 
     find_file(LIBPRCPP_OPENSSL_DIR "openssl/evp.h")
     if(LIBPRCPP_OPENSSL_DIR)
