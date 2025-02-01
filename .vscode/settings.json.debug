@@ -4,10 +4,10 @@
     "cmake.configureSettings": {
         "BUILD_SHARED_LIBS": false,
 
-        "CMAKE_INSTALL_PREFIX": "",
+        // "CMAKE_INSTALL_PREFIX": "",
 
-        "LIBPRCPP_PROJECT_BUILD_TESTS": false,
-        "LIBPRCPP_PROJECT_BUILD_TOOLS": false,
+        "LIBPRCPP_PROJECT_BUILD_TESTS": true,
+        "LIBPRCPP_PROJECT_BUILD_TOOLS": true,
         /*
         set true to use vcpkg
         will search environemtn variable of:

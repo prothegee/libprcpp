@@ -28,6 +28,12 @@ if(LIBPRCPP_PROJECT_USING_ARGON2)
     target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE argon2)
 endif()
 
+# use postgresql
+if(LIBPRCPP_PROJECT_USING_POSTGRESQL)
+    # target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE PostgreSQL::PostgreSQL)
+    target_include_directories(${LIBPRCPP_PROJECT} PRIVATE ${LIBPRCPP_POSTGRESQL_INCLUDE_DIRS})
+endif()
+
 # use scylla-cpp-driver
 if(LIBPRCPP_PROJECT_USING_SCYLLADB)
     target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE scylla-cpp-driver)

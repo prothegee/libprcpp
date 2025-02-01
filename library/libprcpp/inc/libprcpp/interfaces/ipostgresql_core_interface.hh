@@ -7,7 +7,7 @@
 #include <postgresql/libpq-fe.h>
 #else
 #include <libpq-fe.h>
-#endif
+#endif // LIBPRCPP_PROJECT_USING_POSTGRESQL_HAS_PARENT_DIR
 
 #include <libprcpp/types/postgresql_types.hh>
 
