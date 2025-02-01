@@ -1,0 +1,6 @@
+if("${CMAKE_TOOLCHAIN_FILE}" STREQUAL "")
+    message(NOTICE "-- cmake toolchain file is empty")
+else()
+    message(NOTICE "-- including cmake toolchain file \"${CMAKE_TOOLCHAIN_FILE}\"")
+    include(${CMAKE_TOOLCHAIN_FILE})
+endif()

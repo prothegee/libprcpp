@@ -1,8 +1,8 @@
 # libprcpp
 
-one stop c++ library for c++ project integration
+one stop c++ library for c++ project
 
-currently for personal use, as module and just reference
+currently for personal use as module
 
 <br>
 
@@ -10,15 +10,10 @@ currently for personal use, as module and just reference
 
 ## package that might required
 
-- [stb](https://github.com/nothings/stb)
 - [argon2](https://github.com/P-H-C/phc-winner-argon2)
-- [lunasvg](https://github.com/sammycage/lunasvg)
-- [jsoncpp](https://github.com/open-source-parsers/jsoncpp)
 - [openssl](https://github.com/openssl/openssl)
-- [jwt cpp](https://github.com/Thalhammer/jwt-cpp)
-- [libharu](https://github.com/libharu/libharu)
-- [zxing-cpp](https://github.com/zxing-cpp/zxing-cpp)
-- [cryptopp cmake](https://github.com/abdes/cryptopp-cmake)
+<!-- - [jwt cpp](https://github.com/Thalhammer/jwt-cpp) -->
+<!-- - [libharu](https://github.com/libharu/libharu) -->
 - [drogon framework](https://github.com/drogonframework/drogon)
 - [scylla cpp driver](https://github.com/scylladb/cpp-driver)
 
@@ -27,6 +22,14 @@ __*NOTES:*__
 - if above package doesn't exists project will skip that package library
 - may cause some module & functionality not implemented
 ```
+
+- third parties/vendors packages:
+    - [stb](./vendors/stb/stb/README.md)
+    - [sdl](./vendors/sdl/README.md)
+    - [jsoncpp](./vendors/jsoncpp/README.md)
+    - [nanosvg](./vendors/nanosvg/README.md)
+    - [zxing-cpp](./vendors/zxing-cpp/README.md)
+    - [cryptopp cmake](./vendors/cryptopp-cmake/README.md)
 
 <br>
 
@@ -42,41 +45,74 @@ __*NOTES:*__
 
 ---
 
-<!-- ## cmake
+## tested OS
 
-`cmake conf`
-```sh
-# required
-# 0:undefined 1:debug 2:staging 3:demo 4:release
--DLIBPRCPP_BUILD_STATUS=1
-
-# required
-# 0:undefined 1:linux 2:windows 3:macos_
--DLIBPRCPP_BUILD_TARGET=1
-
-# not required | default false
-# error for windows if true, on false is ok
-# will add test directory execute-able
--DLIBPRCPP_PROJECT_BUILD_TEST=true
-
-# not required | default false
-# will make output under LIBPRCPP_BUILD_TAGET_DIRECTORY
--DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true
-```
-
-look on [cmake directory for more info](./cmake)
+- [X] Microsoft Windows ( 11 )
+- [X] GNU/Linux Debian Bookworm ( 12 )
 
 <br>
 
-`cmake build debug - linux`
-```sh
-mkdir -p build/debug;
-cmake -B build/debug -DCMAKE_CXX_FLAGS="-std=c++17" -DCMAKE_BUILD_TYPE=Debug -DLIBPRCPP_BUILD_STATUS=1 -DLIBPRCPP_BUILD_TARGET=1 -DLIBPRCPP_PROJECT_BUILD_TEST=false -DLIBPRCPP_PROJECT_USING_BUILD_TAGET_DIRECTORY=true;
-cmake --build build/debug --config Debug;
-```
+---
+
+## cmake
+
+- build:
+    ```cmake
+    cmake -G "Ninja" -B build/debug -DCMAKE_BUILD_TYPE=Debug;
+    cmake --build build/debug --target all --;
+    ```
+
+- options:
+    ```cmake
+    # build shared lib
+    # default false or OFF
+    BUILD_SHARED_LIBS
+
+    # custom install prefix
+    # default "" or empty
+    CMAKE_INSTALL_PREFIX
+
+    # build libprcpp tests
+    # default false or OFF
+    LIBPRCPP_PROJECT_BUILD_TESTS
+
+    # build libprcpp tools
+    # default false or OFF
+    LIBPRCPP_PROJECT_BUILD_TOOLS
+
+    # build using vcpkg
+    # default false or OFF
+    # if true/ON, this will lookup for environment variable of:
+    # - VCPKG_DIR
+    # - VCPKG_ROOT
+    # - VCPKG_DEFAULT_TRIPLET / VCPKG_TRIPLET
+    LIBPRCPP_USE_VCPKG
+
+    # set manual vcpkg triplet
+    # default "" or empty
+    # available triplets:
+    # - x86-linux
+    # - x64-linux
+    # - arm64-linux
+    # - arm-linux
+    # - x86-windows
+    # - x64-window
+    # - x86-osx
+    # - x64-osx
+    # - arm64-osx
+    # - arm-android
+    # - x86-android
+    # - x64-android
+    # - arm64-android
+    # - x86-ios
+    # - x64-ios
+    # - arm-ios
+    # - arm64-ios
+    LIBPRCPP_VCPKG_TRIPLET
+    ```
 
 <br>
 
---- -->
+---
 
 ###### end of libprcpp README

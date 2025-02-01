@@ -55,3 +55,7 @@ project-build-release*.sh
 project-cleanup.sh
 
 /package-lock.json
+
+/vendors/*.zip
+/vendors/*.tar
+/vendors/*.tar.gz
