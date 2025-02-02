@@ -8,6 +8,7 @@ install(TARGETS ${LIBPRCPP_PROJECT}
         
 install(EXPORT LibprcppTargets
         FILE LibprcppConfig.cmake
+        NAMESPACE libprcpp::
         DESTINATION share/libprcpp)
 
 
@@ -74,3 +75,15 @@ set(LIBPRCPP_INC_DIR_TYPES
     ${LIBPRCPP_PROJECT_DIR}/inc/libprcpp/types/look_types.hh
 )
 install(FILES ${LIBPRCPP_INC_DIR_TYPES} DESTINATION include/libprcpp/types)
+
+
+#######################################################################
+
+
+## hpdf
+# add_library(hpdf)
+install(TARGETS hpdf
+        EXPORT LibprcppTargets
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION bin)

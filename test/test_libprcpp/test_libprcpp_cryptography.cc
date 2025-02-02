@@ -50,13 +50,22 @@ int main()
         std::printf("blake2b:\n- %s\n", cryptographyFunctions::hasher::blake2b(email).c_str());
 
     #if LIBPRCPP_PROJECT_USING_ARGON2
-        std::printf("argon2:\n- %s\n", cryptographyFunctions::hasher::argon2(password, passwordSalt).c_str()); // arround 6.0 secs
+        auto start1 = std::chrono::high_resolution_clock::now();
+        std::printf("argon2:\n- %s\n", cryptographyFunctions::hasher::argon2(password, passwordSalt).c_str());
+        auto end1 = std::chrono::high_resolution_clock::now();
+        std::printf("- took %.3f seconds\n", std::chrono::duration<double>(end1 - start1).count());
     #endif // LIBPRCPP_PROJECT_USING_ARGON2
 
-        std::printf("scrypt:\n- %s\n", cryptographyFunctions::hasher::scrypt(password, passwordSalt).c_str()); // arround 6.0 secs
+        auto start2 = std::chrono::high_resolution_clock::now();
+        std::printf("scrypt:\n- %s\n", cryptographyFunctions::hasher::scrypt(password, passwordSalt).c_str());
+        auto end2 = std::chrono::high_resolution_clock::now();
+        std::printf("- took %.3f seconds\n", std::chrono::duration<double>(end2 - start2).count());
 
     #if LIBPRCPP_PROJECT_USING_OPENSSL
-        std::printf("scryptOpenSSL:\n- %s\n", cryptographyFunctions::hasher::scryptOpenSSL(password, passwordSalt).c_str()); // not sure, kinda broken
+        auto start3 = std::chrono::high_resolution_clock::now();
+        std::printf("scryptOpenSSL:\n- %s\n", cryptographyFunctions::hasher::scryptOpenSSL(password, passwordSalt).c_str());
+        auto end3 = std::chrono::high_resolution_clock::now();
+        std::printf("- took %.3f seconds\n", std::chrono::duration<double>(end3 - start3).count());
     #endif // LIBPRCPP_PROJECT_USING_OPENSSL
 
         auto enc1 = cryptographyFunctions::streamCipher::aesEncrypt(inp1, iv, ik);

@@ -175,4 +175,12 @@ namespace libprcpp
 {
 } // namespace libprcpp
 
+#if defined(__GNUC__) || defined(__clang__)
+    #define DEPRECATED(msg) __attribute__((deprecated(msg)))
+#elif defined(_MSC_VER)
+    #define DEPRECATED(msg) __declspec(deprecated(msg))
+#else
+    #define DEPRECATED(msg)
+#endif
+
 #endif // LIBPRCPP_CONFIG_HH

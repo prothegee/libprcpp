@@ -50,22 +50,45 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 
 if(LIBPRCPP_COMPILER_GNU) # gnu compiler
+    set(LIBPRCPP_COMPILER_GNU_MIN_FLAGS "-std=c++${CMAKE_CXX_STANDARD}")
+    set(CMAKE_CXX_FLAGS "${LIBPRCPP_COMPILER_GNU_MIN_FLAGS}")
+
+    # if(NOT CMAKE_CXX_FLAGS MATCHES "TBA")
+    #     # expand here
+    #     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} TBA")
+    # endif()
+
     target_compile_options(${LIBPRCPP_PROJECT} PRIVATE
         -Wno-unused-value
         -Wno-unused-variable
+        -Wno-deprecated-declarations
     )
 elseif(LIBPRCPP_COMPILER_MSVC) # msvc compiler
-    if(NOT CMAKE_CXX_FLAGS MATCHES "/EHsc")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
-    endif()
+    set(LIBPRCPP_COMPILER_MSVC_MIN_FLAGS "/std:c++${CMAKE_CXX_STANDARD} /EHa")
+    set(CMAKE_CXX_FLAGS "${LIBPRCPP_COMPILER_MSVC_MIN_FLAGS}")
+
+    # if(NOT CMAKE_CXX_FLAGS MATCHES "TBA")
+    #     # expand here
+    #     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} TBA")
+    # endif()
 
     target_compile_options(${LIBPRCPP_PROJECT} PRIVATE
         /W4
+        /wd4996
     )
 elseif(LIBPRCPP_COMPILER_CLANG) # clang compiler
+    set(LIBPRCPP_COMPILER_CLANG_MIN_FLAGS "-std=c++${CMAKE_CXX_STANDARD}")
+    set(CMAKE_CXX_FLAGS "${LIBPRCPP_COMPILER_CLANG_MIN_FLAGS}")
+
+    # if(NOT CMAKE_CXX_FLAGS MATCHES "TBA")
+    #     # expand here
+    #     # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} TBA")
+    # endif()
+
     target_compile_options(${LIBPRCPP_PROJECT} PRIVATE
         -Wno-unused-value
         -Wno-unused-variable
+        -Wno-deprecated-declarations
     )
 else() # undefined
     message(WARNING "-- ${LIBPRCPP_PROJECT}:\n   cmake compiler id of ${CMAKE_CXX_COMPILER_ID} is not configured / not supported")           
