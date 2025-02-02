@@ -68,3 +68,11 @@ if(LIBPRCPP_PROJECT_USING_SCYLLADB)
     add_executable(test_libprcpp_scylladb test_libprcpp_scylladb.cc)
     target_link_libraries(test_libprcpp_scylladb PRIVATE libprcpp)
 endif()
+
+
+# name: test_libprcpp_pdf_maker
+# required libs:
+# - jsoncpp
+# - libharu
+add_executable(test_libprcpp_pdf_maker test_libprcpp_pdf_maker.cc)
+target_link_libraries(test_libprcpp_pdf_maker PRIVATE libprcpp)

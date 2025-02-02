@@ -47,6 +47,8 @@ endif()
 # use libharu
 if(LIBPRCPP_PROJECT_USING_LIBHARU)
     target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE hpdf)
+    target_include_directories(${LIBPRCPP_PROJECT} PRIVATE ${LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE})
+    target_include_directories(${LIBPRCPP_PROJECT} PRIVATE ${LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE_OUT})
 endif()
 
 # use lunasvg
