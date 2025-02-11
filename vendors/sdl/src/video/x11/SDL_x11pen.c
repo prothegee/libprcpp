@@ -81,10 +81,13 @@ static bool X11_XInput2PenIsEraser(SDL_VideoDevice *_this, int deviceid, char *d
             }
 
             if (tooltype_name) {
-                if (0 == SDL_strcasecmp(tooltype_name, PEN_ERASER_NAME_TAG)) {
+                if (SDL_strcasecmp(tooltype_name, PEN_ERASER_NAME_TAG) == 0) {
                     result = true;
                 }
-                X11_XFree(tooltype_name_info);
+                if (tooltype_name != (char *)tooltype_name_info) {
+                    X11_XFree(tooltype_name_info);
+                }
+                X11_XFree(tooltype_name);
 
                 return result;
             }
@@ -285,7 +288,9 @@ X11_PenHandle *X11_MaybeAddPenByDeviceID(SDL_VideoDevice *_this, int deviceid)
     XIDeviceInfo *device_info = X11_XIQueryDevice(data->display, deviceid, &num_device_info);
     if (device_info) {
         SDL_assert(num_device_info == 1);
-        return X11_MaybeAddPen(_this, device_info);
+        X11_PenHandle *handle = X11_MaybeAddPen(_this, device_info);
+        X11_XIFreeDeviceInfo(device_info);
+        return handle;
     }
     return NULL;
 }
