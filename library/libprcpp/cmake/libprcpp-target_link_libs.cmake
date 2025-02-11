@@ -70,3 +70,8 @@ endif()
 if(LIBPRCPP_PROJECT_USING_STB)
     target_include_directories(${LIBPRCPP_PROJECT} PRIVATE ${Stb_INCLUDE_DIR})
 endif()
+
+# use sdl
+if(LIBPRCPP_PROJECT_USING_SDL)
+    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE SDL3-static SDL3_Headers)
+endif()

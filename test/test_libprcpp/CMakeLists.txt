@@ -76,3 +76,10 @@ endif()
 # - libharu
 add_executable(test_libprcpp_pdf_maker test_libprcpp_pdf_maker.cc)
 target_link_libraries(test_libprcpp_pdf_maker PRIVATE libprcpp)
+
+
+# name: test_libprcpp_sdl3_native_resolution
+# required libs:
+# - sdl3
+add_executable(test_libprcpp_sdl3_native_resolution test_libprcpp_sdl3_native_resolution.cc)
+target_link_libraries(test_libprcpp_sdl3_native_resolution PRIVATE libprcpp)
