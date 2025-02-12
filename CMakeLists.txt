@@ -9,7 +9,7 @@ set(LIBPRCPP_PROJECT_ROOT ${PROJECT_SOURCE_DIR}) # libprcpp project root as var
 
 include(cmake/project-0-pre_config.cmake)
 include(cmake/project-1-packages.cmake)
-include(cmake/project-0-pre_config.cmake)
+include(cmake/project-2-post_build.cmake)
 
 
 add_subdirectory(library/libprcpp)
