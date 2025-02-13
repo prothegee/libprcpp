@@ -226,6 +226,40 @@ bool isExtensionAllowed(const std::string &filePath, const std::vector<std::stri
     // check if the extension is in the allowed list
     return std::find(allowedExtensions.begin(), allowedExtensions.end(), extension) != allowedExtensions.end();
 }
+
+
+i32 countCsvRows(const std::string &filePath)
+{
+    int rowCount = 0;
+    std::string line;
+    std::ifstream file(filePath);
+
+    while (std::getline(file, line))
+    {
+        rowCount++;
+    }
+    file.close();
+
+    return rowCount - 1;
+}
+
+i32 countJsonEntries(const std::string &filePath)
+{
+    std::string errs;
+    Json::Value jsonData;
+    std::ifstream file(filePath);
+    Json::CharReaderBuilder reader;
+
+    if (!parseFromStream(reader, file, &jsonData, &errs))
+    {
+        log::errorBase();
+        std::printf("- failed to parse JSON file: %s\n", errs.c_str());
+        return 0;
+    }
+    file.close();
+
+    return jsonData.size();
+}
 #pragma endregion
 
 
@@ -644,22 +678,6 @@ int mainProcess(int argc, char *argv[])
                 std::string batchCsv = outputStr + "-batch.csv";
                 std::string batchJson = outputStr + "-batch.json";
 
-                // check batchOutCsv file
-                if (batchOutCsv == "true" && std::filesystem::exists(batchCsv))
-                {
-                    log::errorBase();
-                    std::printf("- \"%s\" already exists", batchCsv.c_str());
-                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_CSV;
-                }
-
-                // check batchOutJson file
-                if (batchOutJson == "true" && std::filesystem::exists(batchJson))
-                {
-                    log::errorBase();
-                    std::printf("- \"%s\" already exists", batchJson.c_str());
-                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_JSON;
-                }
-
                 for (i32 i = 1; i <= batchIter; i++)
                 {
 
@@ -785,22 +803,6 @@ int mainProcess(int argc, char *argv[])
 
                 std::string batchCsv = outputStr + "-batch.csv";
                 std::string batchJson = outputStr + "-batch.json";
-
-                // check batchOutCsv file
-                if (batchOutCsv == "true" && std::filesystem::exists(batchCsv))
-                {
-                    log::errorBase();
-                    std::printf("- \"%s\" already exists", batchCsv.c_str());
-                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_CSV;
-                }
-
-                // check batchOutJson file
-                if (batchOutJson == "true" && std::filesystem::exists(batchJson))
-                {
-                    log::errorBase();
-                    std::printf("- \"%s\" already exists", batchJson.c_str());
-                    return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_JSON;
-                }
 
                 for (i32 i = 1; i <= batchIter; i++)
                 {
@@ -930,21 +932,49 @@ int mainProcess(int argc, char *argv[])
             outputStr = inputStr;
         }
 
-        // output csv
-        std::string fileOutput = outputStr + "-batch.csv";
+        std::string csvHeader; // to write csv header
+        std::string fileOutput = outputStr + "-batch.csv"; // output csv
+        bool extendFile = false;
 
-        std::ofstream csvFile(fileOutput);
-
-        if (!csvFile.is_open())
+        // check if the file exists
+        if (std::filesystem::exists(fileOutput))
         {
-            log::errorBase();
-            std::printf("- unable to write to .csv for \"%s\"\n", fileOutput.c_str());
-            csvFile.close();
-            return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_CSV;
+            std::cout << "file \"" << fileOutput << "\" already exists with " << countCsvRows(fileOutput) << " entries.\n";
+            
+            // prompt the user to extend the file
+            char choice;
+            do
+            {
+                std::cout << "do you want to extend it? (y/n): ";
+                std::cin >> choice;
+                choice = static_cast<char>(std::tolower(choice)); // ensure lowercase for comparison
+
+                // clear the input buffer to handle any extra characters
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            } while (choice != 'y' && choice != 'n');
+
+            if (choice == 'y')
+            {
+                extendFile = true;
+            }
+            else
+            {
+                log::errorBase();
+                std::printf("- \"%s\" already exists\n", fileOutput.c_str());
+                return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_CSV;
+            }
         }
 
-        // csv header
-        std::string csvHeader;
+        std::ofstream csvFile;
+        if (extendFile)
+        {
+            csvFile.open(fileOutput, std::ios::app); // append mode
+        }
+        else
+        {
+            csvFile.open(fileOutput); // a new file mode
+
+            // create csv header if creating a new file
             csvHeader += TBatchOutRecordDefault_HINT::id;
             csvHeader += ",";
             csvHeader += TBatchOutRecordDefault_HINT::batch_id;
@@ -964,28 +994,45 @@ int mainProcess(int argc, char *argv[])
             csvHeader += TBatchOutRecordDefault_HINT::claimed_date_and_time_num;
             csvHeader += "\n"; // end of the csv file header
 
-        csvFile << csvHeader;
+            csvFile << csvHeader;
+        }
 
-        // create rows
-        for (i32 i = 1; i <= batchIter; i++)
+        if (!csvFile.is_open())
         {
-            std::string batchId = batchIds[i - 1];
-            std::string fileName = futureBatchCsv[i - 1].get();
+            log::errorBase();
+            std::printf("- unable to write to .csv for \"%s\"\n", fileOutput.c_str());
+            csvFile.close();
+            return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_CSV;
+        }
 
-            std::string timestampCreated = dateAndTimesFunctions::UTC::YYYYMMDDhhmmss::toStringHuman(dateAndTimesFunctions::localTimeZone());
+        // calculate the starting ID for new rows
+        i32 startId = extendFile ? countCsvRows(fileOutput) + 1 : 1;
 
-            if (!fileName.empty())
-            {
-                csvFile << i << ",";
-                csvFile << batchId << ",";
-                csvFile << inputStr << ",";
-                csvFile << fileName << ",";
-                csvFile << timestampCreated << ",";
-                csvFile << "false" << ",";
-                csvFile << "" << ",";
-                csvFile << "" << ",";
-                csvFile << 0 << "\n"; // end of csv row data
-            }
+        // cenerate batch IDs and file names
+        for (i32 i = startId; i <= startId + batchIter - 1; i++)
+        {
+            auto localTime = dateAndTimesFunctions::localTimeZone();
+            auto iterTimestampObject = dateAndTimesFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
+
+            // generate batch ID and file name
+            std::string batchId = inputStr + "-" + iterTimestampObject + "-" + std::to_string(i);
+            std::string fileName = outputDirStr + "/" + outputStr + "-" + iterTimestampObject + "-" + std::to_string(i) + "." + outputExtStr;
+
+            // add batch ID to the vector
+            batchIds.push_back(batchId);
+
+            // write the row to the CSV file
+            std::string timestampCreated = dateAndTimesFunctions::UTC::YYYYMMDDhhmmss::toStringHuman(localTime);
+
+            csvFile << i << ",";
+            csvFile << batchId << ",";
+            csvFile << inputStr << ",";
+            csvFile << fileName << ",";
+            csvFile << timestampCreated << ",";
+            csvFile << "false" << ",";
+            csvFile << "" << ",";
+            csvFile << "" << ",";
+            csvFile << 0 << "\n"; // end of csv row data
         }
 
         // finally
@@ -1002,49 +1049,116 @@ int mainProcess(int argc, char *argv[])
             outputStr = inputStr;
         }
 
-        // output json
-        std::string fileOutput = outputStr + "-batch.json";
+        std::string fileOutput = outputStr + "-batch.json"; // output JSON file
+        bool extendFile = false;
 
-        std::ofstream jsonFile(fileOutput);
+        // check if the file exists
+        if (std::filesystem::exists(fileOutput))
+        {
+            std::cout << "file \"" << fileOutput << "\" already exists.\n";
 
-        Json::Value jsonArray(Json::arrayValue);
+            // prompt the user to extend the file
+            char choice;
+            do
+            {
+                std::cout << "do you want to extend it? (y/n): ";
+                std::cin >> choice;
+                choice = static_cast<char>(std::tolower(choice)); // ensure lowercase for comparison
+
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // clear input buffer
+            } while (choice != 'y' && choice != 'n');
+
+            if (choice == 'y')
+            {
+                extendFile = true;
+            }
+            else
+            {
+                log::errorBase();
+                std::printf("- \"%s\" already exists\n", fileOutput.c_str());
+                return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_ALREADY_EXISTS_JSON;
+            }
+        }
+
+        // open the JSON file
+        std::ofstream jsonFile;
+        Json::Value jsonArray(Json::arrayValue); // root JSON array
+
+        if (extendFile)
+        {
+            // read existing JSON content
+            std::ifstream existingFile(fileOutput);
+            if (!existingFile.is_open())
+            {
+                log::errorBase();
+                std::printf("- unable to read existing .json file \"%s\"\n", fileOutput.c_str());
+                return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_JSON;
+            }
+
+            Json::CharReaderBuilder readerBuilder;
+            std::string errs;
+            if (!parseFromStream(readerBuilder, existingFile, &jsonArray, &errs))
+            {
+                log::errorBase();
+                std::printf("- failed to parse existing .json file \"%s\": %s\n", fileOutput.c_str(), errs.c_str());
+                existingFile.close();
+                return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_JSON;
+            }
+            existingFile.close();
+
+            jsonFile.open(fileOutput, std::ios::out | std::ios::trunc); // overwrite mode
+        }
+        else
+        {
+            jsonFile.open(fileOutput, std::ios::out); // new file mode
+        }
 
         if (!jsonFile.is_open())
         {
             log::errorBase();
             std::printf("- unable to write to .json for \"%s\"\n", fileOutput.c_str());
             jsonFile.close();
-            return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_CSV;
+            return RETURN_MAIN_RESULT_ERROR_BATCH_OUT_FAIL_JSON;
         }
 
-        // create data
-        for (i32 i = 1; i <= batchIter; i++)
+        // calculate the starting ID for new rows
+        i32 startId = extendFile ? jsonArray.size() + 1 : 1;
+
+        // generate batch IDs and file names
+        for (i32 i = startId; i <= startId + batchIter - 1; i++)
         {
-            std::string batchId = batchIds[i - 1];
-            std::string fileName = futureBatchJson[i - 1].get();
+            auto localTime = dateAndTimesFunctions::localTimeZone();
+            auto iterTimestampObject = dateAndTimesFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
 
-            std::string timestampCreated = dateAndTimesFunctions::UTC::YYYYMMDDhhmmss::toStringHuman(dateAndTimesFunctions::localTimeZone());
+            // generate batch ID and file name
+            std::string batchId = inputStr + "-" + iterTimestampObject + "-" + std::to_string(i);
+            std::string fileName = outputDirStr + "/" + outputStr + "-" + iterTimestampObject + "-" + std::to_string(i) + "." + outputExtStr;
 
-            if (!fileName.empty())
-            {
-                Json::Value jsonObject;
+            // add batch ID to the vector
+            batchIds.push_back(batchId);
 
-                jsonObject[TBatchOutRecordDefault_HINT::id] = i;
-                jsonObject[TBatchOutRecordDefault_HINT::batch_id] = batchId;
-                jsonObject[TBatchOutRecordDefault_HINT::batch_origin] = inputStr;
-                jsonObject[TBatchOutRecordDefault_HINT::batch_result] = fileName;
-                jsonObject[TBatchOutRecordDefault_HINT::timestamp_created] = timestampCreated;
-                jsonObject[TBatchOutRecordDefault_HINT::owned] = false;
-                jsonObject[TBatchOutRecordDefault_HINT::owner] = "";
-                jsonObject[TBatchOutRecordDefault_HINT::claimed_date_and_time] = "";
-                jsonObject[TBatchOutRecordDefault_HINT::claimed_date_and_time_num] = 0;
+            // create JSON object for this record
+            Json::Value jsonObject;
+            jsonObject[TBatchOutRecordDefault_HINT::id] = i;
+            jsonObject[TBatchOutRecordDefault_HINT::batch_id] = batchId;
+            jsonObject[TBatchOutRecordDefault_HINT::batch_origin] = inputStr;
+            jsonObject[TBatchOutRecordDefault_HINT::batch_result] = fileName;
+            jsonObject[TBatchOutRecordDefault_HINT::timestamp_created] = dateAndTimesFunctions::UTC::YYYYMMDDhhmmss::toStringHuman(localTime);
+            jsonObject[TBatchOutRecordDefault_HINT::owned] = false;
+            jsonObject[TBatchOutRecordDefault_HINT::owner] = "";
+            jsonObject[TBatchOutRecordDefault_HINT::claimed_date_and_time] = "";
+            jsonObject[TBatchOutRecordDefault_HINT::claimed_date_and_time_num] = 0;
 
-                jsonArray.append(jsonObject);
-            }
+            // append the JSON object to the array
+            jsonArray.append(jsonObject);
         }
+
+        // write the JSON array to the file
+        Json::StreamWriterBuilder writerBuilder;
+        std::unique_ptr<Json::StreamWriter> writer(writerBuilder.newStreamWriter());
+        writer->write(jsonArray, &jsonFile);
 
         // finally
-        jsonFile << jsonArray.toStyledString();
         jsonFile.close();
 
         std::printf("- using --batch-out-json save to \"%s\"\n", fileOutput.c_str());

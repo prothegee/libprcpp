@@ -5,7 +5,11 @@ endif()
 
 # use jsoncpp
 if(LIBPRCPP_PROJECT_USING_JSONCPP)
-    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE JsonCpp::JsonCpp)
+    if(jsoncpp_FOUND)
+        target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE JsonCpp::JsonCpp)
+    else()
+        target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE jsoncpp)
+    endif()
 endif()
 
 # use openssl
@@ -73,5 +77,9 @@ endif()
 
 # use sdl
 if(LIBPRCPP_PROJECT_USING_SDL)
-    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE SDL3-static SDL3_Headers)
+    if(LIBPRCPP_IS_SHARED)
+        target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE SDL3 SDL3_Headers)
+    else()
+        target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE SDL3-static SDL3_Headers)
+    endif()
 endif()
