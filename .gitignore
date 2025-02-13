@@ -66,3 +66,9 @@ project-cleanup.sh
 /vendors/*.zip
 /vendors/*.tar
 /vendors/*.tar.gz
+
+
+##
+## exception
+##
+!/vendors/jsoncpp/include/json/config.h

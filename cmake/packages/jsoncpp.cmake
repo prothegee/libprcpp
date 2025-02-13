@@ -26,5 +26,7 @@ else()
 
     add_subdirectory(${LIBPRCPP_VENDOR_JSONCPP_DIR} LIBPRCPP_JSONCPP)
 
+    link_directories(AFTER "${CMAKE_BINARY_DIR}/LIBPRCPP_JSONCPP/src/lib_json")
+
     message(NOTICE "-- jsoncpp using project vendor dir as ${LIBPRCPP_VENDOR_JSONCPP_DIR}")
 endif()
