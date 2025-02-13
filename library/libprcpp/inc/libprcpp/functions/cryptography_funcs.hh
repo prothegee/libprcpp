@@ -259,7 +259,7 @@ namespace hasher
      * @param derivedLength 
      * @return std::string 
      */
-    DEPRECATED("DEPRECATED: use scrypt instead of this, computationCost has exhasceed num")
+    DEPRECATED("DEPRECATED: use scrypt instead of this, computationCost has exceed num")
     std::string scryptOpenSSL(const std::string &input, const std::string &salt, const uint32_t &computationCost = (1<<15), const uint32_t &blockSizeCost = 2, const uint32_t &threadsCost = 1, const uint32_t &derivedLength = 32);
     #endif
 
