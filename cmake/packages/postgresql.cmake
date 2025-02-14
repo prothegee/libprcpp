@@ -44,3 +44,10 @@ else()
         endif()
     endif()
 endif()
+
+
+# skipped when build shared libs
+if(BUILD_SHARED_LIBS)
+    set(LIBPRCPP_PROJECT_USING_POSTGRESQL false)
+    set(LIBPRCPP_PROJECT_USING_POSTGRESQL_HAS_PARENT_DIR false)
+endif()

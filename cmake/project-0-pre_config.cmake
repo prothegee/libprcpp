@@ -29,6 +29,14 @@ string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" LIBPRCPP_SYSTEM_PROCESSOR)
 string(TOLOWER "${CMAKE_BUILD_TYPE}"       LIBPRCPP_SYSTEM_BUILD_TYPE)
 
 
+if(BUILD_SHARED_LIBS)
+    message(NOTICE "-- libprcpp is build shared libs, skipping tests & tools")
+    # make test and tools false/OFF
+    set(LIBPRCPP_PROJECT_BUILD_TESTS false)
+    set(LIBPRCPP_PROJECT_BUILD_TOOLS false)
+endif()
+
+
 # compiler used list
 set(LIBPRCPP_COMPILER_GNU   false)
 set(LIBPRCPP_COMPILER_MSVC  false)
