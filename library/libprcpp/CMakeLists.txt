@@ -63,6 +63,12 @@ if(LIBPRCPP_COMPILER_GNU) # gnu compiler
         -Wno-unused-variable
         -Wno-deprecated-declarations
     )
+
+    if(BUILD_SHARED_LIBS)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lm -llibm -fPIC")
+        set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    endif()
+    
 elseif(LIBPRCPP_COMPILER_MSVC) # msvc compiler
     set(LIBPRCPP_COMPILER_MSVC_MIN_FLAGS "/std:c++${CMAKE_CXX_STANDARD} /EHsc")
     set(CMAKE_CXX_FLAGS "${LIBPRCPP_COMPILER_MSVC_MIN_FLAGS}")

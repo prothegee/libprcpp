@@ -84,3 +84,9 @@ if(LIBPRCPP_PROJECT_USING_SDL)
     # endif()
     target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE SDL3-static SDL_uclibc SDL3_Headers)
 endif()
+
+
+# shared lib case for none msvc
+if(BUILD_SHARED_LIBS AND NOT MSVC)
+    target_link_libraries(${LIBPRCPP_PROJECT} PRIVATE -lm -llibm -fPIC)
+endif()
