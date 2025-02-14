@@ -1,5 +1,7 @@
 #include <libprcpp/functions/cryptography_funcs.hh>
 
+#include <chrono>
+
 using namespace libprcpp;
 
 int main()
