@@ -2,31 +2,19 @@
 jsoncpp
 
 repo link: https://github.com/open-source-parsers/jsoncpp
-
-===========================================
-
-if current machine not providing the library,
-this library will use from vendors dir of "./vendors/jsoncpp"
 #]=]
-set(LIBPRCPP_PROJECT_USING_JSONCPP false)
+set(LIBPRCPP_PROJECT_USING_JSONCPP true)
 
-find_package(jsoncpp CONFIG)
+set(LIBPRCPP_VENDOR_JSONCPP_DIR "${LIBPRCPP_PROJECT_ROOT}/vendors/jsoncpp")
 
-if(jsoncpp_FOUND)
-    set(LIBPRCPP_PROJECT_USING_JSONCPP true)
+set(JSONCPP_WITH_TESTS false)
+set(JSONCPP_WITH_EXAMPLE false)
+set(JSONCPP_WITH_CMAKE_PACKAGE true)
 
-    message(NOTICE "-- jsoncpp package found")
-else()
-    set(LIBPRCPP_PROJECT_USING_JSONCPP true)
-    set(LIBPRCPP_VENDOR_JSONCPP_DIR "${LIBPRCPP_PROJECT_ROOT}/vendors/jsoncpp")
+include_directories(${LIBPRCPP_VENDOR_JSONCPP_DIR}/include)
 
-    set(JSONCPP_WITH_TESTS false)
-    set(JSONCPP_WITH_EXAMPLE false)
-    set(JSONCPP_WITH_CMAKE_PACKAGE true)
+add_subdirectory(${LIBPRCPP_VENDOR_JSONCPP_DIR} LIBPRCPP_JSONCPP)
 
-    add_subdirectory(${LIBPRCPP_VENDOR_JSONCPP_DIR} LIBPRCPP_JSONCPP)
+link_directories(AFTER "${CMAKE_BINARY_DIR}/LIBPRCPP_JSONCPP/src/lib_json")
 
-    link_directories(AFTER "${CMAKE_BINARY_DIR}/LIBPRCPP_JSONCPP/src/lib_json")
-
-    message(NOTICE "-- jsoncpp using project vendor dir as ${LIBPRCPP_VENDOR_JSONCPP_DIR}")
-endif()
+message(NOTICE "-- jsoncpp using project vendor dir as ${LIBPRCPP_VENDOR_JSONCPP_DIR}")
