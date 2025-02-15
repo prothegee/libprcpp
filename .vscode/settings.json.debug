@@ -4,7 +4,16 @@
     "cmake.configureSettings": {
         "BUILD_SHARED_LIBS": false,
 
-        // "CMAKE_INSTALL_PREFIX": "",
+        "BUILD_SKIPPED_VENDOR_SDL": false,
+
+        /*
+        windows:
+        "/std:c++17 /EHsc"
+
+        unix:
+        "-std=c++17"
+        */
+        // "CMAKE_CXX_FLAGS": "",
 
         "LIBPRCPP_PROJECT_BUILD_TESTS": true,
         "LIBPRCPP_PROJECT_BUILD_TOOLS": true,

@@ -4,6 +4,10 @@ one stop c++ library for c++ project
 
 currently for personal use as module
 
+<!--
+will never reach v1.x.x if not cross compiled on linux, windows, macos, android, & ios
+-->
+
 <br>
 
 ---
@@ -13,7 +17,6 @@ currently for personal use as module
 - [argon2](https://github.com/P-H-C/phc-winner-argon2)
 - [openssl](https://github.com/openssl/openssl)
 <!-- - [jwt cpp](https://github.com/Thalhammer/jwt-cpp) -->
-<!-- - [libharu](https://github.com/libharu/libharu) -->
 - [drogon framework](https://github.com/drogonframework/drogon)
 - [scylla cpp driver](https://github.com/scylladb/cpp-driver)
 
@@ -27,9 +30,10 @@ __*NOTES:*__
     - [stb](./vendors/stb/stb/README.md)
     - [sdl](./vendors/sdl/README.md)
     - [jsoncpp](./vendors/jsoncpp/README.md)
+    - [libharu](./vendors/libharu/README.md)
     - [nanosvg](./vendors/nanosvg/README.md)
     - [zxing-cpp](./vendors/zxing-cpp/README.md)
-    - [cryptopp cmake](./vendors/cryptopp-cmake/README.md)
+    - [cryptopp-cmake](./vendors/cryptopp-cmake/README.md)
 
 <br>
 
@@ -109,6 +113,10 @@ __*NOTES:*__
     # - arm-ios
     # - arm64-ios
     LIBPRCPP_VCPKG_TRIPLET
+
+    # skipping build sdl
+    # default false or OFF
+    BUILD_SKIPPED_VENDOR_SDL
     ```
 
 <br>
