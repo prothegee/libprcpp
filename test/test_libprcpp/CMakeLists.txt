@@ -36,6 +36,13 @@ target_link_libraries(test_libprcpp_cryptography PRIVATE libprcpp)
 
 add_executable(test_libprcpp_file_enc_dec test_libprcpp_file_enc_dec.cc)
 target_link_libraries(test_libprcpp_file_enc_dec PRIVATE libprcpp)
+if(NOT MSVC)
+    target_link_libraries(test_libprcpp_file_enc_dec PRIVATE -lm)
+
+    if(LIBPRCPP_COMPILER_GNU) # error gnu gcc 12.2
+        target_link_libraries(test_libprcpp_file_enc_dec PRIVATE -lm) # somehow build not error
+    endif()
+endif()
 
 
 # name: test_libprcpp_barcode_qrcode
@@ -45,6 +52,13 @@ target_link_libraries(test_libprcpp_file_enc_dec PRIVATE libprcpp)
 # - zxing-cpp
 add_executable(test_libprcpp_barcode_qrcode test_libprcpp_barcode_qrcode.cc)
 target_link_libraries(test_libprcpp_barcode_qrcode PRIVATE libprcpp)
+if(NOT MSVC)
+    target_link_libraries(test_libprcpp_barcode_qrcode PRIVATE -lm)
+
+    if(LIBPRCPP_COMPILER_GNU) # error gnu gcc 12.2
+        target_link_libraries(test_libprcpp_barcode_qrcode PRIVATE -lm) # somehow build not error
+    endif()
+endif()
 
 
 # name: test_libprcpp_smtps_curl
@@ -74,8 +88,22 @@ endif()
 # required libs:
 # - jsoncpp
 # - libharu
+# error:
+# - gnu gcc compiler
 add_executable(test_libprcpp_pdf_maker test_libprcpp_pdf_maker.cc)
 target_link_libraries(test_libprcpp_pdf_maker PRIVATE libprcpp)
+if(NOT MSVC)
+    target_link_libraries(test_libprcpp_pdf_maker PRIVATE -lm)
+
+    if(LIBPRCPP_COMPILER_GNU) # error gnu gcc 12.2
+        target_link_libraries(test_libprcpp_pdf_maker PRIVATE -lm) # stil error here
+        if(EXISTS "/usr/lib/x86_64-linux-gnu/libm.so")
+            target_link_libraries(test_libprcpp_pdf_maker PRIVATE "/usr/lib/x86_64-linux-gnu/libm.so") # somehow build not error
+        else()
+            message(WARNING "test_libprcpp_pdf_maker for gcc has error, be warn")
+        endif()
+    endif()
+endif()
 
 
 # name: test_libprcpp_sdl3_native_resolution
@@ -83,3 +111,10 @@ target_link_libraries(test_libprcpp_pdf_maker PRIVATE libprcpp)
 # - sdl3
 add_executable(test_libprcpp_sdl3_native_resolution test_libprcpp_sdl3_native_resolution.cc)
 target_link_libraries(test_libprcpp_sdl3_native_resolution PRIVATE libprcpp)
+
+
+# #
+# foreach(linked qwe asd zxc)
+#     # 
+# endforeach()
+

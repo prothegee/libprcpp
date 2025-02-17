@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.15...3.30)
 set(PRGENT_VERSION_MAJOR 0)
 set(PRGENT_VERSION_MINOR 10)
 set(PRGENT_VERSION_PATCH 0)
-set(PRGENT_VERSION_DATES 20250213)
+set(PRGENT_VERSION_DATES 20250217)
 set(PRGENT_VERSION_STRING "${PRGENT_VERSION_MAJOR}.${PRGENT_VERSION_MINOR}.${PRGENT_VERSION_PATCH}.${PRGENT_VERSION_DATES}")
 
 
@@ -20,8 +20,10 @@ include(FindPackageHandleStandardArgs)
 add_executable(${PROJECT_NAME} inc/prgent/main.hh src/prgent/main.cc)
 
 
-install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION bin)
+# # install
+# ## skip for now
+# install(TARGETS ${PROJECT_NAME}
+#         RUNTIME DESTINATION bin)
 
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -73,23 +75,23 @@ endif()
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libprcpp)
+if(NOT MSVC)
+    target_link_libraries(${PROJECT_NAME} PRIVATE -lm)
+
+    if(LIBPRCPP_COMPILER_GNU) # error gnu gcc 12.2
+        target_link_libraries(${PROJECT_NAME} PRIVATE -lm) # somehow build not error
+    endif()
+endif()
 
 
 aux_source_directory(src/prgent             PRGENT_DIR)
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
         ${PRGENT_DIR}
-        ${PRGENT_DIR_BASE}
-        ${PRGENT_DIR_CONSTANTS}
-        ${PRGENT_DIR_ENUMS}
-        ${PRGENT_DIR_FUNCTIONS}
-        ${PRGENT_DIR_TYPES}
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/inc
-        $<BUILD_INTERFACE:${LIBPRCPP_PROJECT_DIR}>/inc
 )
