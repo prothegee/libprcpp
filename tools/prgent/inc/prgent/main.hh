@@ -1,6 +1,6 @@
 #ifndef PRGENT_MAIN_HH
 #define PRGENT_MAIN_HH
-#include <libprcpp/base/config.hh>
+#include <libprcpp/config.hh>
 #include <libprcpp/constants/files_const.hh>
 #include <libprcpp/functions/utility_funcs.hh>
 #include <libprcpp/functions/date_and_times_funcs.hh>

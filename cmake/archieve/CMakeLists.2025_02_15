@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.15...3.30)
 
 # versions
 set(LIBPRCPP_VERSION_MAJOR  0)
-set(LIBPRCPP_VERSION_MINOR  15)
+set(LIBPRCPP_VERSION_MINOR  0)
 set(LIBPRCPP_VERSION_PATCH  0)
-set(LIBPRCPP_VERSION_DATES  20250217)
+set(LIBPRCPP_VERSION_DATES  20250215)
 set(LIBPRCPP_VERSION_BUILD "${LIBPRCPP_VERSION_MAJOR}.${LIBPRCPP_VERSION_MINOR}.${LIBPRCPP_VERSION_PATCH}.${LIBPRCPP_VERSION_DATES}")
 
 
@@ -18,31 +18,21 @@ project(libprcpp
     LANGUAGES CXX C
 )
 
-set(LIBPRCPP_PROJECT_DIR ${PROJECT_SOURCE_DIR})
-
 
 # option/s
-## build tools, default false/OFF
-option(BUILD_TOOLS              "build project tool/s" OFF)
 ## build tests, default false/OFF
 option(BUILD_TESTS              "build project test/s" OFF)
+## build examples, default false/OFF
+option(BUILD_TESTS           "build project example/s" OFF)
 ## build use vcpkg
 option(BUILD_USE_VCPKG          "build using vcpkg, will look environment variable of VCPKG_DIR/VCPKG_ROOT & VCPKG_DEFAULT_TRIPLET/DEFAULT_TRIPLET" OFF)
-# ## build as shared libs, default false/OFF
+## build as shared libs, default false/OFF
 # option(BUILD_SHARED_LIBS        "build as shared library" OFF) # skip for now
 
 ## skipped vendor SDL lib, default true/ON
-option(BUILD_SKIPPED_VENDOR_SDL             "build skipped for SDL" OFF)
-## skipped vendor STB lib, default true/ON
-option(BUILD_SKIPPED_VENDOR_STB             "build skipped for STB" OFF)
+option(BUILD_SKIPPED_VENDOR_SDL "build skipped for SDL" ON)
 ## skipped vendor libharu/hpdf lib, default true/ON
-option(BUILD_SKIPPED_VENDOR_LIBHARU         "build skipped for libharu/hpdf" OFF)
-## skipped vendor nanosvg lib, default false/OFF
-option(BUILD_SKIPPED_VENDOR_NANOSVG         "build skipped for nanosvg" OFF)
-## skipped vendor zxing-cpp lib, default false/OFF
-option(BUILD_SKIPPED_VENDOR_ZXING_CPP       "build skipped for zxing-cpp" OFF)
-## skipped vendor cryptopp-cmake lib, default false/OFF
-option(BUILD_SKIPPED_VENDOR_CRYPTOPP_CMAKE  "build skipped for cryptopp-cmake" OFF)
+option(BUILD_SKIPPED_VENDOR_LIBHARU "build skipped for libharu" ON)
 
 
 # variables
@@ -176,10 +166,9 @@ endif()
 
 # include base
 include(CheckIncludeFileCXX)
-include(GenerateExportHeader)
 include(CMakeDependentOption)
-include(CMakePackageConfigHelpers)
 include(FindPackageHandleStandardArgs)
+include(CMakePackageConfigHelpers)
 
 
 # libprcpp headers files specifier
@@ -188,56 +177,6 @@ set(LIBPRCPP_HEADERS_FILES_BASE
     library/inc/libprcpp/config.hh
     library/inc/libprcpp/libprcpp.hh
 )
-list(APPEND LIBPRCPP_HEADERS_FILES ${LIBPRCPP_HEADERS_FILES_BASE})
-
-## constants
-set(LIBPRCPP_HEADERS_FILES_CONSTANTS
-    library/inc/libprcpp/constants/files_const.hh
-    library/inc/libprcpp/constants/header_const.hh
-    library/inc/libprcpp/constants/host_const.hh
-    library/inc/libprcpp/constants/return_const.hh
-    library/inc/libprcpp/constants/strings_const.hh
-)
-list(APPEND LIBPRCPP_HEADERS_FILES ${LIBPRCPP_HEADERS_FILES_CONSTANTS})
-
-## enums
-set(LIBPRCPP_HEADERS_FILES_ENUMS
-    library/inc/libprcpp/enums/encdec_enums.hh
-    library/inc/libprcpp/enums/language_enums.hh
-    library/inc/libprcpp/enums/result_enums.hh
-    library/inc/libprcpp/enums/scylla_enums.hh
-)
-list(APPEND LIBPRCPP_HEADERS_FILES ${LIBPRCPP_HEADERS_FILES_ENUMS})
-
-## functions
-set(LIBPRCPP_HEADERS_FILES_FUNCTIONS
-    library/inc/libprcpp/functions/cryptography_funcs.hh
-    library/inc/libprcpp/functions/date_and_times_funcs.hh
-    library/inc/libprcpp/functions/images_funcs.hh
-    library/inc/libprcpp/functions/network_funcs.hh
-    library/inc/libprcpp/functions/system_funcs.hh
-    library/inc/libprcpp/functions/utility_funcs.hh
-)
-list(APPEND LIBPRCPP_HEADERS_FILES ${LIBPRCPP_HEADERS_FILES_FUNCTIONS})
-
-## interfaces
-set(LIBPRCPP_HEADERS_FILES_INTERFACES
-    library/inc/libprcpp/interfaces/idrogon_http_controller_helper.hh
-    library/inc/libprcpp/interfaces/ipostgresql_core_interface.hh
-    library/inc/libprcpp/interfaces/iscylladb_core_interface.hh
-)
-list(APPEND LIBPRCPP_HEADERS_FILES ${LIBPRCPP_HEADERS_FILES_INTERFACES})
-
-## types
-set(LIBPRCPP_HEADERS_FILES_TYPES
-    library/inc/libprcpp/types/auth_types.hh
-    library/inc/libprcpp/types/base_types.hh
-    library/inc/libprcpp/types/batch_types.hh
-    library/inc/libprcpp/types/look_types.hh
-    library/inc/libprcpp/types/postgresql_types.hh
-    library/inc/libprcpp/types/scylla_types.hh
-)
-list(APPEND LIBPRCPP_HEADERS_FILES ${LIBPRCPP_HEADERS_FILES_TYPES})
 
 
 # libprcpp sources files specifier
@@ -246,25 +185,6 @@ set(LIBPRCPP_SOURCES_FILES_BASE
     library/src/libprcpp/libprcpp.cc
 )
 list(APPEND LIBPRCPP_SOURCES_FILES ${LIBPRCPP_SOURCES_FILES_BASE})
-
-## functions
-set(LIBPRCPP_SOURCES_FILES_FUNCTIONS
-    library/src/libprcpp/functions/cryptography_funcs.cc
-    library/src/libprcpp/functions/date_and_times_funcs.cc
-    library/src/libprcpp/functions/images_funcs.cc
-    library/src/libprcpp/functions/network_funcs.cc
-    library/src/libprcpp/functions/system_funcs.cc
-    library/src/libprcpp/functions/utility_funcs.cc
-)
-list(APPEND LIBPRCPP_SOURCES_FILES ${LIBPRCPP_SOURCES_FILES_FUNCTIONS})
-
-## interfaces
-set(LIBPRCPP_SOURCES_FILES_INTERFACES
-    library/src/libprcpp/interfaces/idrogon_http_controller_helper.cc
-    library/src/libprcpp/interfaces/ipostgresql_core_interface.cc
-    library/src/libprcpp/interfaces/iscylladb_core_interface.cc
-)
-list(APPEND LIBPRCPP_SOURCES_FILES ${LIBPRCPP_SOURCES_FILES_INTERFACES})
 
 
 # packages & their variables
@@ -357,11 +277,15 @@ find_package(jsoncpp CONFIG)
 if(jsoncpp_FOUND)
     set(LIBPRCPP_USING_JSONCPP true)
 else()
-    set(LIBPRCPP_VENDOR_JSONCPP_DIR ${PROJECT_SOURCE_DIR}/vendors/jsoncpp)
+    set(LIBPRCPP_VENDOR_JSONCPP_DIR ${PROJECT_SOURCE_DIR}/vendors/jsoncpp LIBPRCPP_JSONCPP)
 
     set(JSONCPP_WITH_TESTS false)
     set(JSONCPP_WITH_EXAMPLE false)
     set(JSONCPP_WITH_CMAKE_PACKAGE true)
+
+    #### include_directories(${LIBPRCPP_VENDOR_JSONCPP_DIR}/include)
+
+    #### link_directories("${CMAKE_BINARY_DIR}/LIBPRCPP_JSONCPP/src/lib_json")
 
     add_subdirectory(${LIBPRCPP_VENDOR_JSONCPP_DIR} LIBPRCPP_JSONCPP)
 
@@ -370,24 +294,15 @@ endif()
 
 ## nanosvg
 set(LIBPRCPP_USING_NANOSVG false)
-if(NOT BUILD_SKIPPED_VENDOR_NANOSVG)
-    set(LIBPRCPP_VENDOR_NANOSVG_DIR "${PROJECT_SOURCE_DIR}/vendors/nanosvg")
 
-    if(NOT EXISTS "${CMAKE_BINARY_DIR}/out/nanosvg")
-        file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/out/nanosvg")
-    endif()
+set(LIBPRCPP_VENDOR_NANOSVG_DIR "${PROJECT_SOURCE_DIR}/vendors/nanosvg")
 
-    set(LIBPRCPP_VENDOR_NANOSVG_DIR_NANOSVG)
+#### include_directories("${LIBPRCPP_VENDOR_NANOSVG_DIR}/LIBPRCPP_NANOSVG/src")
 
-    file(COPY "${LIBPRCPP_VENDOR_NANOSVG_DIR}/src/" DESTINATION "${CMAKE_BINARY_DIR}/out/nanosvg")
+#### link_directories("${LIBPRCPP_VENDOR_NANOSVG_DIR}/LIBPRCPP_NANOSVG/src")
 
-    set(LIBPRCPP_VENDOR_NANOSVG_DIR_NANOSVG "${CMAKE_BINARY_DIR}/out")
-
-    include_directories(${LIBPRCPP_VENDOR_NANOSVG_DIR_NANOSVG})
-
-    add_subdirectory(${LIBPRCPP_VENDOR_NANOSVG_DIR} LIBPRCPP_NANOSVG)
-    set(LIBPRCPP_USING_NANOSVG true)
-endif()
+add_subdirectory(${LIBPRCPP_VENDOR_NANOSVG_DIR} LIBPRCPP_NANOSVG)
+set(LIBPRCPP_USING_NANOSVG true)
 
 ## openssl
 set(LIBPRCPP_USING_OPENSSL false)
@@ -416,19 +331,22 @@ endif()
 
 ## cryptopp-cmake
 set(LIBPRCPP_USING_CRYPTOPP_CMAKE false)
-if(NOT BUILD_SKIPPED_VENDOR_CRYPTOPP_CMAKE)
-    set(LIBPRCPP_VENDOR_CRYPTOPP_CMAKE_DIR "${PROJECT_SOURCE_DIR}/vendors/cryptopp-cmake")
 
-    set(CRYPTOPP_BUILD_TESTING false)
+set(LIBPRCPP_VENDOR_CRYPTOPP_CMAKE_DIR "${PROJECT_SOURCE_DIR}/vendors/cryptopp-cmake")
 
-    add_subdirectory(${LIBPRCPP_VENDOR_CRYPTOPP_CMAKE_DIR} LIBPRCPP_CRYPTOPP_CMAKE)
-    set(LIBPRCPP_USING_CRYPTOPP_CMAKE true)
-endif()
+set(CRYPTOPP_BUILD_TESTING false)
+
+#### include_directories("${CMAKE_BINARY_DIR}/LIBPRCPP_CRYPTOPP_CMAKE/cryptopp")
+
+#### link_directories("${CMAKE_BINARY_DIR}/LIBPRCPP_CRYPTOPP_CMAKE/cryptopp")
+
+add_subdirectory(${LIBPRCPP_VENDOR_CRYPTOPP_CMAKE_DIR} LIBPRCPP_CRYPTOPP_CMAKE)
+set(LIBPRCPP_USING_CRYPTOPP_CMAKE true)
 
 ## argon2
 set(LIBPRCPP_USING_ARGON2 false)
 
-find_file(LIBPRCPP_ARGON2_INCLUDE_DIRS "argon2.h")
+find_file(LIBPRCPP_ARGON2_INCLUDE_DIRS "argon2.h") # unix only, not sure in windows for now
 if(LIBPRCPP_ARGON2_INCLUDE_DIRS)
     set(LIBPRCPP_USING_ARGON2 true)
 endif()
@@ -455,22 +373,22 @@ endif()
 
 ## libharu
 set(LIBPRCPP_USING_LIBHARU false)
+
 if(NOT BUILD_SKIPPED_VENDOR_LIBHARU)
     set(LIBPRCPP_VENDOR_LIBHARU_DIR "${PROJECT_SOURCE_DIR}/vendors/libharu")
 
-    set(LIBPRCPP_VENDOR_LIBHARU_DIR_SOURCE_OUT ${CMAKE_BINARY_DIR}/LIBPRCPP_LIBHARU/src)
+    set(LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE ${LIBPRCPP_VENDOR_LIBHARU_DIR}/include)
+
     set(LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE_OUT ${CMAKE_BINARY_DIR}/LIBPRCPP_LIBHARU/include)
 
     set(LIBHPDF_SHARED false)
     set(LIBHPDF_STATIC true)
     set(LIBHPDF_EXAMPLES false)
 
-    include_directories(${LIBPRCPP_VENDOR_LIBHARU_DIR}/include)
+    #### include_directories(${LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE_OUT})
+    #### include_directories(${LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE})
 
-    include_directories(${LIBPRCPP_VENDOR_LIBHARU_DIR_SOURCE_OUT})
-    include_directories(${LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE_OUT})
-
-    link_directories(AFTER "${LIBPRCPP_VENDOR_LIBHARU_DIR_SOURCE_OUT}")
+    #### link_directories("${CMAKE_BINARY_DIR}/LIBPRCPP_LIBHARU/src")
 
     add_subdirectory(${LIBPRCPP_VENDOR_LIBHARU_DIR} LIBPRCPP_LIBHARU)
 
@@ -479,47 +397,45 @@ endif()
 
 ## stb
 set(LIBPRCPP_USING_STB false)
-if(NOT BUILD_SKIPPED_VENDOR_STB)
-    if(NOT DEFINED ${Stb_INCLUDE_DIR})
-        set(Stb_INCLUDE_DIR "")
-    endif()
 
-    set(LIBPRCPP_VENDOR_STB_DIR "${PROJECT_SOURCE_DIR}/vendors/stb")
-
-    if(NOT ${LIBPRCPP_VENDOR_STB_DIR} STREQUAL "")
-        set(LIBPRCPP_USING_STB true)
-        set(Stb_INCLUDE_DIR ${LIBPRCPP_VENDOR_STB_DIR})
-        include_directories(${Stb_INCLUDE_DIR})
-    endif()
-
-    set(LIBPRCPP_USING_STB true)
+if(NOT DEFINED ${Stb_INCLUDE_DIR})
+    set(Stb_INCLUDE_DIR "")
 endif()
+
+set(LIBPRCPP_VENDOR_STB_DIR "${PROJECT_SOURCE_DIR}/vendors/stb")
+
+if(NOT ${LIBPRCPP_VENDOR_STB_DIR} STREQUAL "")
+    set(LIBPRCPP_USING_STB true)
+    set(Stb_INCLUDE_DIR ${LIBPRCPP_VENDOR_STB_DIR})
+    include_directories(${Stb_INCLUDE_DIR})
+endif()
+
+set(LIBPRCPP_USING_STB true)
 
 ## zxing-cpp
 set(LIBPRCPP_USING_ZXING_CPP false)
-if(NOT BUILD_SKIPPED_VENDOR_ZXING_CPP)
-    set(LIBPRCPP_VENDOR_ZXING_CPP_DIR "${PROJECT_SOURCE_DIR}/vendors/zxing-cpp")
 
-    set(ZXING_EXPERIMENTAL_API true)
-    set(ZXING_EXAMPLES false)
-    set(ZXING_BLACKBOX_TESTS false)
-    set(ZXING_UNIT_TESTS false)
+set(LIBPRCPP_VENDOR_ZXING_CPP_DIR "${PROJECT_SOURCE_DIR}/vendors/zxing-cpp")
 
-    if(NOT EXISTS "${CMAKE_BINARY_DIR}/out/ZXing")
-        file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/out/ZXing")
-    endif()
+set(ZXING_EXPERIMENTAL_API true)
+set(ZXING_EXAMPLES false)
+set(ZXING_BLACKBOX_TESTS false)
+set(ZXING_UNIT_TESTS false)
 
-    set(LIBPRCPP_VENDOR_ZXING_CPP_DIR_ZXING)
-
-    file(COPY "${LIBPRCPP_VENDOR_ZXING_CPP_DIR}/core/src/" DESTINATION "${CMAKE_BINARY_DIR}/out/ZXing")
-
-    set(LIBPRCPP_VENDOR_ZXING_CPP_DIR_ZXING_DIR "${CMAKE_BINARY_DIR}/out")
-
-    include_directories(${LIBPRCPP_VENDOR_ZXING_CPP_DIR_ZXING_DIR})
-
-    add_subdirectory(${LIBPRCPP_VENDOR_ZXING_CPP_DIR} LIBPRCPP_ZXING_CPP)
-    set(LIBPRCPP_USING_ZXING_CPP true)
+if(NOT EXISTS "${CMAKE_BINARY_DIR}/out/ZXing")
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/out/ZXing")
 endif()
+
+set(LIBPRCPP_VENDOR_ZXING_CPP_DIR_ZXING)
+
+file(COPY "${LIBPRCPP_VENDOR_ZXING_CPP_DIR}/core/src/" DESTINATION "${CMAKE_BINARY_DIR}/out/ZXing")
+
+set(LIBPRCPP_VENDOR_ZXING_CPP_DIR_ZXING_DIR "${CMAKE_BINARY_DIR}/out")
+
+include_directories(${LIBPRCPP_VENDOR_ZXING_CPP_DIR_ZXING_DIR})
+
+add_subdirectory(${LIBPRCPP_VENDOR_ZXING_CPP_DIR} LIBPRCPP_ZXING_CPP)
+set(LIBPRCPP_USING_ZXING_CPP true)
 
 ## sdl
 set(LIBPRCPP_USING_SDL false)
@@ -530,9 +446,6 @@ if(NOT BUILD_SKIPPED_VENDOR_SDL)
 
     link_directories(AFTER "${CMAKE_BINARY_DIR}/LIBPRCPP_SDL")
 
-    set(SDL_STATIC true)
-    set(SDL_TEST_LIBRARY false)
-
     add_subdirectory(${LIBPRCPP_VENDOR_SDL_DIR} LIBPRCPP_SDL)
 
     set(LIBPRCPP_USING_SDL true)
@@ -541,26 +454,13 @@ endif()
 
 # project library
 add_library(${PROJECT_NAME} ${LIBPRCPP_SOURCES_FILES})
-# set(LIBPRCPP_BUILD_SHARED_LIBS false)
-# if(BUILD_SHARED_LIBS)
-#     set_target_properties(${PROJECT_NAME} PROPERTIES
-#         VERSION "${LIBPRCPP_VERSION_MAJOR}.${LIBPRCPP_VERSION_MINOR}.${LIBPRCPP_VERSION_PATCH}"
-#         SOVERSION "${LIBPRCPP_VERSION_MAJOR}.${LIBPRCPP_VERSION_MINOR}.${LIBPRCPP_VERSION_PATCH}"
-#     )
-#     set(LIBPRCPP_BUILD_SHARED_LIBS true)
-# endif() # skip for now
-
-## build tools
-set(LIBPRCPP_BUILD_TOOLS false)
-if(BUILD_TOOLS)
-    set(LIBPRCPP_BUILD_TOOLS true)
-endif()
-
-## build tests
-set(LIBPRCPP_BUILD_TESTS false)
-if(BUILD_TESTS)
-    set(LIBPRCPP_BUILD_TESTS true)
-endif()
+# add_library(${PROJECT_NAME} ${LIBPRCPP_HEADERS_FILES} ${LIBPRCPP_SOURCES_FILES})
+if(BUILD_SHARED_LIBS)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        VERSION "${LIBPRCPP_VERSION_MAJOR}.${LIBPRCPP_VERSION_MINOR}.${LIBPRCPP_VERSION_PATCH}"
+        SOVERSION "${LIBPRCPP_VERSION_MAJOR}.${LIBPRCPP_VERSION_MINOR}.${LIBPRCPP_VERSION_PATCH}"
+    )
+endif() # skip for now
 
 
 # target links
@@ -612,7 +512,7 @@ endif()
 
 ## libharu
 if(LIBPRCPP_USING_LIBHARU)
-    target_link_libraries(${PROJECT_NAME} PRIVATE hpdf)
+    target_link_libraries(${PROJECT_NAME} PRIVATE libharu hpdf)
 
     target_include_directories(${PROJECT_NAME} PRIVATE ${LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE})
     target_include_directories(${PROJECT_NAME} PRIVATE ${LIBPRCPP_VENDOR_LIBHARU_DIR_INCLUDE_OUT})
@@ -634,31 +534,8 @@ if(LIBPRCPP_USING_SDL)
 endif()
 
 
-# # install options
-# ## skip for now
-# if(NOT WIN32)
-#     include(GNUInstallDirs)
-# endif()
-# ## target
-# install(TARGETS ${PROJECT_NAME}
-#         EXPORT LibprcppTargets
-#         ARCHIVE DESTINATION lib
-#         LIBRARY DESTINATION lib
-#         RUNTIME DESTINATION bin)
-
-# ## target share
-# install(EXPORT LibprcppTargets
-#         FILE LibprcppConfig.cmake
-#         # NAMESPACE libprcpp::
-#         DESTINATION share/libprcpp)
-
-# ## target headers
-# install(FILES ${LIBPRCPP_HEADERS_FILES_BASE} DESTINATION include/libprcpp)
-# install(FILES ${LIBPRCPP_HEADERS_FILES_CONSTANTS} DESTINATION include/libprcpp/constants)
-# install(FILES ${LIBPRCPP_HEADERS_FILES_ENUMS} DESTINATION include/libprcpp/enums)
-# install(FILES ${LIBPRCPP_HEADERS_FILES_FUNCTIONS} DESTINATION include/libprcpp/functions)
-# install(FILES ${LIBPRCPP_HEADERS_FILES_INTERFACES} DESTINATION include/libprcpp/interfaces)
-# install(FILES ${LIBPRCPP_HEADERS_FILES_TYPES} DESTINATION include/libprcpp/types)
+# install options
+## TBA
 
 
 # force naming
@@ -692,7 +569,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         -Wno-empty-body
         -Wno-unused-function
         -Wno-deprecated-declarations
-        -lm
     )
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(LIBPRCPP_COMPILER_ID    2)
@@ -753,17 +629,13 @@ configure_file(
     ${PROJECT_SOURCE_DIR}/library/inc/libprcpp/config.hh
 )
 
-# libprcpp export
-generate_export_header(${PROJECT_NAME}
-    EXPORT_FILE_NAME
-        ${PROJECT_SOURCE_DIR}/library/inc/libprcpp/export.hh
-)
-
 
 # target include
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/library/inc
+        # $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>/LIBPRCPP_CRYPTOPP_CMAKE
+        # $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
 
@@ -771,23 +643,10 @@ target_include_directories(${PROJECT_NAME}
 ## N/A
 
 # target source
-## dont expand this yet
 target_sources(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/library/src/libprcpp
 )
-
-
-# extra subdir
-## tests
-if(BUILD_TESTS)
-    add_subdirectory(test/test_libprcpp)
-endif()
-
-## tools
-if(BUILD_TOOLS)
-    add_subdirectory(tools/prgent)
-endif()
 
 
 # post build
@@ -800,24 +659,20 @@ message(NOTICE "   system               : ${LIBPRCPP_SYSTEM_NAME}")
 message(NOTICE "   compiler             : ${CMAKE_CXX_COMPILER_ID}")
 message(NOTICE "   processor            : ${LIBPRCPP_SYSTEM_PROCESSOR_OUT}")
 message(NOTICE "   build type           : ${LIBPRCPP_SYSTEM_BUILD_TYPE}")
-message(NOTICE "   build tests          : ${LIBPRCPP_BUILD_TESTS}")
-message(NOTICE "   build tools          : ${LIBPRCPP_BUILD_TOOLS}")
-# message(NOTICE "   build shared lib     : ${LIBPRCPP_BUILD_SHARED_LIBS}") # skip for now
-message(NOTICE "   build using vcpkg    : ${LIBPRCPP_USING_VCPKG}")
+message(NOTICE "   build use vpckg      : ${LIBPRCPP_USING_VCPKG}")
 message(NOTICE "   cmake cxx std        : ${CMAKE_CXX_STANDARD}")
 message(NOTICE "   cmake cxx flags      : ${CMAKE_CXX_FLAGS}")
-message(NOTICE "   ======================================================")
-message(NOTICE "   using sdl            : ${LIBPRCPP_USING_SDL}")
-message(NOTICE "   using stb            : ${LIBPRCPP_USING_STB}")
-message(NOTICE "   using argon2         : ${LIBPRCPP_USING_ARGON2}")
-message(NOTICE "   using drogon         : ${LIBPRCPP_USING_DROGON}")
+message(NOTICE "   using vcpkg          : ${LIBPRCPP_USING_VCPKG}")
 message(NOTICE "   using jsoncpp        : ${LIBPRCPP_USING_JSONCPP}")
 message(NOTICE "   using nanosvg        : ${LIBPRCPP_USING_NANOSVG}")
 message(NOTICE "   using openssl        : ${LIBPRCPP_USING_OPENSSL}")
-message(NOTICE "   using scylladb       : ${LIBPRCPP_USING_SCYLLADB}")
-message(NOTICE "   using zxing-cpp      : ${LIBPRCPP_USING_ZXING_CPP}")
-message(NOTICE "   using postgresql     : ${LIBPRCPP_USING_POSTGRESQL}")
-message(NOTICE "   using libharu/hpdf   : ${LIBPRCPP_USING_LIBHARU}")
+message(NOTICE "   using drogon         : ${LIBPRCPP_USING_DROGON}")
 message(NOTICE "   using cryptopp-cmake : ${LIBPRCPP_USING_CRYPTOPP_CMAKE}")
-message(NOTICE "   ======================================================")
+message(NOTICE "   using argon2         : ${LIBPRCPP_USING_ARGON2}")
+message(NOTICE "   using postgresql     : ${LIBPRCPP_USING_POSTGRESQL}")
+message(NOTICE "   using scylladb       : ${LIBPRCPP_USING_SCYLLADB}")
+message(NOTICE "   using libharu/hpdf   : ${LIBPRCPP_USING_LIBHARU}")
+message(NOTICE "   using stb            : ${LIBPRCPP_USING_STB}")
+message(NOTICE "   using zxing-cpp      : ${LIBPRCPP_USING_ZXING_CPP}")
+message(NOTICE "   using sdl            : ${LIBPRCPP_USING_SDL}")
 message(NOTICE "   executeable curl     : ${LIBPRCPP_USING_CURL_EXECUTEABLE} -> ${LIBPRCPP_CURL_EXECUTEABLE}")
