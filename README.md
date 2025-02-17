@@ -16,7 +16,6 @@ will never reach v1.x.x if not cross compiled on linux, windows, macos, android,
 
 - [argon2](https://github.com/P-H-C/phc-winner-argon2)
 - [openssl](https://github.com/openssl/openssl)
-<!-- - [jwt cpp](https://github.com/Thalhammer/jwt-cpp) -->
 - [drogon framework](https://github.com/drogonframework/drogon)
 - [scylla cpp driver](https://github.com/scylladb/cpp-driver)
 
@@ -62,61 +61,9 @@ __*NOTES:*__
 
 - build:
     ```cmake
-    cmake -G "Ninja" -B build/debug -DCMAKE_BUILD_TYPE=Debug;
+    mkdir -p build/debug;
+    cmake -G "Ninja" -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-std:c++17"; # use "/std:c++17 /EHsc" for msvc
     cmake --build build/debug --target all --;
-    ```
-
-- options:
-    ```cmake
-    # build shared lib
-    # default false or OFF
-    BUILD_SHARED_LIBS
-
-    # custom install prefix
-    # default "" or empty
-    CMAKE_INSTALL_PREFIX
-
-    # build libprcpp tests
-    # default false or OFF
-    LIBPRCPP_PROJECT_BUILD_TESTS
-
-    # build libprcpp tools
-    # default false or OFF
-    LIBPRCPP_PROJECT_BUILD_TOOLS
-
-    # build using vcpkg
-    # default false or OFF
-    # if true/ON, this will lookup for environment variable of:
-    # - VCPKG_DIR
-    # - VCPKG_ROOT
-    # - VCPKG_DEFAULT_TRIPLET / VCPKG_TRIPLET
-    LIBPRCPP_USE_VCPKG
-
-    # set manual vcpkg triplet
-    # default "" or empty
-    # available triplets:
-    # - x86-linux
-    # - x64-linux
-    # - arm64-linux
-    # - arm-linux
-    # - x86-windows
-    # - x64-window
-    # - x86-osx
-    # - x64-osx
-    # - arm64-osx
-    # - arm-android
-    # - x86-android
-    # - x64-android
-    # - arm64-android
-    # - x86-ios
-    # - x64-ios
-    # - arm-ios
-    # - arm64-ios
-    LIBPRCPP_VCPKG_TRIPLET
-
-    # skipping build sdl
-    # default false or OFF
-    BUILD_SKIPPED_VENDOR_SDL
     ```
 
 <br>
