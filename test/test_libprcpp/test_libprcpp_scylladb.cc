@@ -7,7 +7,7 @@ using namespace libprcpp;
 //////////////////////////////////////////////
 
 
-#if LIBPRCPP_PROJECT_USING_SCYLLADB
+#if LIBPRCPP_USING_SCYLLADB
 std::mutex printMutex;
 class CScyllaDbCase : public IScyllaDbCoreInterface
 {
@@ -162,7 +162,7 @@ public:
         }
     }
 };
-#endif // LIBPRCPP_PROJECT_USING_SCYLLADB
+#endif // LIBPRCPP_USING_SCYLLADB
 
 
 //////////////////////////////////////////////
@@ -170,7 +170,7 @@ public:
 
 int main()
 {
-#if LIBPRCPP_PROJECT_USING_SCYLLADB
+#if LIBPRCPP_USING_SCYLLADB
     CScyllaDbCase table;
     table.initialize();
     table.initializeType();
@@ -217,7 +217,7 @@ int main()
     }
 
     table.cleanup();
-#endif // LIBPRCPP_PROJECT_USING_SCYLLADB
+#endif // LIBPRCPP_USING_SCYLLADB
 
     return 0;
 }

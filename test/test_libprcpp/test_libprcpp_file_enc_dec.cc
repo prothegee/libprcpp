@@ -34,10 +34,10 @@ int main()
         std::string imgOutDec4 = "file_out4_dec.png";
 
 
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
+    #if LIBPRCPP_USING_OPENSSL
         auto encryptOk1 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_AES_OPENSSL,        fileInRaw,    fileOutEnc1, iv,  ik);
         auto decryptOk1 = systemFuntions::file::decrypt(EEncDecMode::ENC_DEC_MODE_AES_OPENSSL,        fileOutEnc1,  fileOutDec1, iv,  ik);
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+    #endif // LIBPRCPP_USING_OPENSSL
         auto encryptOk2 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_AES_CRYPTOPP,       fileInRaw,    fileOutEnc2, iv,  ik);
         auto decryptOk2 = systemFuntions::file::decrypt(EEncDecMode::ENC_DEC_MODE_AES_CRYPTOPP,       fileOutEnc2,  fileOutDec2, iv,  ik);
         auto encryptOk3 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, fileInRaw,    fileOutEnc3, iv2, ik);
@@ -45,14 +45,14 @@ int main()
         auto encryptOk4 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_RC6_CRYPTOPP,       fileInRaw,    fileOutEnc4, iv,  ik);
         auto decryptOk4 = systemFuntions::file::decrypt(EEncDecMode::ENC_DEC_MODE_RC6_CRYPTOPP,       fileOutEnc4,  fileOutDec4, iv,  ik);
 
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
+    #if LIBPRCPP_USING_OPENSSL
         (encryptOk1 != RESULT_OK)
             ? std::printf("encryptOk1 fail\n")
             : std::printf("encryptOk1 ok\n");
         (decryptOk1 != RESULT_OK)
             ? std::printf("decryptOk1 fail\n")
             : std::printf("decryptOk1 ok\n");
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+    #endif // LIBPRCPP_USING_OPENSSL
         (encryptOk2 != RESULT_OK)
             ? std::printf("encryptOk2 fail\n")
             : std::printf("encryptOk2 ok\n");
@@ -73,10 +73,10 @@ int main()
             : std::printf("decryptOk4 ok\n");
 
 
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
+    #if LIBPRCPP_USING_OPENSSL
         auto imgEncryptOk1 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_AES_OPENSSL,        imgInRaw,   imgOutEnc1, iv,  ik);
         auto imgDecryptOk1 = systemFuntions::file::decrypt(EEncDecMode::ENC_DEC_MODE_AES_OPENSSL,        imgOutEnc1, imgOutDec1, iv,  ik);
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+    #endif // LIBPRCPP_USING_OPENSSL
         auto imgEncryptOk2 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_AES_CRYPTOPP,       imgInRaw,   imgOutEnc2, iv,  ik);
         auto imgDecryptOk2 = systemFuntions::file::decrypt(EEncDecMode::ENC_DEC_MODE_AES_CRYPTOPP,       imgOutEnc2, imgOutDec2, iv,  ik);
         auto imgEncryptOk3 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_XCHACHA20_CRYPTOPP, imgInRaw,   imgOutEnc3, iv2, ik);
@@ -84,14 +84,14 @@ int main()
         auto imgEncryptOk4 = systemFuntions::file::encrypt(EEncDecMode::ENC_DEC_MODE_AES_CRYPTOPP,       imgInRaw,   imgOutEnc4, iv,  ik);
         auto imgDecryptOk4 = systemFuntions::file::decrypt(EEncDecMode::ENC_DEC_MODE_AES_CRYPTOPP,       imgOutEnc4, imgOutDec4, iv,  ik);
 
-    #if LIBPRCPP_PROJECT_USING_OPENSSL
+    #if LIBPRCPP_USING_OPENSSL
         (imgEncryptOk1 != RESULT_OK)
             ? std::printf("imgEncryptOk1 fail\n")
             : std::printf("imgEncryptOk1 ok\n");
         (imgDecryptOk1 != RESULT_OK)
             ? std::printf("imgDecryptOk1 fail\n")
             : std::printf("imgDecryptOk1 ok\n");
-    #endif // LIBPRCPP_PROJECT_USING_OPENSSL
+    #endif // LIBPRCPP_USING_OPENSSL
         (imgEncryptOk2 != RESULT_OK)
             ? std::printf("imgEncryptOk2 fail\n")
             : std::printf("imgEncryptOk2 ok\n");

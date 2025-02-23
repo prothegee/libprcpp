@@ -33,6 +33,18 @@ target_link_libraries(test_libprcpp_parser_json PRIVATE libprcpp)
 # - cryptopp-cmake
 add_executable(test_libprcpp_cryptography test_libprcpp_cryptography.cc)
 target_link_libraries(test_libprcpp_cryptography PRIVATE libprcpp)
+if(NOT MSVC)
+    target_link_libraries(test_libprcpp_cryptography PRIVATE -lm)
+
+    if(LIBPRCPP_COMPILER_GNU) # error gnu gcc 12.2
+        target_link_libraries(test_libprcpp_cryptography PRIVATE -lm) # stil error here
+        if(EXISTS "/usr/lib/x86_64-linux-gnu/libm.so")
+            target_link_libraries(test_libprcpp_cryptography PRIVATE "/usr/lib/x86_64-linux-gnu/libm.so") # somehow build not error
+        else()
+            message(WARNING "test_libprcpp_cryptography for gcc has error, be warn")
+        endif()
+    endif()
+endif()
 
 add_executable(test_libprcpp_file_enc_dec test_libprcpp_file_enc_dec.cc)
 target_link_libraries(test_libprcpp_file_enc_dec PRIVATE libprcpp)
@@ -78,7 +90,7 @@ endif()
 # - jsoncpp
 # - scylla-cpp-driver
 # required config file: test_libprcpp_scylladb.json (you can copy test_libprcpp_scylladb.debug.json and rename to test_libprcpp_scylladb.json first)
-if(LIBPRCPP_PROJECT_USING_SCYLLADB)
+if(LIBPRCPP_USING_SCYLLADB)
     add_executable(test_libprcpp_scylladb test_libprcpp_scylladb.cc)
     target_link_libraries(test_libprcpp_scylladb PRIVATE libprcpp)
 endif()
