@@ -4,7 +4,7 @@ using namespace libprcpp;
 
 int main()
 {
-#if LIBPRCPP_PROJECT_USING_JSONCPP
+#if LIBPRCPP_USING_JSONCPP
     try
     {
         std::printf("start test for test_parser_json\n");
@@ -57,6 +57,6 @@ int main()
         std::cerr << e.what() << '\n';
         return -1;
     }
-#endif // LIBPRCPP_PROJECT_USING_JSONCPP
+#endif // LIBPRCPP_USING_JSONCPP
     return 0;
 }
