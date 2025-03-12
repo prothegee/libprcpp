@@ -88,6 +88,7 @@ public:
          * @brief immediately initialize pointer/s for session & cluster
          * 
          * @note should be call in constructor before any usage
+         * @note after cluster hit contact point, you can do other thing/s
          * 
          * @param connectionData 
          */
