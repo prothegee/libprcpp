@@ -147,7 +147,7 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
     else
     {
         #if LIBPRCPP_BUILD_STATUS == 1
-        std::cout << "DEBUG: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected (" << extraInfo << ")\ns";
+        std::cout << "DEBUG: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected (" << extraInfo << ")\n";
         #endif 
     }
 }
