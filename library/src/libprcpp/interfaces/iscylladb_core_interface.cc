@@ -84,7 +84,7 @@ void IScyllaDbCoreInterface::SIScyllaDb::printError(CassFuture *pCassFuture, con
     fprintf(stderr, "ERROR \"%s\":\n%.*s\n", info, (int)messageSize, message);
 }
 
-void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbConnection &connectionData)
+void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbConnection &connectionData, const char *extraInfo)
 {
     IScyllaDbCoreInterface::m_connectionData.host = connectionData.host;
     IScyllaDbCoreInterface::m_connectionData.username = connectionData.username;
@@ -141,13 +141,13 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
 
     if (cass_future_error_code(m_pCassFuture) != CASS_OK)
     {
-        std::cerr << "ERROR: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" fail to make connection\n";
+        std::cerr << "ERROR: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" fail to make connection on: \"" << extraInfo << "\"\n";
         exit(-1);
     }
     else
     {
         #if LIBPRCPP_BUILD_STATUS == 1
-        std::cout << "DEBUG: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected\n";
+        std::cout << "DEBUG: \"IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor\" connected (" << extraInfo << ")\ns";
         #endif 
     }
 }

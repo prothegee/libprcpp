@@ -91,7 +91,7 @@ public:
          * 
          * @param connectionData 
          */
-        void initializeConstructor(const TScyllaDbConnection &connectionData);
+        void initializeConstructor(const TScyllaDbConnection &connectionData, const char *extraInfo = "");
 
         /**
          * @brief get this keyspace project
