@@ -92,7 +92,8 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
 
     IScyllaDbCoreInterface::m_connectionData.keyspace = connectionData.keyspace;
     IScyllaDbCoreInterface::m_connectionData.strategy = connectionData.strategy;
-    IScyllaDbCoreInterface::m_connectionData.replication_factor = connectionData.replication_factor;
+    IScyllaDbCoreInterface::m_connectionData.factors_configs = connectionData.factors_configs;
+    IScyllaDbCoreInterface::m_connectionData.factors_configs_extra = connectionData.factors_configs_extra;
 
     if (m_pCassCluster == nullptr) { m_pCassCluster = cass_cluster_new(); }
     if (m_pCassSession == nullptr) { m_pCassSession = cass_session_new(); }
