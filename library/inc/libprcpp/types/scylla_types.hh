@@ -17,7 +17,6 @@ struct TScyllaDbConnection
     std::string keyspace = "";
     EScyllaDbAuthMode auth_mode = EScyllaDbAuthMode::SCYLLADB_AUTH_MODE_UNDEFINED;
     EScyllaDbTopologyStrat strategy = EScyllaDbTopologyStrat::SCYLLADB_TOPOLOGY_STRAT_UNDEFINED;
-    int replication_factor = 3;
     std::string factors_configs = "";
     std::string factors_configs_extra = "";
 };
