@@ -23,14 +23,26 @@ public:
 
         TScyllaDbConnection conn;
 
-        conn.auth_mode = (EScyllaDbAuthMode)CONFIG["connection"]["auth"].asInt();
-        conn.host = CONFIG["connection"]["hosts"].asString();
-        conn.username = CONFIG["connection"]["username"].asString();
-        conn.password = CONFIG["connection"]["password"].asString();
+        const int32_t CONN_AUTH = CONFIG["libprcpp_scylladb_test"]["connection"]["auth"].asInt();
 
-        conn.keyspace = CONFIG["keyspace"].asString();
-        conn.strategy = (EScyllaDbTopologyStrat)CONFIG["strategy"].asInt();
-        conn.replication_factor = CONFIG["replication_factor"].asInt();
+        conn.auth_mode = (EScyllaDbAuthMode)CONN_AUTH;
+
+        conn.host.clear();
+        for (auto &host : CONFIG["libprcpp_scylladb_test"]["connection"]["hosts"])
+        {
+            auto thisHost = host.asString() + ",";
+            conn.host += thisHost;
+        }
+        conn.host.resize(conn.host.size() - 1);
+
+        conn.username = CONFIG["libprcpp_scylladb_test"]["connection"]["username"].asString();
+        conn.password = CONFIG["libprcpp_scylladb_test"]["connection"]["password"].asString();
+
+        conn.keyspace = CONFIG["libprcpp_scylladb_test"]["keyspace"].asString();
+        conn.strategy = (EScyllaDbTopologyStrat)CONFIG["libprcpp_scylladb_test"]["strategy"].asInt();
+
+        conn.factors_configs = CONFIG["libprcpp_scylladb_test"]["factors_configs"][CONN_AUTH][0].asString();
+        conn.factors_configs_extra = CONFIG["libprcpp_scylladb_test"]["factors_configs_extra"].asString();
 
         IScyllaDb.initializeConstructor(conn);
 
@@ -171,6 +183,11 @@ public:
 int main()
 {
 #if LIBPRCPP_USING_SCYLLADB
+    /*
+    NOTE:
+    - this test is not involvingg network topology strategy    
+    */
+
     CScyllaDbCase table;
     table.initialize();
     table.initializeType();
