@@ -92,6 +92,9 @@ void IScyllaDbCoreInterface::SIScyllaDb::initializeConstructor(const TScyllaDbCo
 
     IScyllaDbCoreInterface::m_connectionData.keyspace = connectionData.keyspace;
     IScyllaDbCoreInterface::m_connectionData.strategy = connectionData.strategy;
+
+    IScyllaDbCoreInterface::m_connectionData.multiple_datacenters = connectionData.multiple_datacenters;
+
     IScyllaDbCoreInterface::m_connectionData.factors_configs = connectionData.factors_configs;
     IScyllaDbCoreInterface::m_connectionData.factors_configs_extra = connectionData.factors_configs_extra;
 

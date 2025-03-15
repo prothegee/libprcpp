@@ -41,6 +41,8 @@ public:
         conn.keyspace = CONFIG["libprcpp_scylladb_test"]["keyspace"].asString();
         conn.strategy = (EScyllaDbTopologyStrat)CONFIG["libprcpp_scylladb_test"]["strategy"].asInt();
 
+        conn.multiple_datacenters = CONFIG["libprcpp_scylladb_test"]["multiple_datacenters"].asBool();
+
         conn.factors_configs = CONFIG["libprcpp_scylladb_test"]["factors_configs"][CONN_AUTH][0].asString();
         conn.factors_configs_extra = CONFIG["libprcpp_scylladb_test"]["factors_configs_extra"].asString();
 

@@ -29,7 +29,7 @@
             ],
             // expected for: NetworkTopologyStrategy
             [
-                "'dc1': 3, 'dc2': 3, 'dc3': 3"
+                "'replication_factor': 1"
             ],
             // expected for: LocalStrategy
             [
@@ -40,6 +40,9 @@
                 "'replication_factor': 3"
             ]
         ],
+        // if true, factors_configs_extra will be use
+        // replication factor need to be specific across datacenter/s
+        "multiple_datacenters": false,
         // will ignore if length is 0 & only applied with multiple data center
         "factors_configs_extra": "'dc1': 3, 'dc2': 3, 'dc3': 3"
     }
