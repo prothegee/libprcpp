@@ -8,24 +8,24 @@ namespace libprcpp
 /**
  * @brief language enum
  */
-enum ELanguage : i32
+enum ELanguage : TI32
 {
     LANGUAGE_UNDEFINED,     // undefined
     LANGUAGE_ENGLISH,       // en
     LANGUAGE_BAHASA,        // id
 };
 
-inline static cchar *LANGUAGE_UNDEFINED_HINT = "undefined";
-inline static cchar *LANGUAGE_ENGLISH_HINT   = "en";
-inline static cchar *LANGUAGE_BAHASA_HINT    = "id";
+inline static const TChar *LANGUAGE_UNDEFINED_HINT = "undefined";
+inline static const TChar *LANGUAGE_ENGLISH_HINT   = "en";
+inline static const TChar *LANGUAGE_BAHASA_HINT    = "id";
 
 /**
  * @brief get string value of related languageEnum param
  * 
  * @param languageEnum 
- * @return cchar* 
+ * @return const TChar* 
  */
-inline static cchar *ELanguageToString(const ELanguage &languageEnum)
+inline static const TChar *ELanguageToString(const ELanguage &languageEnum)
 {
     switch (languageEnum)
     {
@@ -41,7 +41,7 @@ inline static cchar *ELanguageToString(const ELanguage &languageEnum)
  * @param languageString 
  * @return ELanguage 
  */
-inline static ELanguage ELanguageToEnum(cchar *languageString)
+inline static ELanguage ELanguageToEnum(const TChar *languageString)
 {
     if (languageString == LANGUAGE_ENGLISH_HINT)    { return LANGUAGE_ENGLISH; }
     if (languageString == LANGUAGE_BAHASA_HINT)     { return LANGUAGE_BAHASA; }

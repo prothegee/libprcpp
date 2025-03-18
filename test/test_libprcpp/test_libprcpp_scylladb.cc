@@ -224,7 +224,7 @@ int main()
 
     auto end = std::chrono::high_resolution_clock::now();
 
-    std::chrono::duration<double> duration = end - start;
+    std::chrono::duration<TF64> duration = end - start;
 
     if (errorCount > 0 || collideCount > 0)
     {

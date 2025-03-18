@@ -251,7 +251,7 @@ namespace barcode
     bool decode(const std::string &content, std::string &output, const BarcodeFormat &codeFormat, const bool &tryHard)
     {
         bool isOk = false;
-        i32 width, height, channels;
+        TI32 width, height, channels;
 
         std::vector<uint8_t> luminanceData;
 
@@ -418,7 +418,7 @@ namespace qrcode
     bool decode(const std::string &content, std::string &output, const BarcodeFormat &codeFormat, const bool &tryHard)
     {
         bool isOk = false;
-        i32 width, height, channels;
+        TI32 width, height, channels;
 
         std::vector<uint8_t> luminanceData;
 

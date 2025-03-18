@@ -9,7 +9,7 @@ namespace libprcpp
 /**
  * @brief encrypt decrypt mode enum
  */
-enum EEncDecMode : i32
+enum EEncDecMode : TI32
 {
     ENC_DEC_MODE_UNDEFINED,
 #if LIBPRCPP_USING_OPENSSL

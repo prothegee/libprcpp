@@ -5,11 +5,11 @@
 namespace libprcpp
 {
 
-inline static cchar *FILE_EXTENSION_IS_JPEG_HINT = ".jpeg"; // .jpeg
-inline static cchar *FILE_EXTENSION_IS_JPG_HINT  = ".jpg";  // .jpg
-inline static cchar *FILE_EXTENSION_IS_PDF_HINT  = ".pdf";  // .pdf
-inline static cchar *FILE_EXTENSION_IS_PNG_HINT  = ".png";  // .png
-inline static cchar *FILE_EXTENSION_IS_SVG_HINT  = ".svg";  // .svg
+inline static const TChar *FILE_EXTENSION_IS_JPEG_HINT = ".jpeg"; // .jpeg
+inline static const TChar *FILE_EXTENSION_IS_JPG_HINT  = ".jpg";  // .jpg
+inline static const TChar *FILE_EXTENSION_IS_PDF_HINT  = ".pdf";  // .pdf
+inline static const TChar *FILE_EXTENSION_IS_PNG_HINT  = ".png";  // .png
+inline static const TChar *FILE_EXTENSION_IS_SVG_HINT  = ".svg";  // .svg
 
 } // namespace libprcpp
 

@@ -310,7 +310,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer aesEncryptToBuffer(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer aesEncryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     /**
      * @brief decrypt buffer using AES to buffer
      * 
@@ -319,7 +319,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer aesDecryptToBuffer(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer aesDecryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     #endif // LIBPRCPP_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_USING_OPENSSL
@@ -350,7 +350,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer aesEncryptToBufferOpenSSL(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer aesEncryptToBufferOpenSSL(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     /**
      * @brief deecrypt buffer using AES OpenSSL to buffer
      * 
@@ -359,7 +359,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer aesDecryptToBufferOpenSSL(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer aesDecryptToBufferOpenSSL(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     #endif // LIBPRCPP_USING_OPENSSL
 
     #if LIBPRCPP_USING_CRYPTOPP_CMAKE
@@ -390,7 +390,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer xChaCha20EncryptToBuffer(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer xChaCha20EncryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     /**
      * @brief deecrypt buffer using xChaCha20 to buffer
      * 
@@ -399,7 +399,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer xChaCha20DecryptToBuffer(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer xChaCha20DecryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     #endif // LIBPRCPP_USING_CRYPTOPP_CMAKE
 
     #if LIBPRCPP_USING_CRYPTOPP_CMAKE
@@ -430,7 +430,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer rc6encryptToBuffer(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer rc6encryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     /**
      * @brief deecrypt buffer using rc6 to buffer
      * 
@@ -439,7 +439,7 @@ namespace streamCipher
      * @param ikBuffer 
      * @return TBuffer 
      */
-    TBuffer rc6decryptToBuffer(const TBuffer &buffer, cuchar *ivBuffer, cuchar *ikBuffer);
+    TBuffer rc6decryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer);
     #endif // LIBPRCPP_USING_CRYPTOPP_CMAKE
 } // namespace streamCipher
 

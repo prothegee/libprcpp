@@ -55,19 +55,19 @@ int main()
         auto start1 = std::chrono::high_resolution_clock::now();
         std::printf("argon2:\n- %s\n", cryptographyFunctions::hasher::argon2(password, passwordSalt).c_str());
         auto end1 = std::chrono::high_resolution_clock::now();
-        std::printf("- took %.3f seconds\n", std::chrono::duration<double>(end1 - start1).count());
+        std::printf("- took %.3f seconds\n", std::chrono::duration<TF64>(end1 - start1).count());
     #endif // LIBPRCPP_USING_ARGON2
 
         auto start2 = std::chrono::high_resolution_clock::now();
         std::printf("scrypt:\n- %s\n", cryptographyFunctions::hasher::scrypt(password, passwordSalt).c_str());
         auto end2 = std::chrono::high_resolution_clock::now();
-        std::printf("- took %.3f seconds\n", std::chrono::duration<double>(end2 - start2).count());
+        std::printf("- took %.3f seconds\n", std::chrono::duration<TF64>(end2 - start2).count());
 
     #if LIBPRCPP_USING_OPENSSL
         auto start3 = std::chrono::high_resolution_clock::now();
         std::printf("scryptOpenSSL:\n- %s\n", cryptographyFunctions::hasher::scryptOpenSSL(password, passwordSalt).c_str());
         auto end3 = std::chrono::high_resolution_clock::now();
-        std::printf("- took %.3f seconds\n", std::chrono::duration<double>(end3 - start3).count());
+        std::printf("- took %.3f seconds\n", std::chrono::duration<TF64>(end3 - start3).count());
     #endif // LIBPRCPP_USING_OPENSSL
 
         auto enc1 = cryptographyFunctions::streamCipher::aesEncrypt(inp1, iv, ik);

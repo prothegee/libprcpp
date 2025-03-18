@@ -22,20 +22,20 @@ struct TBatchOutRecordDefault
     bool        owned;
     std::string owner;
     std::string claimed_date_and_time;
-    ui64        claimed_date_and_time_num;
+    TU64        claimed_date_and_time_num;
 };
 // record hint for TBatchOutRecordDefault
 struct TBatchOutRecordDefault_HINT
 {
-    inline static cchar *id = "id";
-    inline static cchar *batch_id = "batch_id";
-    inline static cchar *batch_origin = "batch_origin";
-    inline static cchar *batch_result = "batch_result";
-    inline static cchar *timestamp_created = "timestamp_created";
-    inline static cchar *owned = "owned";
-    inline static cchar *owner = "owner";
-    inline static cchar *claimed_date_and_time = "claimed_date_and_time";
-    inline static cchar *claimed_date_and_time_num = "claimed_date_and_time_num";
+    inline static const TChar *id = "id";
+    inline static const TChar *batch_id = "batch_id";
+    inline static const TChar *batch_origin = "batch_origin";
+    inline static const TChar *batch_result = "batch_result";
+    inline static const TChar *timestamp_created = "timestamp_created";
+    inline static const TChar *owned = "owned";
+    inline static const TChar *owner = "owner";
+    inline static const TChar *claimed_date_and_time = "claimed_date_and_time";
+    inline static const TChar *claimed_date_and_time_num = "claimed_date_and_time_num";
 };
 
 } // namespace prgent

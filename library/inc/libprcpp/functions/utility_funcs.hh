@@ -71,7 +71,7 @@ std::string base64decode(const std::string &input);
 
 namespace arg
 {
-    inline static cchar *NOTHING_HERE = "nothing here";
+    inline static const TChar *NOTHING_HERE = "nothing here";
 } // namespace arg
 
 
@@ -168,18 +168,18 @@ namespace generate
      * 
      * @param min 
      * @param max 
-     * @return float 
+     * @return TF32 
      */
-    float randomNumber(const float min, const float max);
+    TF32 randomNumber(const TF32 min, const TF32 max);
 
     /**
      * @brief generate random number
      * 
      * @param min 
      * @param max 
-     * @return double 
+     * @return TF64 
      */
-    double randomNumber(const double min, const double max);
+    TF64 randomNumber(const TF64 min, const TF64 max);
 
     /**
      * @brief generate 16 random bytes in array

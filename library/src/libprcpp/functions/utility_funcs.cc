@@ -197,28 +197,28 @@ namespace generate
         return result;
     }
 
-    float randomNumber(const float min, const float max)
+    TF32 randomNumber(const TF32 min, const TF32 max)
     {
-        float result = 0.0f;
+        TF32 result = 0.0f;
 
         std::random_device rd;
         std::default_random_engine re(rd());
 
-        std::uniform_real_distribution<float> distribute(min, max);
+        std::uniform_real_distribution<TF32> distribute(min, max);
 
         result = distribute(re);
 
         return result;
     }
 
-    double randomNumber(const double min, const double max)
+    TF64 randomNumber(const TF64 min, const TF64 max)
     {
-        double result = 0.0;
+        TF64 result = 0.0;
 
         std::random_device rd;
         std::mt19937_64 re(rd());
 
-        std::uniform_real_distribution<double> distr(min, max);
+        std::uniform_real_distribution<TF64> distr(min, max);
 
         result = distr(re);
 

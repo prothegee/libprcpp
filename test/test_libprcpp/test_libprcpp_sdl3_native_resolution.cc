@@ -1,4 +1,5 @@
 #include <libprcpp/libprcpp.hh>
+#include <libprcpp/types/base_types.hh>
 
 #include <SDL3/SDL.h>
 
@@ -10,13 +11,15 @@
 #include <iomanip>
 #include <sstream>
 
+using namespace libprcpp;
+
 //////////////////////////////////////////////////////////////////
 
 struct TDisplayResolutionData
 {
     int32_t width;
     int32_t height;
-    double refresh_rate;
+    TF64 refresh_rate;
 };
 
 
