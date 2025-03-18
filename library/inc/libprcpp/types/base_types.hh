@@ -21,44 +21,34 @@ namespace libprcpp
 {
 
 // alter type of int32_t
-typedef int32_t i32;
-// alter type of int32_t
 typedef int32_t TI32;
 
 // alter type of int64_t
-typedef int64_t i64;
-// alter type of int64_t
 typedef int64_t TI64;
 
+// alter type of int128_t
+typedef __int128_t TI128;
+
 // alter type of uint32_t
-typedef uint32_t ui32;
-// alter type of uint32_t
-typedef uint32_t TUi32;
+typedef uint32_t TU32;
 
 // alter type of uint64_t
-typedef uint64_t ui64;
-// alter type of uint64_t
-typedef uint64_t TUi64;
+typedef uint64_t TU64;
 
-// alter type of float
-typedef float f32;
+// alter type of uint128_t
+typedef __uint128_t TU128;
+
 // alter type of float
 typedef float TF32;
 
 // alter type of double
-typedef double f64;
-// alter type of double
 typedef double TF64;
 
-// alter type of const char
-typedef const char cchar;
-// alter type of const char
-typedef const char TCchar;
+// alter type of char
+typedef char TChar;
 
-// alter type of const unsigned char
-typedef const unsigned char cuchar;
-// alter type of const unsigned char
-typedef const unsigned char TCuchar;
+// alter type of unsigned char
+typedef unsigned char TUChar;
 
 // buffer type, alter of std::vector<unsigned char> 
 typedef std::vector<unsigned char> TBuffer;

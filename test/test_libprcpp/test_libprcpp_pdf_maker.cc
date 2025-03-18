@@ -7,6 +7,7 @@
 #include <json/json.h>
 #include <hpdf.h>
 
+#include <libprcpp/types/base_types.hh>
 #include <libprcpp/functions/date_and_times_funcs.hh>
 
 using namespace libprcpp;
@@ -23,7 +24,7 @@ struct TInvoiceSenderData
     std::string phone;
     std::string address;
     std::string logo_attachment; // this should be on the top left of pdf invoice, if empty ignore it
-    double      logo_attachment_scale = 1;
+    TF64      logo_attachment_scale = 1;
 };
 
 /**
@@ -33,7 +34,7 @@ struct TInvoiceRecipientItem
 {
     std::string item_name;
     int32_t     quantity;
-    double      price;
+    TF64      price;
     std::string currency;
 };
 
@@ -73,8 +74,8 @@ bool generateBasicInvoice(const std::string &output, const TInvoiceSenderData &i
     }
     HPDF_Page_SetFontAndSize(page, font, fontSize);
 
-    double margin = 50;
-    double y = HPDF_Page_GetHeight(page) - margin;
+    TF64 margin = 50;
+    TF64 y = HPDF_Page_GetHeight(page) - margin;
 
     // add logo if provided
     if (!invoiceSender.logo_attachment.empty())
@@ -88,9 +89,9 @@ bool generateBasicInvoice(const std::string &output, const TInvoiceSenderData &i
         }
 
         // draw the logo at the top-left corner
-        double logoWidth = HPDF_Image_GetWidth(logo);
-        double logoHeight = HPDF_Image_GetHeight(logo);
-        double scale = invoiceSender.logo_attachment_scale;
+        TF64 logoWidth = HPDF_Image_GetWidth(logo);
+        TF64 logoHeight = HPDF_Image_GetHeight(logo);
+        TF64 scale = invoiceSender.logo_attachment_scale;
         HPDF_Page_DrawImage(page, logo, margin, y - logoHeight * scale, logoWidth * scale, logoHeight * scale);
         y -= logoHeight * scale + 20; // Adjust y position after adding the logo
     }

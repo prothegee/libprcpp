@@ -8,7 +8,7 @@ namespace libprcpp
 /**
  * @brief result enum
  */
-enum EResult : i32
+enum EResult : TI32
 {
     RESULT_UNDEFINED,
     RESULT_OK,

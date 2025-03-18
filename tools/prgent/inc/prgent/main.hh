@@ -68,7 +68,7 @@ void showHelpConfigurations(const std::string &helpHint)
 /**
  * @brief prgent generate mode enum
  */
-enum EGenerateMode : i32
+enum EGenerateMode : TI32
 {
     GENERATE_MODE_UNDEFINED,
     GENERATE_MODE_BARCODE_ENCODE,
@@ -81,7 +81,7 @@ enum EGenerateMode : i32
 /**
  * @brief prgent return main result enum
  */
-enum EReturnMainResult : i32
+enum EReturnMainResult : TI32
 {
     RETURN_MAIN_RESULT_OK,
     RETURN_MAIN_RESULT_SHOW_HELP,
@@ -104,30 +104,30 @@ enum EReturnMainResult : i32
 };
 
 
-inline static cchar *ARG_IS_HELP = "--help"; // arg for `--help`
-inline static cchar *ARG_IS_MODE = "--mode"; // arg for `--mode`
-inline static cchar *ARG_IS_INPUT = "--input"; // arg for `--input`
-inline static cchar *ARG_IS_OUTPUT = "--output"; // arg for `--output`
-inline static cchar *ARG_IS_OUTPUT_DIR = "--output-dir"; // arg for `--output-dir`
-inline static cchar *ARG_IS_OUTPUT_EXT = "--output-ext"; // arg for `--output-ext`
-inline static cchar *ARG_IS_IMAGE_SIZE = "--image-size"; // arg for `--image-size` apply NNNxNNN where N is numeric value
-inline static cchar *ARG_IS_IMAGE_MARGIN = "--image-margin"; // arg for `--image-margin`
-inline static cchar *ARG_IS_BATCH_ITER = "--batch-iter"; // arg for `--image-margin`
-inline static cchar *ARG_IS_BATCH_OUT_CSV = "--batch-out-csv"; // arg for `--batch-out-csv`
-inline static cchar *ARG_IS_BATCH_OUT_JSON = "--batch-out-json"; // arg for `--batch-out-json`
+inline static const TChar *ARG_IS_HELP = "--help"; // arg for `--help`
+inline static const TChar *ARG_IS_MODE = "--mode"; // arg for `--mode`
+inline static const TChar *ARG_IS_INPUT = "--input"; // arg for `--input`
+inline static const TChar *ARG_IS_OUTPUT = "--output"; // arg for `--output`
+inline static const TChar *ARG_IS_OUTPUT_DIR = "--output-dir"; // arg for `--output-dir`
+inline static const TChar *ARG_IS_OUTPUT_EXT = "--output-ext"; // arg for `--output-ext`
+inline static const TChar *ARG_IS_IMAGE_SIZE = "--image-size"; // arg for `--image-size` apply NNNxNNN where N is numeric value
+inline static const TChar *ARG_IS_IMAGE_MARGIN = "--image-margin"; // arg for `--image-margin`
+inline static const TChar *ARG_IS_BATCH_ITER = "--batch-iter"; // arg for `--image-margin`
+inline static const TChar *ARG_IS_BATCH_OUT_CSV = "--batch-out-csv"; // arg for `--batch-out-csv`
+inline static const TChar *ARG_IS_BATCH_OUT_JSON = "--batch-out-json"; // arg for `--batch-out-json`
 
 
-inline static cchar *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_NUM = "1"; // "1"
-inline static cchar *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_STR = "barcode-encode"; // "barcode-encode"
+inline static const TChar *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_NUM = "1"; // "1"
+inline static const TChar *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_STR = "barcode-encode"; // "barcode-encode"
 
-inline static cchar *GENERATE_MODE_BARCODE_DECODE_AS_NUM = "2"; // "2"
-inline static cchar *GENERATE_MODE_BARCODE_DECODE_AS_STR = "barcode-decode"; // "barcode-decode"
+inline static const TChar *GENERATE_MODE_BARCODE_DECODE_AS_NUM = "2"; // "2"
+inline static const TChar *GENERATE_MODE_BARCODE_DECODE_AS_STR = "barcode-decode"; // "barcode-decode"
 
-inline static cchar *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_NUM = "3"; // "3"
-inline static cchar *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_STR = "qrcode-encode"; // "qrcode-encode"
+inline static const TChar *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_NUM = "3"; // "3"
+inline static const TChar *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_STR = "qrcode-encode"; // "qrcode-encode"
 
-inline static cchar *GENERATE_MODE_QRCODE_DECODE_AS_NUM = "4"; // "4"
-inline static cchar *GENERATE_MODE_QRCODE_DECODE_AS_STR = "qrcode-decode"; // "qrcode-decode"
+inline static const TChar *GENERATE_MODE_QRCODE_DECODE_AS_NUM = "4"; // "4"
+inline static const TChar *GENERATE_MODE_QRCODE_DECODE_AS_STR = "qrcode-decode"; // "qrcode-decode"
 
 
 const std::vector<std::string> ALLOWED_MODE_IMAGE_EXTENSIONS = {
@@ -138,7 +138,7 @@ const std::vector<std::string> ALLOWED_MODE_IMAGE_EXTENSIONS = {
 };
 
 
-bool parseSizeArg(const std::string &sizeStr, i32 &width, i32 &height)
+bool parseSizeArg(const std::string &sizeStr, TI32 &width, TI32 &height)
 {
     // check if the string contains exactly one 'x'
     size_t xPos = sizeStr.find('x');
@@ -228,7 +228,7 @@ bool isExtensionAllowed(const std::string &filePath, const std::vector<std::stri
 }
 
 
-i32 countCsvRows(const std::string &filePath)
+TI32 countCsvRows(const std::string &filePath)
 {
     int rowCount = 0;
     std::string line;
@@ -243,7 +243,7 @@ i32 countCsvRows(const std::string &filePath)
     return rowCount - 1;
 }
 
-i32 countJsonEntries(const std::string &filePath)
+TI32 countJsonEntries(const std::string &filePath)
 {
     std::string errs;
     Json::Value jsonData;
@@ -270,9 +270,9 @@ int mainProcess(int argc, char *argv[])
     bool supportsImageSizeAndMargin = false;
 
     // default value for size in pixel/px
-    i32 sizeWidth = 256, sizeHeight = 256, sizeMargin = 0;
+    TI32 sizeWidth = 256, sizeHeight = 256, sizeMargin = 0;
 
-    i32 batchIter = 0;
+    TI32 batchIter = 0;
 
     EGenerateMode generateMode = GENERATE_MODE_UNDEFINED;
 
@@ -288,7 +288,7 @@ int mainProcess(int argc, char *argv[])
 
     std::string batchIterStr, batchOutCsv, batchOutJson;
 
-    for (i32 i = 1; i < argc; i++)
+    for (TI32 i = 1; i < argc; i++)
     {
         std::string arg = argv[i];
 
@@ -513,7 +513,7 @@ int mainProcess(int argc, char *argv[])
 
     //////////////////////////////////////////////////////
 
-    bool batchModeFail = false; // double check
+    bool batchModeFail = false; // TF64 check
 
     std::vector<std::string> batchIds;
 
@@ -521,7 +521,7 @@ int mainProcess(int argc, char *argv[])
     std::vector<std::future<std::string>> futureBatchCsv, futureBatchJson;
 
     // only used for encode
-    auto generateBatchEncode = [&](i32 batchNum, std::string timestampObject) -> std::string
+    auto generateBatchEncode = [&](TI32 batchNum, std::string timestampObject) -> std::string
     {
         std::string result;
 
@@ -678,7 +678,7 @@ int mainProcess(int argc, char *argv[])
                 std::string batchCsv = outputStr + "-batch.csv";
                 std::string batchJson = outputStr + "-batch.json";
 
-                for (i32 i = 1; i <= batchIter; i++)
+                for (TI32 i = 1; i <= batchIter; i++)
                 {
 
                     auto localTime = dateAndTimesFunctions::localTimeZone();
@@ -804,7 +804,7 @@ int mainProcess(int argc, char *argv[])
                 std::string batchCsv = outputStr + "-batch.csv";
                 std::string batchJson = outputStr + "-batch.json";
 
-                for (i32 i = 1; i <= batchIter; i++)
+                for (TI32 i = 1; i <= batchIter; i++)
                 {
                     auto localTime = dateAndTimesFunctions::localTimeZone();
                     auto iterTimestampObject = dateAndTimesFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
@@ -1006,10 +1006,10 @@ int mainProcess(int argc, char *argv[])
         }
 
         // calculate the starting ID for new rows
-        i32 startId = extendFile ? countCsvRows(fileOutput) + 1 : 1;
+        TI32 startId = extendFile ? countCsvRows(fileOutput) + 1 : 1;
 
         // cenerate batch IDs and file names
-        for (i32 i = startId; i <= startId + batchIter - 1; i++)
+        for (TI32 i = startId; i <= startId + batchIter - 1; i++)
         {
             auto localTime = dateAndTimesFunctions::localTimeZone();
             auto iterTimestampObject = dateAndTimesFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);
@@ -1122,10 +1122,10 @@ int mainProcess(int argc, char *argv[])
         }
 
         // calculate the starting ID for new rows
-        i32 startId = extendFile ? jsonArray.size() + 1 : 1;
+        TI32 startId = extendFile ? jsonArray.size() + 1 : 1;
 
         // generate batch IDs and file names
-        for (i32 i = startId; i <= startId + batchIter - 1; i++)
+        for (TI32 i = startId; i <= startId + batchIter - 1; i++)
         {
             auto localTime = dateAndTimesFunctions::localTimeZone();
             auto iterTimestampObject = dateAndTimesFunctions::UTC::YYYYMMDDhhmmssms::toString(localTime);

@@ -9,7 +9,7 @@ namespace libprcpp
 /**
  * @brief scylladb auth mode enum
  */
-enum EScyllaDbAuthMode : i32
+enum EScyllaDbAuthMode : TI32
 {
     SCYLLADB_AUTH_MODE_UNDEFINED,
     SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR,
@@ -17,18 +17,18 @@ enum EScyllaDbAuthMode : i32
     SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR,
 };
 
-inline static cchar *SCYLLADB_AUTH_MODE_UNDEFINED_HINT                                      = "Undefined"; // Undefined
-inline static cchar *SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR_HINT                        = "AllowAllAuthenticator"; // AllowAllAuthenticator
-inline static cchar *SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR_HINT                         = "PasswordAuthenticator"; // PasswordAuthenticator
-inline static cchar *SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR_HINT   = "com.scylladb.auth.TransitionalAuthenticator"; // com.scylladb.auth.TransitionalAuthenticator
+inline static const TChar *SCYLLADB_AUTH_MODE_UNDEFINED_HINT                                      = "Undefined"; // Undefined
+inline static const TChar *SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR_HINT                        = "AllowAllAuthenticator"; // AllowAllAuthenticator
+inline static const TChar *SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR_HINT                         = "PasswordAuthenticator"; // PasswordAuthenticator
+inline static const TChar *SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR_HINT   = "com.scylladb.auth.TransitionalAuthenticator"; // com.scylladb.auth.TransitionalAuthenticator
 
 /**
  * @brief get string value of related scylladbAuthModeEnum
  * 
  * @param scylladbAuthModeEnum 
- * @return cchar* 
+ * @return const TChar* 
  */
-inline static cchar *EScyllaDbAuthModeToString(const EScyllaDbAuthMode &scylladbAuthModeEnum)
+inline static const TChar *EScyllaDbAuthModeToString(const EScyllaDbAuthMode &scylladbAuthModeEnum)
 {
     switch (scylladbAuthModeEnum)
     {
@@ -45,7 +45,7 @@ inline static cchar *EScyllaDbAuthModeToString(const EScyllaDbAuthMode &scylladb
  * @param scylladbAuthModeString 
  * @return EScyllaDbAuthMode 
  */
-inline static EScyllaDbAuthMode EScyllaDbAuthModeToEnum(cchar *scylladbAuthModeString)
+inline static EScyllaDbAuthMode EScyllaDbAuthModeToEnum(const TChar *scylladbAuthModeString)
 {
     if (scylladbAuthModeString == SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR_HINT)                      { return SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR; }
     if (scylladbAuthModeString == SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR_HINT)                       { return SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR; }
@@ -60,7 +60,7 @@ inline static EScyllaDbAuthMode EScyllaDbAuthModeToEnum(cchar *scylladbAuthModeS
 /**
  * @brief scylladb topology strategy enum
  */
-enum EScyllaDbTopologyStrat : i32
+enum EScyllaDbTopologyStrat : TI32
 {
     SCYLLADB_TOPOLOGY_STRAT_UNDEFINED,
     SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY,
@@ -69,19 +69,19 @@ enum EScyllaDbTopologyStrat : i32
     SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY,
 };
 
-inline static cchar *SCYLLADB_TOPOLOGY_STRAT_UNDEFINED_HINT                 = "Undefined"; // Undefined
-inline static cchar *SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY_HINT           = "SimpleStrategy"; // SimpleStrategy
-inline static cchar *SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY_HINT = "NetworkTopologyStrategy"; // NetworkTopologyStrategy
-inline static cchar *SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY_HINT            = "LocalStrategy"; // LocalStrategy
-inline static cchar *SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY_HINT       = "EverywhereStrategy"; // EverywhereStrategy
+inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_UNDEFINED_HINT                 = "Undefined"; // Undefined
+inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY_HINT           = "SimpleStrategy"; // SimpleStrategy
+inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY_HINT = "NetworkTopologyStrategy"; // NetworkTopologyStrategy
+inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY_HINT            = "LocalStrategy"; // LocalStrategy
+inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY_HINT       = "EverywhereStrategy"; // EverywhereStrategy
 
 /**
  * @brief get string value of related scylladbTopologyStratEnum
  * 
  * @param scylladbTopologyStratEnum 
- * @return cchar* 
+ * @return const TChar* 
  */
-inline static cchar *EScyllaDbTopologyStratToString(const EScyllaDbTopologyStrat &scylladbTopologyStratEnum)
+inline static const TChar *EScyllaDbTopologyStratToString(const EScyllaDbTopologyStrat &scylladbTopologyStratEnum)
 {
     switch (scylladbTopologyStratEnum)
     {
@@ -99,7 +99,7 @@ inline static cchar *EScyllaDbTopologyStratToString(const EScyllaDbTopologyStrat
  * @param scyllaDbTopologyStratString 
  * @return EScyllaDbTopologyStrat 
  */
-inline static EScyllaDbTopologyStrat EScyllaDbTopologyStratToEnum(cchar *scyllaDbTopologyStratString)
+inline static EScyllaDbTopologyStrat EScyllaDbTopologyStratToEnum(const TChar *scyllaDbTopologyStratString)
 {
     if (scyllaDbTopologyStratString == SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY_HINT)            { return SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY; }
     if (scyllaDbTopologyStratString == SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY_HINT)  { return SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY; }
