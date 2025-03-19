@@ -71,7 +71,7 @@ std::string base64decode(const std::string &input);
 
 namespace arg
 {
-    inline static const TChar *NOTHING_HERE = "nothing here";
+    inline static const TChr *NOTHING_HERE = "nothing here";
 } // namespace arg
 
 

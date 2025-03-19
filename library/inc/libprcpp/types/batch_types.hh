@@ -27,15 +27,15 @@ struct TBatchOutRecordDefault
 // record hint for TBatchOutRecordDefault
 struct TBatchOutRecordDefault_HINT
 {
-    inline static const TChar *id = "id";
-    inline static const TChar *batch_id = "batch_id";
-    inline static const TChar *batch_origin = "batch_origin";
-    inline static const TChar *batch_result = "batch_result";
-    inline static const TChar *timestamp_created = "timestamp_created";
-    inline static const TChar *owned = "owned";
-    inline static const TChar *owner = "owner";
-    inline static const TChar *claimed_date_and_time = "claimed_date_and_time";
-    inline static const TChar *claimed_date_and_time_num = "claimed_date_and_time_num";
+    inline static const TChr *id = "id";
+    inline static const TChr *batch_id = "batch_id";
+    inline static const TChr *batch_origin = "batch_origin";
+    inline static const TChr *batch_result = "batch_result";
+    inline static const TChr *timestamp_created = "timestamp_created";
+    inline static const TChr *owned = "owned";
+    inline static const TChr *owner = "owner";
+    inline static const TChr *claimed_date_and_time = "claimed_date_and_time";
+    inline static const TChr *claimed_date_and_time_num = "claimed_date_and_time_num";
 };
 
 } // namespace prgent

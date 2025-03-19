@@ -15,17 +15,17 @@ enum ELanguage : TI32
     LANGUAGE_BAHASA,        // id
 };
 
-inline static const TChar *LANGUAGE_UNDEFINED_HINT = "undefined";
-inline static const TChar *LANGUAGE_ENGLISH_HINT   = "en";
-inline static const TChar *LANGUAGE_BAHASA_HINT    = "id";
+inline static const TChr *LANGUAGE_UNDEFINED_HINT = "undefined";
+inline static const TChr *LANGUAGE_ENGLISH_HINT   = "en";
+inline static const TChr *LANGUAGE_BAHASA_HINT    = "id";
 
 /**
  * @brief get string value of related languageEnum param
  * 
  * @param languageEnum 
- * @return const TChar* 
+ * @return const TChr* 
  */
-inline static const TChar *ELanguageToString(const ELanguage &languageEnum)
+inline static const TChr *ELanguageToString(const ELanguage &languageEnum)
 {
     switch (languageEnum)
     {
@@ -41,7 +41,7 @@ inline static const TChar *ELanguageToString(const ELanguage &languageEnum)
  * @param languageString 
  * @return ELanguage 
  */
-inline static ELanguage ELanguageToEnum(const TChar *languageString)
+inline static ELanguage ELanguageToEnum(const TChr *languageString)
 {
     if (languageString == LANGUAGE_ENGLISH_HINT)    { return LANGUAGE_ENGLISH; }
     if (languageString == LANGUAGE_BAHASA_HINT)     { return LANGUAGE_BAHASA; }
