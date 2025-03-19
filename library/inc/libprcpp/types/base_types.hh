@@ -45,10 +45,10 @@ typedef float TF32;
 typedef double TF64;
 
 // alter type of char
-typedef char TChar;
+typedef char TChr;
 
 // alter type of unsigned char
-typedef unsigned char TUChar;
+typedef unsigned char TUChr;
 
 // buffer type, alter of std::vector<unsigned char> 
 typedef std::vector<unsigned char> TBuffer;

@@ -17,18 +17,18 @@ enum EScyllaDbAuthMode : TI32
     SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR,
 };
 
-inline static const TChar *SCYLLADB_AUTH_MODE_UNDEFINED_HINT                                      = "Undefined"; // Undefined
-inline static const TChar *SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR_HINT                        = "AllowAllAuthenticator"; // AllowAllAuthenticator
-inline static const TChar *SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR_HINT                         = "PasswordAuthenticator"; // PasswordAuthenticator
-inline static const TChar *SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR_HINT   = "com.scylladb.auth.TransitionalAuthenticator"; // com.scylladb.auth.TransitionalAuthenticator
+inline static const TChr *SCYLLADB_AUTH_MODE_UNDEFINED_HINT                                      = "Undefined"; // Undefined
+inline static const TChr *SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR_HINT                        = "AllowAllAuthenticator"; // AllowAllAuthenticator
+inline static const TChr *SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR_HINT                         = "PasswordAuthenticator"; // PasswordAuthenticator
+inline static const TChr *SCYLLADB_AUTH_MODE_COM_SCYLLADB_AUTH_TRANSITIONAL_AUTHENTICATOR_HINT   = "com.scylladb.auth.TransitionalAuthenticator"; // com.scylladb.auth.TransitionalAuthenticator
 
 /**
  * @brief get string value of related scylladbAuthModeEnum
  * 
  * @param scylladbAuthModeEnum 
- * @return const TChar* 
+ * @return const TChr* 
  */
-inline static const TChar *EScyllaDbAuthModeToString(const EScyllaDbAuthMode &scylladbAuthModeEnum)
+inline static const TChr *EScyllaDbAuthModeToString(const EScyllaDbAuthMode &scylladbAuthModeEnum)
 {
     switch (scylladbAuthModeEnum)
     {
@@ -45,7 +45,7 @@ inline static const TChar *EScyllaDbAuthModeToString(const EScyllaDbAuthMode &sc
  * @param scylladbAuthModeString 
  * @return EScyllaDbAuthMode 
  */
-inline static EScyllaDbAuthMode EScyllaDbAuthModeToEnum(const TChar *scylladbAuthModeString)
+inline static EScyllaDbAuthMode EScyllaDbAuthModeToEnum(const TChr *scylladbAuthModeString)
 {
     if (scylladbAuthModeString == SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR_HINT)                      { return SCYLLADB_AUTH_MODE_ALLOW_ALL_AUTHENTICATOR; }
     if (scylladbAuthModeString == SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR_HINT)                       { return SCYLLADB_AUTH_MODE_PASSWORD_AUTHENTICATOR; }
@@ -69,19 +69,19 @@ enum EScyllaDbTopologyStrat : TI32
     SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY,
 };
 
-inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_UNDEFINED_HINT                 = "Undefined"; // Undefined
-inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY_HINT           = "SimpleStrategy"; // SimpleStrategy
-inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY_HINT = "NetworkTopologyStrategy"; // NetworkTopologyStrategy
-inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY_HINT            = "LocalStrategy"; // LocalStrategy
-inline static const TChar *SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY_HINT       = "EverywhereStrategy"; // EverywhereStrategy
+inline static const TChr *SCYLLADB_TOPOLOGY_STRAT_UNDEFINED_HINT                 = "Undefined"; // Undefined
+inline static const TChr *SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY_HINT           = "SimpleStrategy"; // SimpleStrategy
+inline static const TChr *SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY_HINT = "NetworkTopologyStrategy"; // NetworkTopologyStrategy
+inline static const TChr *SCYLLADB_TOPOLOGY_STRAT_LOCAL_STRATEGY_HINT            = "LocalStrategy"; // LocalStrategy
+inline static const TChr *SCYLLADB_TOPOLOGY_STRAT_EVERYWHERE_STRATEGY_HINT       = "EverywhereStrategy"; // EverywhereStrategy
 
 /**
  * @brief get string value of related scylladbTopologyStratEnum
  * 
  * @param scylladbTopologyStratEnum 
- * @return const TChar* 
+ * @return const TChr* 
  */
-inline static const TChar *EScyllaDbTopologyStratToString(const EScyllaDbTopologyStrat &scylladbTopologyStratEnum)
+inline static const TChr *EScyllaDbTopologyStratToString(const EScyllaDbTopologyStrat &scylladbTopologyStratEnum)
 {
     switch (scylladbTopologyStratEnum)
     {
@@ -99,7 +99,7 @@ inline static const TChar *EScyllaDbTopologyStratToString(const EScyllaDbTopolog
  * @param scyllaDbTopologyStratString 
  * @return EScyllaDbTopologyStrat 
  */
-inline static EScyllaDbTopologyStrat EScyllaDbTopologyStratToEnum(const TChar *scyllaDbTopologyStratString)
+inline static EScyllaDbTopologyStrat EScyllaDbTopologyStratToEnum(const TChr *scyllaDbTopologyStratString)
 {
     if (scyllaDbTopologyStratString == SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY_HINT)            { return SCYLLADB_TOPOLOGY_STRAT_SIMPLE_STRATEGY; }
     if (scyllaDbTopologyStratString == SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY_HINT)  { return SCYLLADB_TOPOLOGY_STRAT_NETWORK_TOPOLOGY_STRATEGY; }

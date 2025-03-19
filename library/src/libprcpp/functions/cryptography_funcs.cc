@@ -438,7 +438,7 @@ std::string aesDecrypt(const std::string &input, const std::string &iv, const st
     return result;
 }
 
-TBuffer aesEncryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer aesEncryptToBuffer(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     TBuffer ciphertext;
 
@@ -461,7 +461,7 @@ TBuffer aesEncryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBu
     return ciphertext;
 }
 
-TBuffer aesDecryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer aesDecryptToBuffer(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     TBuffer plaintext;
 
@@ -567,7 +567,7 @@ std::string aesDecryptOpenSSL(const std::string &input, const std::string &iv, c
     return result;
 }
 
-TBuffer aesEncryptToBufferOpenSSL(const TBuffer &bufferText, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer aesEncryptToBufferOpenSSL(const TBuffer &bufferText, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
@@ -616,7 +616,7 @@ TBuffer aesEncryptToBufferOpenSSL(const TBuffer &bufferText, TUChar *ivBuffer, T
     return ciphertext;
 }
 
-TBuffer aesDecryptToBufferOpenSSL(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer aesDecryptToBufferOpenSSL(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     OpenSSL_add_all_algorithms();
     ERR_load_crypto_strings();
@@ -714,7 +714,7 @@ std::string xChaCha20decrypt(const std::string &input, const std::string &iv, co
     return result;
 }
 
-TBuffer xChaCha20EncryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer xChaCha20EncryptToBuffer(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     TBuffer ciphertext;
 
@@ -737,7 +737,7 @@ TBuffer xChaCha20EncryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar
     return ciphertext;
 }
 
-TBuffer xChaCha20DecryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer xChaCha20DecryptToBuffer(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     TBuffer plaintext;
 
@@ -809,7 +809,7 @@ std::string rc6decrypt(const std::string &input, const std::string &iv, const st
     return result;
 }
 
-TBuffer rc6encryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer rc6encryptToBuffer(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     TBuffer ciphertext;
 
@@ -832,7 +832,7 @@ TBuffer rc6encryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBu
     return ciphertext;
 }
 
-TBuffer rc6decryptToBuffer(const TBuffer &buffer, TUChar *ivBuffer, TUChar *ikBuffer)
+TBuffer rc6decryptToBuffer(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer)
 {
     TBuffer plaintext;
 

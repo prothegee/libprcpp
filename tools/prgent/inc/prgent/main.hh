@@ -104,30 +104,30 @@ enum EReturnMainResult : TI32
 };
 
 
-inline static const TChar *ARG_IS_HELP = "--help"; // arg for `--help`
-inline static const TChar *ARG_IS_MODE = "--mode"; // arg for `--mode`
-inline static const TChar *ARG_IS_INPUT = "--input"; // arg for `--input`
-inline static const TChar *ARG_IS_OUTPUT = "--output"; // arg for `--output`
-inline static const TChar *ARG_IS_OUTPUT_DIR = "--output-dir"; // arg for `--output-dir`
-inline static const TChar *ARG_IS_OUTPUT_EXT = "--output-ext"; // arg for `--output-ext`
-inline static const TChar *ARG_IS_IMAGE_SIZE = "--image-size"; // arg for `--image-size` apply NNNxNNN where N is numeric value
-inline static const TChar *ARG_IS_IMAGE_MARGIN = "--image-margin"; // arg for `--image-margin`
-inline static const TChar *ARG_IS_BATCH_ITER = "--batch-iter"; // arg for `--image-margin`
-inline static const TChar *ARG_IS_BATCH_OUT_CSV = "--batch-out-csv"; // arg for `--batch-out-csv`
-inline static const TChar *ARG_IS_BATCH_OUT_JSON = "--batch-out-json"; // arg for `--batch-out-json`
+inline static const TChr *ARG_IS_HELP = "--help"; // arg for `--help`
+inline static const TChr *ARG_IS_MODE = "--mode"; // arg for `--mode`
+inline static const TChr *ARG_IS_INPUT = "--input"; // arg for `--input`
+inline static const TChr *ARG_IS_OUTPUT = "--output"; // arg for `--output`
+inline static const TChr *ARG_IS_OUTPUT_DIR = "--output-dir"; // arg for `--output-dir`
+inline static const TChr *ARG_IS_OUTPUT_EXT = "--output-ext"; // arg for `--output-ext`
+inline static const TChr *ARG_IS_IMAGE_SIZE = "--image-size"; // arg for `--image-size` apply NNNxNNN where N is numeric value
+inline static const TChr *ARG_IS_IMAGE_MARGIN = "--image-margin"; // arg for `--image-margin`
+inline static const TChr *ARG_IS_BATCH_ITER = "--batch-iter"; // arg for `--image-margin`
+inline static const TChr *ARG_IS_BATCH_OUT_CSV = "--batch-out-csv"; // arg for `--batch-out-csv`
+inline static const TChr *ARG_IS_BATCH_OUT_JSON = "--batch-out-json"; // arg for `--batch-out-json`
 
 
-inline static const TChar *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_NUM = "1"; // "1"
-inline static const TChar *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_STR = "barcode-encode"; // "barcode-encode"
+inline static const TChr *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_NUM = "1"; // "1"
+inline static const TChr *GENERATE_MODE_BARCODE_ENCODE_ARG_AS_STR = "barcode-encode"; // "barcode-encode"
 
-inline static const TChar *GENERATE_MODE_BARCODE_DECODE_AS_NUM = "2"; // "2"
-inline static const TChar *GENERATE_MODE_BARCODE_DECODE_AS_STR = "barcode-decode"; // "barcode-decode"
+inline static const TChr *GENERATE_MODE_BARCODE_DECODE_AS_NUM = "2"; // "2"
+inline static const TChr *GENERATE_MODE_BARCODE_DECODE_AS_STR = "barcode-decode"; // "barcode-decode"
 
-inline static const TChar *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_NUM = "3"; // "3"
-inline static const TChar *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_STR = "qrcode-encode"; // "qrcode-encode"
+inline static const TChr *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_NUM = "3"; // "3"
+inline static const TChr *GENERATE_MODE_QRCODE_ENCODE_ARG_AS_STR = "qrcode-encode"; // "qrcode-encode"
 
-inline static const TChar *GENERATE_MODE_QRCODE_DECODE_AS_NUM = "4"; // "4"
-inline static const TChar *GENERATE_MODE_QRCODE_DECODE_AS_STR = "qrcode-decode"; // "qrcode-decode"
+inline static const TChr *GENERATE_MODE_QRCODE_DECODE_AS_NUM = "4"; // "4"
+inline static const TChr *GENERATE_MODE_QRCODE_DECODE_AS_STR = "qrcode-decode"; // "qrcode-decode"
 
 
 const std::vector<std::string> ALLOWED_MODE_IMAGE_EXTENSIONS = {
