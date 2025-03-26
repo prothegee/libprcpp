@@ -237,11 +237,3 @@ void IDrogonHttpControllerHelper::SIStartInvokeMeta::customParameter(const std::
 #endif // LIBPRCPP_USING_DROGON
 
 } // namespace libprcpp
-
-#if LIBPRCPP_BUILD_COMPILER_ID == 1
-// RESERVED
-#elif LIBPRCPP_BUILD_COMPILER_ID == 2
-// RESERVED
-#elif LIBPRCPP_BUILD_COMPILER_ID == 3
-// RESERVED
-#endif
