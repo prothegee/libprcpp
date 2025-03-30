@@ -352,7 +352,7 @@ namespace streamCipher
      */
     TBuffer aesEncryptToBufferOpenSSL(const TBuffer &buffer, TUChr *ivBuffer, TUChr *ikBuffer);
     /**
-     * @brief deecrypt buffer using AES OpenSSL to buffer
+     * @brief decrypt buffer using AES OpenSSL to buffer
      * 
      * @param buffer 
      * @param ivBuffer 

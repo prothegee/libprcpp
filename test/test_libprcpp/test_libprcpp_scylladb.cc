@@ -1,6 +1,6 @@
 #include <libprcpp/interfaces/iscylladb_core_interface.hh>
 #include <libprcpp/functions/utility_funcs.hh>
-#include <libprcpp/functions/date_and_times_funcs.hh>
+#include <libprcpp/functions/date_and_time_funcs.hh>
 
 using namespace libprcpp;
 
@@ -115,7 +115,7 @@ public:
         utilityFunctions::find::andReplaceAll(query, "{KEYSPACE}", m_conn.keyspace);
         utilityFunctions::find::andReplaceAll(query, "{TABLE_NAME}", TABLE_NAME);
 
-        std::string currentTz = dateAndTimesFunctions::UTC::timeZone::toString();
+        std::string currentTz = dateAndTimeFunctions::UTC::timeZone::toString();
 
         utilityFunctions::find::andReplaceAll(query, "{REPLACE_TIME_TEXT}", currentTz);
 

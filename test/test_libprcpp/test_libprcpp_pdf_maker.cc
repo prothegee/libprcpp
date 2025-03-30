@@ -8,7 +8,7 @@
 #include <hpdf.h>
 
 #include <libprcpp/types/base_types.hh>
-#include <libprcpp/functions/date_and_times_funcs.hh>
+#include <libprcpp/functions/date_and_time_funcs.hh>
 
 using namespace libprcpp;
 
@@ -187,7 +187,7 @@ int main()
         "Foo Street No. 12, Province, District, SubDistrict, Country, 123456"
     };
 
-    const std::string INVOICE_DATE = dateAndTimesFunctions::UTC::YYYYMMDD::toStringISO8601(dateAndTimesFunctions::localTimeZone());
+    const std::string INVOICE_DATE = dateAndTimeFunctions::UTC::YYYYMMDD::toStringISO8601(dateAndTimeFunctions::localTimeZone());
 
     auto futureResult = std::async(std::launch::async, generateBasicInvoice, INVOICE_OUTPUT, INVOICE_SENDER, INVOICE_ITEMS, INVOICE_RECIPIENT, INVOICE_DATE, "Helvetica", 10);
 
