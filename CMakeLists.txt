@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.15...3.30)
 
 # versions
 set(LIBPRCPP_VERSION_MAJOR  0)
-set(LIBPRCPP_VERSION_MINOR  17)
+set(LIBPRCPP_VERSION_MINOR  18)
 set(LIBPRCPP_VERSION_PATCH  0)
-set(LIBPRCPP_VERSION_DATES  20250326)
+set(LIBPRCPP_VERSION_DATES  20250330)
 set(LIBPRCPP_VERSION_BUILD "${LIBPRCPP_VERSION_MAJOR}.${LIBPRCPP_VERSION_MINOR}.${LIBPRCPP_VERSION_PATCH}.${LIBPRCPP_VERSION_DATES}")
 
 
@@ -212,7 +212,7 @@ list(APPEND LIBPRCPP_HEADERS_FILES ${LIBPRCPP_HEADERS_FILES_ENUMS})
 ## functions
 set(LIBPRCPP_HEADERS_FILES_FUNCTIONS
     library/inc/libprcpp/functions/cryptography_funcs.hh
-    library/inc/libprcpp/functions/date_and_times_funcs.hh
+    library/inc/libprcpp/functions/date_and_time_funcs.hh
     library/inc/libprcpp/functions/images_funcs.hh
     library/inc/libprcpp/functions/network_funcs.hh
     library/inc/libprcpp/functions/system_funcs.hh
@@ -250,7 +250,7 @@ list(APPEND LIBPRCPP_SOURCES_FILES ${LIBPRCPP_SOURCES_FILES_BASE})
 ## functions
 set(LIBPRCPP_SOURCES_FILES_FUNCTIONS
     library/src/libprcpp/functions/cryptography_funcs.cc
-    library/src/libprcpp/functions/date_and_times_funcs.cc
+    library/src/libprcpp/functions/date_and_time_funcs.cc
     library/src/libprcpp/functions/images_funcs.cc
     library/src/libprcpp/functions/network_funcs.cc
     library/src/libprcpp/functions/system_funcs.cc

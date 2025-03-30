@@ -377,7 +377,7 @@ namespace hasher
 
         if (status != ARGON2_OK)
         {
-            throw std::runtime_error("argon2: hasing failed with " + std::to_string(status) + " error code");
+            throw std::runtime_error("argon2: hasihng failed with " + std::to_string(status) + " error code");
         }
 
         result = dataToHexStringArgon2(hash);

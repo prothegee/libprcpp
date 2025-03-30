@@ -1,4 +1,4 @@
-#include <libprcpp/functions/date_and_times_funcs.hh>
+#include <libprcpp/functions/date_and_time_funcs.hh>
 
 #if LIBPRCPP_COMPILER_MSVC
 #pragma warning (push)
@@ -8,7 +8,7 @@
 
 namespace libprcpp
 {
-namespace dateAndTimesFunctions
+namespace dateAndTimeFunctions
 {
 
 
@@ -1379,7 +1379,7 @@ namespace UTC
 } // namespace UTC
 
 
-} // namespace dateAndTimesFunctions
+} // namespace dateAndTimeFunctions
 } // namespace libprcpp
 
 #if LIBPRCPP_COMPILER_MSVC

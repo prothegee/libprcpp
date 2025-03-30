@@ -13,7 +13,7 @@
 
 namespace libprcpp
 {
-namespace dateAndTimesFunctions
+namespace dateAndTimeFunctions
 {
 
 
@@ -447,7 +447,7 @@ namespace UTC
 } // namespace UTC
 
 
-} // namespace dateAndTimesFunctions
+} // namespace dateAndTimeFunctions
 } // namespace libprcpp
 
 #endif // LIBPRCPP_DATE_AND_TIMES_FUNCS_HH
